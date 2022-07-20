@@ -1,0 +1,29 @@
+﻿using Skmr.Editor.Instructions.Interfaces;
+using Skmr.Editor.Media;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using static Skmr.Editor.Ffmpeg;
+
+namespace Skmr.Editor.Instructions
+{
+    public class CreateScreenshotAt : IInstruction
+    {
+        public Medium Input { get; set; }
+        public Medium Output { get; set; }
+        public Ffmpeg Ffmpeg { get; set; }
+        public CreateScreenshotAt(TimeSpan time, Format format)
+        {
+            Time = time;
+            Format = format;
+        }
+
+        public TimeSpan Time { get; }
+        public Format Format { get; }
+
+        public void Execute()
+        {
+            Ffmpeg.Run($"-i {Input.Path} -ss {Time} -frames:v 1 {Output.Path}");
+        }
+    }
+}

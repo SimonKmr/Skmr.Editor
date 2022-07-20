@@ -1,0 +1,32 @@
+﻿using Skmr.Editor.Instructions.Interfaces;
+using Skmr.Editor.Media;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Skmr.Editor.Instructions
+{
+    public class CropVideo : IInstruction
+    {
+        public Medium Input { get; set; }
+        public Medium Output { get; set; }
+        public Ffmpeg Ffmpeg { get; set; }
+        public CropVideo(int width, int height, int x = 0, int y = 0)
+        {
+            Width = width;
+            Height = height;
+            X = x;
+            Y = y;
+        }
+
+        public int Width { get; }
+        public int Height { get; }
+        public int X { get; }
+        public int Y { get; }
+
+        public void Execute()
+        {
+            Ffmpeg.Run($"-i {Input.Path} -filter:v \"crop={Width}:{Height}:{X}:{Y}\" -codec:a copy {Output.Path}");
+        }
+    }
+}
