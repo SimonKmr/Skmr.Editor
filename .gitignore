@@ -118,6 +118,12 @@ ipch/
 *.vspx
 *.sap
 
+# Ffmpegfiles
+FfMpegExe/
+ffmpeg.exe
+ffplay.exe
+ffprobe.exe
+
 # Visual Studio Trace Files
 *.e2e
 
