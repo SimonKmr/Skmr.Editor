@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
 {
-    internal class LeagueOfLegends
+    public class LeagueOfLegends
     {
         public static Position[] GetHealthbars(Bitmap image)
         {
@@ -21,42 +21,43 @@ namespace Skmr.Editor.Analyzer.ComputerVision
 
                 //Split off Red Segments
                 var imgHSV = img.Convert<Hsv, Byte>();
-                var imgRed = imgHSV.InRange(new Hsv(0, 170, 120), new Hsv(8, 255, 255));
-                var imgMasked = RegionOfInterest(imgRed, GetValorantMask());
+
 
                 //GetPosition of Red Segments
-                VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
-                Mat hirarchy = new Mat();
-                CvInvoke.FindContours(imgRed, contours, hirarchy, Emgu.CV.CvEnum.RetrType.External, Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple);
+                var imgRed = imgHSV.InRange(new Hsv(0, 170, 120), new Hsv(8, 255, 255));
+                Utility.AddPositionsToList(positions,imgRed);
 
-                for (int i = 0; i < contours.Size; i++)
-                {
-                    if (contours[i].Size > 4 && contours[i].Size < 40)
-                    {
-                        var p = Position.Create("Healthbar", contours[i].ToArray());
-                        if (p.Length > 10 && p.Height > 5)
-                        {
-                            positions.Add(p);
-                        }
-                    }
-                }
+                var imgBlue = imgHSV.InRange(new Hsv(100, 160, 200), new Hsv(110, 230, 255));
+                Utility.AddPositionsToList(positions, imgBlue);
+
+                var imgYellow = imgHSV.InRange(new Hsv(0, 100, 210), new Hsv(40, 255, 255));
+                Utility.AddPositionsToList(positions, imgYellow);
+
+                imgRed.Save("Red.jpg");
+                imgYellow.Save("Yellow.jpg");
 
                 img.Dispose();
                 imgHSV.Dispose();
                 imgRed.Dispose();
-                imgMasked.Dispose();
+                imgBlue.Dispose();
+                imgYellow.Dispose();
             }
-            throw new NotImplementedException();
+            return positions.ToArray();
 
-        }
-        public static Image<Gray, Byte> RegionOfInterest(Image<Gray, Byte> image, VectorOfPoint points)
+        } 
+
+
+
+        public static bool HasGrayScreen(Bitmap image)
         {
-            var mask = new Image<Gray, Byte>(image.Width, image.Height);
-            CvInvoke.FillPoly(mask, points, new MCvScalar(255));
-            CvInvoke.BitwiseAnd(image, mask, image);
-            return image;
+            using (Bitmap bitmap = image)
+            {
+                Image<Bgr, Byte> img = bitmap.ToImage<Bgr, Byte>();
+            }
+            return false;
         }
-        public static VectorOfPoint GetValorantMask()
+
+        public static VectorOfPoint GetMask()
         {
             throw new NotImplementedException();
         }
