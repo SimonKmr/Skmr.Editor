@@ -1,10 +1,6 @@
 ﻿using Skmr.Editor.Instructions.Interfaces;
 using Skmr.Editor.Media;
-
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
 namespace Skmr.Editor.Instructions
 {
