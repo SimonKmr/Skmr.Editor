@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Text;
 using static Skmr.Editor.Ffmpeg;
 using io = System.IO;
 
@@ -25,10 +26,14 @@ namespace Skmr.Editor.Media
         {
             var file = new FileInfo(path);
             var nameParts = file.Name.Split('.');
-            var extension = nameParts[1];
+            var extension = nameParts[nameParts.Length-1];
+
+            StringBuilder sb = new StringBuilder();
+            for (var i = 0; i < nameParts.Length - 1; i++)
+                sb.Append(nameParts[i]);
 
             Folder = file.Directory.FullName;
-            Name = nameParts[0];
+            Name = sb.ToString();
             Format = Format.Extensions["."+extension];
             
         }

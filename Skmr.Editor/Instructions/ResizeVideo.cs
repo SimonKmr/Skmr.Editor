@@ -26,12 +26,12 @@ namespace Skmr.Editor.Instructions
 
         public ResizeVideo Input(Medium medium)
         {
-            Info.Inputs.Concat(new Medium[] { medium });
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
             return this;
         }
         public ResizeVideo Output(Medium medium)
         {
-            Info.Outputs.Concat(new Medium[] { medium });
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
             return this;
         }
 

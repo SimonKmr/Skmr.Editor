@@ -26,12 +26,12 @@ namespace Skmr.Editor.Instructions
 
         public CreateScreenshotAt Input(Medium medium)
         {
-            Info.Inputs.Concat(new Medium[] { medium });
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
             return this;
         }
         public CreateScreenshotAt Output(Medium medium)
         {
-            Info.Outputs.Concat(new Medium[] { medium });
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
             return this;
         }
     }

@@ -42,12 +42,12 @@ namespace Skmr.Editor.Instructions
 
         public ColorGradeVideo Input(Medium medium)
         {
-            Info.Inputs.Concat(new Medium[] { medium });
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
             return this;
         }
         public ColorGradeVideo Output(Medium medium)
         {
-            Info.Outputs.Concat(new Medium[] { medium });
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
             return this;
         }
     }
