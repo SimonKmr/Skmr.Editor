@@ -1,17 +1,15 @@
-﻿using Skmr.Editor.Instructions.Interfaces;
-using Skmr.Editor.Media;
+﻿using Skmr.Editor.Media;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using static Skmr.Editor.Ffmpeg;
 
 namespace Skmr.Editor.Instructions
 {
-    public class ExportScreenshots : IInstruction
+    public class ExportScreenshots : IInstruction<ExportScreenshots>
     {
-        public Medium Input { get; set; }
-        public Medium Output { get; set; }
-        public Ffmpeg Ffmpeg { get; set; }
+        public Info Info { get; } = new Info();
         public ExportScreenshots(int frames, int seconds, string folder, Format.Image format)
         {
             Frames = frames;
@@ -26,10 +24,22 @@ namespace Skmr.Editor.Instructions
         public Format.Image Format { get; }
         
 
-        public void Execute()
+        public void Run()
         {
-            Output = Input;
-            Ffmpeg.Run($"-i {Input.Path} -vf fps={Frames}/{Seconds} {Folder}\\{Input.Name}_%05d{Format}");
+            Info.Outputs[0] = Info.Inputs[0];
+            Info.Ffmpeg.Run($"-i {Input} -vf fps={Frames}/{Seconds} {Folder}\\{Info.Inputs[0].Name}_%05d{Format}");
+        }
+
+        public ExportScreenshots Input(Medium medium)
+        {
+            Info.Inputs.Concat(new Medium[] { medium });
+            return this;
+        }
+
+        public ExportScreenshots Output(Medium medium)
+        {
+            Info.Outputs.Concat(new Medium[] { medium });
+            return this;
         }
     }
 }

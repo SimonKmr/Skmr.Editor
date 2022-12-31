@@ -1,5 +1,4 @@
-﻿using Skmr.Editor.Instructions.Interfaces;
-using Skmr.Editor.Media;
+﻿using Skmr.Editor.Media;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace Skmr.Editor.Instructions
 {
-    public class ColorGradeVideo : IInstruction
+    public class ColorGradeVideo : IInstruction<ColorGradeVideo>
     {
+        public Info Info { get; } = new Info();
         public float Contrast { get; set; } = 1;
         public float Brighness { get; set; } = 0;
         public float Saturation { get; set; } = 1;
@@ -20,15 +20,12 @@ namespace Skmr.Editor.Instructions
         public float GammaB { get; set; } = 1;
         public float GammaWeight { get; set; } = 1;
         
-        public Medium Input { get; set; }
-        public Medium Output { get; set; }
-        public Ffmpeg Ffmpeg { get; set; }
 
-        public void Execute()
+        public void Run()
         {
             var ci = new CultureInfo("en-US");
             StringBuilder sb = new StringBuilder();
-            sb.Append($"-i {Input.Path} ");
+            sb.Append($"-i {Info.Inputs[0]} ");
             sb.Append("-vf eq=");
             sb.Append($"contrast={Contrast.ToString(ci)}:");
             sb.Append($"brightness={Brighness.ToString(ci)}:");
@@ -38,9 +35,20 @@ namespace Skmr.Editor.Instructions
             sb.Append($"gamma_g={GammaG.ToString(ci)}:");
             sb.Append($"gamma_b={GammaB.ToString(ci)}:");
             sb.Append($"gamma_weight={GammaWeight.ToString(ci)}");
-            sb.Append($" {Output.Path}");
+            sb.Append($" {Info.Outputs[0]}");
 
-            Ffmpeg.Run(sb.ToString());
+            Info.Ffmpeg.Run(sb.ToString());
+        }
+
+        public ColorGradeVideo Input(Medium medium)
+        {
+            Info.Inputs.Concat(new Medium[] { medium });
+            return this;
+        }
+        public ColorGradeVideo Output(Medium medium)
+        {
+            Info.Outputs.Concat(new Medium[] { medium });
+            return this;
         }
     }
 }
