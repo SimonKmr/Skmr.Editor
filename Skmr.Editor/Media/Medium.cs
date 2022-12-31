@@ -1,14 +1,17 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
 using static Skmr.Editor.Ffmpeg;
 using io = System.IO;
 
 namespace Skmr.Editor.Media
 {
-    public class Medium
+    public class Medium: IEquatable<Medium>, ICloneable
     {
         public string Folder { get; set; }
         public string Name { get; set; }
         public Format Format { get; set; }
+        
         public string File { get => $"{Name}{Format}"; }
         public string Path { get => $"{Folder}\\{File}"; }
 
@@ -18,6 +21,18 @@ namespace Skmr.Editor.Media
             Name = name;
             Format = format;
         }
+        public Medium(string path) 
+        {
+            var file = new FileInfo(path);
+            var nameParts = file.Name.Split('.');
+            var extension = nameParts[1];
+
+            Folder = file.Directory.FullName;
+            Name = nameParts[0];
+            Format = Format.Extensions["."+extension];
+            
+        }
+
         public Medium Copy(string to)
         {
             string res = $"{to}\\{File}";
@@ -40,6 +55,16 @@ namespace Skmr.Editor.Media
         }
 
         public static Medium GenerateMedium(string folder, Format format)
-            => new Medium(folder, DateTime.Now.Ticks.ToString(), format);
+            => new(folder, DateTime.Now.Ticks.ToString(), format);
+
+        public override string ToString()
+            => Path;
+        
+        public bool Equals(Medium other)
+            => Path.Equals(other.Path);
+
+        public object Clone()
+            => new Medium(Folder, Name, Format);
+
     }
 }
