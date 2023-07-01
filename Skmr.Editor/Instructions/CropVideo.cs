@@ -1,16 +1,14 @@
-﻿using Skmr.Editor.Instructions.Interfaces;
-using Skmr.Editor.Media;
+﻿using Skmr.Editor.Media;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Skmr.Editor.Instructions
 {
-    public class CropVideo : IInstruction
+    public class CropVideo : IInstruction<CropVideo>
     {
-        public Medium Input { get; set; }
-        public Medium Output { get; set; }
-        public Ffmpeg Ffmpeg { get; set; }
+        public Info Info { get; } = new Info();
         public CropVideo(int width, int height, int x = 0, int y = 0)
         {
             Width = width;
@@ -24,9 +22,20 @@ namespace Skmr.Editor.Instructions
         public int X { get; }
         public int Y { get; }
 
-        public void Execute()
+        public void Run()
         {
-            Ffmpeg.Run($"-i {Input.Path} -filter:v \"crop={Width}:{Height}:{X}:{Y}\" -codec:a copy {Output.Path}");
+            Info.Ffmpeg.Run($"-i {Info.Inputs[0]} -filter:v \"crop={Width}:{Height}:{X}:{Y}\" -codec:a copy {Info.Outputs[0]}");
+        }
+
+        public CropVideo Input(Medium medium)
+        {
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
+        public CropVideo Output(Medium medium)
+        {
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
         }
     }
 }

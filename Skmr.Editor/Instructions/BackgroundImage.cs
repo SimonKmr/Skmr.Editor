@@ -1,29 +1,38 @@
-﻿using Skmr.Editor.Instructions.Interfaces;
-using Skmr.Editor.Media;
+﻿using Skmr.Editor.Media;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Skmr.Editor.Instructions
 {
-    public class BackgroundImage : IInstruction
+    public class BackgroundImage : IInstruction<BackgroundImage>
     {
-        public Medium Input { get; set; }
+        public Info Info { get; set; } = new Info();
         public Medium Image { get; set; }
-        public Medium Output { get; set; }
-        public Ffmpeg Ffmpeg { get; set; }
         public VerticalAlignment VertAlignment { get; set; } = new VerticalAlignment();
-        public void Execute()
+        public void Run()
         {
             //Implementation of             
             // https://stackoverflow.com/questions/35269387/ffmpeg-overlay-one-video-onto-another-video
 
             // the clips have to be scaled to the same size best case -> same size as base video
 
-            Ffmpeg.Run($"-loop 1 -i {Image.Path} " +
-                $"-i {Input.Path} " +
+            Info.Ffmpeg.Run($"-loop 1 -i {Image} " +
+                $"-i {Info.Inputs[0]} " +
                 $"-filter_complex \"overlay=(W-w)/2:{VertAlignment}:shortest=1,format=yuv420p\" " +
-                $"{Output.Path}");
+                $"{Info.Outputs[0]}");
+        }
+
+        public BackgroundImage Input(Medium medium)
+        {
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
+        public BackgroundImage Output(Medium medium)
+        {
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();  
+            return this;
         }
 
         public class VerticalAlignment

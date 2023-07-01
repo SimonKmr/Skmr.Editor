@@ -1,17 +1,15 @@
-﻿using Skmr.Editor.Instructions.Interfaces;
-using Skmr.Editor.Media;
+﻿using Skmr.Editor.Media;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using static Skmr.Editor.Ffmpeg;
 
 namespace Skmr.Editor.Instructions
 {
-    public class CreateScreenshotAt : IInstruction
+    public class CreateScreenshotAt : IInstruction<CreateScreenshotAt>
     {
-        public Medium Input { get; set; }
-        public Medium Output { get; set; }
-        public Ffmpeg Ffmpeg { get; set; }
+        public Info Info { get; } = new Info();
         public CreateScreenshotAt(TimeSpan time, Format format)
         {
             Time = time;
@@ -21,9 +19,20 @@ namespace Skmr.Editor.Instructions
         public TimeSpan Time { get; }
         public Format Format { get; }
 
-        public void Execute()
+        public void Run()
         {
-            Ffmpeg.Run($"-i {Input.Path} -ss {Time} -frames:v 1 {Output.Path}");
+            Info.Ffmpeg.Run($"-i {Info.Inputs[0]} -ss {Time} -frames:v 1 {Info.Outputs[0]}");
+        }
+
+        public CreateScreenshotAt Input(Medium medium)
+        {
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
+        public CreateScreenshotAt Output(Medium medium)
+        {
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
         }
     }
 }

@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "image gen", "image gen\imag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Y4MPrinter", "Y4MPrinter\Y4MPrinter.csproj", "{41D16C76-F3DD-43E7-B6C2-2ABA28BD6C4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skmr.Editor.Tests", "Skmr.Editor.Tests\Skmr.Editor.Tests.csproj", "{52D660B5-586A-42C8-A172-BD565B8D9952}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{41D16C76-F3DD-43E7-B6C2-2ABA28BD6C4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41D16C76-F3DD-43E7-B6C2-2ABA28BD6C4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41D16C76-F3DD-43E7-B6C2-2ABA28BD6C4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52D660B5-586A-42C8-A172-BD565B8D9952}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52D660B5-586A-42C8-A172-BD565B8D9952}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52D660B5-586A-42C8-A172-BD565B8D9952}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52D660B5-586A-42C8-A172-BD565B8D9952}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

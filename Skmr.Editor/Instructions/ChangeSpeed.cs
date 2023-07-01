@@ -1,24 +1,31 @@
-﻿using Skmr.Editor.Instructions.Interfaces;
-using Skmr.Editor.Media;
+﻿using Skmr.Editor.Media;
 using System.Globalization;
+using System.Linq;
 
 namespace Skmr.Editor.Instructions
 {
-    public class ChangeSpeed : IInstruction
+    public class ChangeSpeed : IInstruction<ChangeSpeed>
     {
-        public Medium Input { get; set; }
-        public Medium Output { get; set; }
-        public Ffmpeg Ffmpeg { get; set; }
-        
-        
-        public void Execute()
+        public Info Info { get; } = new Info();
+        public void Run()
         {
             var ci = new CultureInfo("en-US");
             double invertedSpeed = 1 / Speed;
-            string arguments = $"-i {Input.Path} -filter_complex \"[0:v]setpts={invertedSpeed.ToString(ci)}*PTS[v];[0:a]atempo={Speed.ToString(ci)}[a]\" -map \"[v]\" -map \"[a]\" {Output.Path}";
-            Ffmpeg.Run(arguments);
+            string arguments = $"-i {Info.Inputs[0]} -filter_complex \"[0:v]setpts={invertedSpeed.ToString(ci)}*PTS[v];[0:a]atempo={Speed.ToString(ci)}[a]\" -map \"[v]\" -map \"[a]\" {Info.Outputs[0]}";
+            Info.Ffmpeg.Run(arguments);
         }
-        
+
+        public ChangeSpeed Input(Medium medium)
+        {
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
+        public ChangeSpeed Output(Medium medium)
+        {
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
+
         public ChangeSpeed(double speed)
         {
             Speed = speed;

@@ -1,45 +1,54 @@
-﻿using Skmr.Editor.Instructions.Interfaces;
-using Skmr.Editor.Media;
+﻿using Skmr.Editor.Media;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Skmr.Editor.Instructions
 {
-    public class ConcatVideos : IInstruction
+    public class ConcatVideos : IInstruction<ConcatVideos>
     {
-        public Medium[] Input { get; set; }
-        public Medium Output { get; set; }
-        public Ffmpeg Ffmpeg { get; set; }
+        public Info Info { get; } = new Info();
         public void Execute2()
         {
             //https://stackoverflow.com/a/11175851
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < Input.Length; i++) sb.Append($"-i {Input[i].Path} ");
+            for (int i = 0; i < Info.Inputs.Length; i++) sb.Append($"-i {Info.Inputs[i]} ");
             sb.Append("-filter_complex \"");
-            for (int i = 0; i < Input.Length; i++) sb.Append($"[{i}:v] [{i}:a] ");
+            for (int i = 0; i < Info.Inputs.Length; i++) sb.Append($"[{i}:v] [{i}:a] ");
             sb.Append($"concat=n={2}:v={VideoTracks}:a={AudioTracks} [v] [a]\" ");
             sb.Append($"-map \"[v]\" -map \"[a]\" ");
-            sb.Append($"{Output.Path}");
+            sb.Append($"{Info.Outputs[0]}");
 
             string arguments = sb.ToString();
-            Ffmpeg.Run(arguments);
+            Info.Ffmpeg.Run(arguments);
         }
 
-        public void Execute()
+        public void Run()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append($"-i \"concat:");
-            for (int i = 0; i < Input.Length; i++)
+            for (int i = 0; i < Info.Inputs.Length; i++)
             {
-                sb.Append(Input[i].Path);
-                if (i < Input.Length - 1) sb.Append("|");
+                sb.Append(Info.Inputs[i]);
+                if (i < Info.Inputs.Length - 1) sb.Append("|");
             }
-            sb.Append($"\" -vcodec copy -acodec copy {Output.Path}");
+            sb.Append($"\" -vcodec copy -acodec copy {Output}");
 
 
             string arguments = sb.ToString();
-            Ffmpeg.Run(arguments);
+            Info.Ffmpeg.Run(arguments);
+        }
+
+        public ConcatVideos Input(Medium medium)
+        {
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
+        public ConcatVideos Output(Medium medium)
+        {
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
         }
 
 

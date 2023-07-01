@@ -1,21 +1,18 @@
-﻿using Skmr.Editor.Instructions.Interfaces;
-using Skmr.Editor.Media;
+﻿using Skmr.Editor.Media;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Skmr.Editor.Instructions
 {
-    public class ResizeVideo : IInstruction
+    public class ResizeVideo : IInstruction<ResizeVideo>
     {
-        public Medium Input { get; set; }
-        public Medium Output { get; set; }
-        public Ffmpeg Ffmpeg { get; set; }
-        
-        
-        public void Execute()
+
+        public Info Info { get; } = new Info();
+        public void Run()
         {
-            Ffmpeg.Run($"-i {Input.Path} -filter:v \"scale={Width}:{Height}\" -codec:a copy {Output.Path}");
+            Info.Ffmpeg.Run($"-i {Info.Inputs[0]} -filter:v \"scale={Width}:{Height}\" -codec:a copy {Info.Outputs[0]}");
         }
         
         
@@ -26,6 +23,17 @@ namespace Skmr.Editor.Instructions
         }
         public int Width { get; }
         public int Height { get; }
+
+        public ResizeVideo Input(Medium medium)
+        {
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
+        public ResizeVideo Output(Medium medium)
+        {
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
 
 
     }

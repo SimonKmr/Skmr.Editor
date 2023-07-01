@@ -1,16 +1,14 @@
-﻿using Skmr.Editor.Instructions.Interfaces;
-using Skmr.Editor.Media;
+﻿using Skmr.Editor.Media;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Skmr.Editor.Instructions
 {
-    public class CutVideo : IInstruction
+    public class CutVideo : IInstruction<CutVideo>
     {
-        public Medium Input { get; set; }
-        public Medium Output{ get; set; }
-        public Ffmpeg Ffmpeg { get; set; }
+        public Info Info { get; } = new Info();
         public CutVideo((TimeSpan,TimeSpan) directions)
         {
             Directions = directions;
@@ -18,11 +16,22 @@ namespace Skmr.Editor.Instructions
 
         public (TimeSpan,TimeSpan) Directions { get; }
 
-        public void Execute()
+        public void Run()
         {
             string format = @"hh\:mm\:ss\.\0";
-            Ffmpeg.Run($"-ss {Directions.Item1.ToString(format)} -t {Directions.Item2.ToString(format)} -i {Input.Path} -c copy {Output.Path}");
+            Info.Ffmpeg.Run($"-ss {Directions.Item1.ToString(format)} -t {Directions.Item2.ToString(format)} -i {Info.Inputs[0]} -c copy {Info.Outputs[0]}");
 
+        }
+
+        public CutVideo Input(Medium medium)
+        {
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
+        public CutVideo Output(Medium medium)
+        {
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
         }
     }
 }

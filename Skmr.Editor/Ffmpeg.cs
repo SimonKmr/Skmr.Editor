@@ -42,8 +42,8 @@ namespace Skmr.Editor
         
         public Ffmpeg() 
         {
-            Executable = @"FfMpegExe\ffmpeg.exe";
-
+            string ffmpegPath = Environment.GetEnvironmentVariable("ffmpeg", EnvironmentVariableTarget.User) + "\\ffmpeg.exe";
+            Executable = ffmpegPath ?? throw new Exception("environment variable \"ffmpeg\" not set");
         }
         public Ffmpeg(string executable)
         {

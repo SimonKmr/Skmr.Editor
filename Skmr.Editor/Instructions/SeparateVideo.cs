@@ -1,19 +1,28 @@
-﻿using Skmr.Editor.Instructions.Interfaces;
-using Skmr.Editor.Media;
+﻿using Skmr.Editor.Media;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Skmr.Editor.Instructions
 {
-    public class SeparateVideo : IInstruction
+    public class SeparateVideo : IInstruction<SeparateVideo>
     {
-        public Medium Input { get; set; }
-        public Medium Output { get; set; }
-        public Ffmpeg Ffmpeg { get; set; }
-        public void Execute()
+        public Info Info { get; } = new Info();
+        public void Run()
         {
-            Ffmpeg.Run($"-i {Input.Path} -map 0:v -c copy {Output.Path}");
+            Info.Ffmpeg.Run($"-i {Info.Inputs[0]} -map 0:v -c copy {Info.Outputs[0]}");
+        }
+
+        public SeparateVideo Input(Medium medium)
+        {
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
+        public SeparateVideo Output(Medium medium)
+        {
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
         }
     }
 }

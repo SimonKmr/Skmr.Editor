@@ -10,13 +10,4 @@
     <None Remove="Instructions\Structure\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="FfMpegExe\ffprobe.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="FfMpegExe\ReadMe.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

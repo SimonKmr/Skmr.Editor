@@ -1,19 +1,33 @@
-﻿using Skmr.Editor.Instructions.Interfaces;
-using Skmr.Editor.Media;
+﻿using Skmr.Editor.Media;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Skmr.Editor.Instructions
 {
-    public class SeparateAudio : IInstruction
+    public class SeparateAudio : IInstruction<SeparateAudio>
     {
-        public Medium Input { get; set; }
-        public Medium Output { get; set; }
-        public Ffmpeg Ffmpeg { get; set; }
-        public void Execute()
+        public Info Info { get; } = new Info();
+        public void Run()
         {
-            Ffmpeg.Run($"-i {Input.Path} -map 0:a:{Track} -c copy {Output.Path}");
+            Info.Ffmpeg.Run($"-i {Info.Inputs[0]} -map 0:a:{Track} -c copy {Info.Outputs[0]}");
+        }
+
+        public SeparateAudio Input(Medium medium)
+        {
+            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
+        public SeparateAudio Output(Medium medium)
+        {
+            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
+            return this;
+        }
+
+        public void ExecuteAll()
+        {
+            Info.Ffmpeg.Run($"-i {Info.Inputs[0]} -vn -acodec copy {Info.Outputs[0]}");
         }
 
         
@@ -22,6 +36,8 @@ namespace Skmr.Editor.Instructions
             Track = track;
         }
         public int Track { get; }
+
+
 
     }
 }

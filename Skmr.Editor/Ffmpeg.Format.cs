@@ -1,12 +1,24 @@
-﻿namespace Skmr.Editor
+﻿using System;
+using System.Collections.Generic;
+
+namespace Skmr.Editor
 {
     public partial class Ffmpeg
     {
         public class Format
         {
-            public Format(string value) { Value = value; }
+            public static Dictionary<string, Format> Extensions { get; private set; } = new Dictionary<string, Format>();
+
+
+            public Format(string value) 
+            { 
+                Value = value;
+                Extensions.Add(value, this);
+            }
             public string Value { get; private set; }
             public override string ToString() => Value;
+
+            
 
             public class Video : Format
             {
