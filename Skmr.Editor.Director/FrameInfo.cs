@@ -1,4 +1,5 @@
-﻿using Skmr.Editor.Analyzer.ComputerVision;
+﻿using Skmr.Editor.Engine;
+using Skmr.Editor.Engine.ComputerVision;
 
 
 namespace Skmr.Editor.Director
@@ -13,9 +14,8 @@ namespace Skmr.Editor.Director
 
         public FrameInfo(string folder)
         {
-            ImageLoader imageLoader = new ImageLoader(folder);
             List<Position[]> screenshotInfo = new List<Position[]>();
-            foreach(var screenshotImage in imageLoader.LazyLoad())
+            foreach (var screenshotImage in Image.OpenAll(folder)) 
             {
                 screenshotInfo.Add(LostArk.GetHealthbarPositions(screenshotImage));
             }

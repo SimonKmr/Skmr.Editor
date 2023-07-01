@@ -7,31 +7,30 @@ namespace Skmr.Editor.Analyzer.ComputerVision
 {
     public class LostArk
     {
-        public static Position[] GetPositions(Bitmap image)
+        public static Position[] GetPositions(Image image)
         {
             Position[] healthbars = GetHealthbarPositions(image);
             throw new NotImplementedException();
         }
-        public static Position[] GetHealthbarPositions(Bitmap image)
+        public static Position[] GetHealthbarPositions(Image image)
         {
             List<Position> positions = new List<Position>();
-            using (Bitmap bitmap = image)
-            {
-                Image<Bgr, Byte> img = bitmap.ToImage<Bgr, Byte>();
 
-                //Split off Red Segments
-                var imgHSV = img.Convert<Hsv, Byte>();
-                var imgRed = imgHSV.InRange(new Hsv(0, 170, 120), new Hsv(8, 255, 255));
-                var imgMasked = Utility.RegionOfInterest(imgRed, GetLostArkMask());
+            Image<Bgr, Byte> img = new Image<Bgr, Byte>( image.GetByteBgrMap());
 
-                Utility.AddPositionsToList(positions, imgMasked);
+            //Split off Red Segments
+            var imgHSV = img.Convert<Hsv, Byte>();
+            var imgRed = imgHSV.InRange(new Hsv(0, 170, 120), new Hsv(8, 255, 255));
+            var imgMasked = Utility.RegionOfInterest(imgRed, GetLostArkMask());
 
-                //Dispose all the images, because else the ram clutters up
-                img.Dispose();
-                imgHSV.Dispose();
-                imgRed.Dispose();
-                imgMasked.Dispose();
-            }
+            Utility.AddPositionsToList(positions, imgMasked);
+
+            //Dispose all the images, because else the ram clutters up
+            img.Dispose();
+            imgHSV.Dispose();
+            imgRed.Dispose();
+            imgMasked.Dispose();
+            
             return positions.ToArray();
         }
         public static VectorOfPoint GetLostArkMask()

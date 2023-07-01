@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Skmr.Editor.Analyzer.Files.Mp4
+namespace Skmr.Editor.Engine.Containers.Mp4
 {
     internal class Mp4File
     {

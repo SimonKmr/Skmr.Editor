@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Skmr.Editor.Analyzer.Files.Mp4
+namespace Skmr.Editor.Engine.Containers.Mp4
 {
     public partial class Atom
     {
