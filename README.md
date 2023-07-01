@@ -20,4 +20,10 @@
 
 ## Analyzer
 ### Computer Vision
-### Metadata reader
+### Machine Learning (with PyTorch)
+## Engine (todo)
+- Support reading metadata from codes
+- Support operations on [Y4M](https://wiki.multimedia.cx/index.php/YUV4MPEG2)
+- Support conversion from [Y4M to Av1](https://github.com/xiph/rav1e)
+- Move from FfMpeg to own engine
+  
