@@ -26,16 +26,6 @@ namespace Skmr.Editor.Engine
         public (byte r, byte g, byte b) Get(int x, int y)
             => pixels[x, y];
 
-        public static Image Open(string Path)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static IEnumerable<Image> OpenAll(string path)
-        {
-            throw new NotImplementedException();
-        }
-
         public byte[,,] GetByteBgrMap()
         {
             var res = new byte[Width, Height,3];
@@ -52,5 +42,4 @@ namespace Skmr.Editor.Engine
             return res;
         }
     }
-
 }

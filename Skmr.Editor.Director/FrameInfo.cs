@@ -1,5 +1,5 @@
 ﻿using Skmr.Editor.Engine;
-using Skmr.Editor.Engine.ComputerVision;
+using Skmr.Editor.Analyzer.ComputerVision;
 
 
 namespace Skmr.Editor.Director

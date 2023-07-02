@@ -1,18 +1,19 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using skmr = Skmr.Editor.Engine;
 using System.Drawing;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
 {
     public class LostArk
     {
-        public static Position[] GetPositions(Image image)
+        public static Position[] GetPositions(skmr.Image image)
         {
             Position[] healthbars = GetHealthbarPositions(image);
             throw new NotImplementedException();
         }
-        public static Position[] GetHealthbarPositions(Image image)
+        public static Position[] GetHealthbarPositions(skmr.Image image)
         {
             List<Position> positions = new List<Position>();
 
