@@ -226,37 +226,6 @@ namespace Skmr.Editor.Engine.Codecs
             public IntPtr t35_metadata;
         }
 
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct ChromaSampling
-        {
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct MatrixCoefficients
-        {
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct ChromaticityPoint
-        {
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct FrameTypeOverride
-        {
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct FrameOpaqueCb
-        {
-
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         public struct Rational
         {
@@ -264,89 +233,6 @@ namespace Skmr.Editor.Engine.Codecs
             public UInt64 num;
             /// Denominator.
             public UInt64 den;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct EncoderConfig
-        {
-            public uint width; 
-            public uint height; 
-            public Rational sample_aspect_ratio;
-            public Rational time_base;
-
-            public uint bit_depth;
-            public ChromaSampling chroma_sampling;
-            public ChromaSamplePosition chroma_sample_position;
-            public PixelRange pixel_range;
-            public ColorDescription? color_description;
-            public MasteringDisplay? mastering_display;
-            public ContentLight? content_light;
-
-            public byte? level_idx;
-            public byte enable_timing_info;
-            public byte still_picture;
-            public byte error_resilient;
-
-            public ulong switch_frame_interval;
-            public ulong min_key_frame_interval;
-            public ulong max_key_frame_interval;
-
-            public int? reservoir_frame_delay;
-            public byte low_latency;
-            public uint quantizer;
-            public byte min_quantizer;
-            public int bitrate;
-
-            public Tune tune;
-            public GrainTableSegment? film_grain_params;
-
-            public uint tiles_cols;
-            public uint tiles_rows;
-            public uint tiles;
-            public SpeedSettings speed_setting;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct GrainTableSegment
-        {
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct ColorDescription
-        {
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct Tune
-        {
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct MasteringDisplay
-        {
-
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct ContentLight
-        {
-
-        }
-
-        public struct SpeedSettings
-        {
-            public byte multiref;
-            public byte fast_deblock;
-        }
-
-        public static IntPtr GetConfigPointer(EncoderConfig config)
-        {
-            var ptr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(EncoderConfig)));
-            Marshal.StructureToPtr(config, ptr, true);
-            return ptr;
         }
 
         public enum EncoderStatus : int
