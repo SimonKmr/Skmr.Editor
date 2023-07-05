@@ -30,6 +30,7 @@ namespace Skmr.Editor.Engine.Codecs
         [DllImport("Codecs/Dlls/rav1e.dll")]
         public static extern void rav1e_data_unref(Data data);
 
+        #region config
         /// <summary>
         /// 
         /// </summary>
@@ -40,13 +41,10 @@ namespace Skmr.Editor.Engine.Codecs
         /// <summary>
         /// Setup a second pass rate control using the provided summary
         /// </summary>
-        /// <param name="cfg"></param>
-        /// <param name="data"></param>
-        /// <param name="size_t"></param>
         /// <returns>
-        /// `0` on success 
-        /// `> 0` if the buffer has to be larger 
-        /// `< 0` on failure
+        ///`0` on success
+        ///`&gt; 0` if the buffer has to be larger 
+        ///`&lt; 0` on failure
         /// </returns>
         [DllImport("Codecs/Dlls/rav1e.dll")]
         public static extern Int32 rav1e_config_set_rc_summary(IntPtr cfg, IntPtr data, UInt64 size_t);
@@ -87,25 +85,23 @@ namespace Skmr.Editor.Engine.Codecs
 
 
         [DllImport("Codecs/Dlls/rav1e.dll")]
-        public static extern Int32 rav1e_config_parse(IntPtr cfg, IntPtr key, IntPtr value);
+        public static extern Int32 rav1e_config_parse(IntPtr cfg, [MarshalAs(UnmanagedType.LPStr)] string key, [MarshalAs(UnmanagedType.LPStr)] string value);
 
 
         [DllImport("Codecs/Dlls/rav1e.dll")]
-        public static extern Int32 rav1e_config_parse(IntPtr cfg, IntPtr key, Int32 value);
+        public static extern Int32 rav1e_config_parse_int(IntPtr cfg, [MarshalAs(UnmanagedType.LPStr)] string key, Int32 value);
+        #endregion
 
-
-        [DllImport("Codecs/Dlls/rav1e.dll")]
-        public static extern Int32 rav1e_config_parse_int(IntPtr cfg, IntPtr key, Int32 value);
-
-
+        #region context
         [DllImport("Codecs/Dlls/rav1e.dll")]
         public static extern IntPtr rav1e_context_new(IntPtr cfg);
 
 
         [DllImport("Codecs/Dlls/rav1e.dll")]
         public static extern void rav1e_context_unref(IntPtr ctx);
+        #endregion
 
-
+        #region frame
         [DllImport("Codecs/Dlls/rav1e.dll")]
         public static extern IntPtr rav1e_frame_new(IntPtr ctx);
 
@@ -123,8 +119,8 @@ namespace Skmr.Editor.Engine.Codecs
 
 
         [DllImport("Codecs/Dlls/rav1e.dll")]
-        public static extern Int32 rav1e_frame_add_t35_metadata(IntPtr ctx);
-
+        public static extern Int32 rav1e_frame_add_t35_metadata(IntPtr frame, byte country_code, byte country_code_extension_byte, IntPtr data, IntPtr size_t);
+        #endregion
 
         [DllImport("Codecs/Dlls/rav1e.dll")]
         public static extern Int32 rav1e_twopass_out(IntPtr ctx);
@@ -163,14 +159,15 @@ namespace Skmr.Editor.Engine.Codecs
         /// and returned by `rav1e_receive_packet` in the `Packet` `opaque` field or
         /// the destructor will be called on `rav1e_context_unref` if the frame is
         /// still pending in the encoder.
+        /// still pending in the encoder.
         /// </summary>
         /// <returns>
         /// - `0` on success,
-        /// - `> 0` if the input queue is full
-        /// - `< 0` on unrecoverable failure
+        /// - `&gt; 0` if the input queue is full
+        /// - `&lt; 0` on unrecoverable failure
         /// </returns>
         [DllImport("Codecs/Dlls/rav1e.dll")]
-        public static extern EncoderStatus rav1e_send_frame(IntPtr ctx, Frame frame);
+        public static extern EncoderStatus rav1e_send_frame(IntPtr ctx, IntPtr frame);
 
 
         [DllImport("Codecs/Dlls/rav1e.dll")]
@@ -180,7 +177,10 @@ namespace Skmr.Editor.Engine.Codecs
         [DllImport("Codecs/Dlls/rav1e.dll")]
         public static extern IntPtr rav1e_status_to_str(EncoderStatus status);
 
-
+        /// <summary>
+        /// Receive encoded data
+        /// </summary>
+        /// <returns></returns>
         [DllImport("Codecs/Dlls/rav1e.dll")]
         public static extern Int32 rav1e_receive_packet();
 
@@ -189,15 +189,11 @@ namespace Skmr.Editor.Engine.Codecs
         public static extern void rav1e_packet_unref(IntPtr pkt);
 
         [DllImport("Codecs/Dlls/rav1e.dll")]
-        public static extern Int32 rav1e_container_sequence_header();
+        public static extern IntPtr rav1e_container_sequence_header(IntPtr ctx);
 
 
         [DllImport("Codecs/Dlls/rav1e.dll")]
-        public static extern Int32 rav1e_frame_fill_plane_internal();
-
-
-        [DllImport("Codecs/Dlls/rav1e.dll")]
-        public static extern Int32 rav1e_frame_fill_plane();
+        public static extern void rav1e_frame_fill_plane(IntPtr frame, int plane, IntPtr data, IntPtr data_len, IntPtr stride, int bytewidth);
 
 
         [DllImport("Codecs/Dlls/rav1e.dll")]
@@ -233,6 +229,18 @@ namespace Skmr.Editor.Engine.Codecs
             public UInt64 num;
             /// Denominator.
             public UInt64 den;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct Packet
+        {
+            public IntPtr data;
+            public IntPtr len;
+            public ulong input_frameno;
+            public FrameType frame_type;
+            public IntPtr opaque;
+            public IntPtr rec;
+            public IntPtr source;
         }
 
         public enum EncoderStatus : int
@@ -285,6 +293,14 @@ namespace Skmr.Editor.Engine.Codecs
             SMPTE432,
             /// EBU Tech. 3213-E
             EBU3213 = 22,
+        }
+
+        public enum FrameType
+        {
+            KEY,
+            INTER,
+            INTRA_ONLY,
+            SWITCH,
         }
     }
 }
