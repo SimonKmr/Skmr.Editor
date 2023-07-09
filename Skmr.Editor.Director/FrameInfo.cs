@@ -15,7 +15,7 @@ namespace Skmr.Editor.Director
         public FrameInfo(string folder)
         {
             List<Position[]> screenshotInfo = new List<Position[]>();
-            foreach (var screenshotImage in Image.OpenAll(folder)) 
+            foreach (var screenshotImage in Engine.Utility.OpenAll(folder)) 
             {
                 screenshotInfo.Add(LostArk.GetHealthbarPositions(screenshotImage));
             }
