@@ -14,4 +14,10 @@
     <Folder Include="FfMpeg\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Codecs\Dlls\rav1e.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

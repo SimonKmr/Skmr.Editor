@@ -68,6 +68,42 @@ namespace Skmr.Editor.Engine
             return bytes;
         }
 
+        public byte[] Get(int frame, Channel channel)
+        {
+            var frameBytes = Get(frame);
+            var width = Width;
+            var height = Height;
+
+            int ySize = width * height;
+            int cbSize = ySize / 4;
+            int crSize = ySize / 4;
+
+            switch (channel)
+            {
+                case Channel.Y:
+                    byte[] yComponent = new byte[ySize];
+                    Array.Copy(frameBytes, 0, yComponent, 0, ySize);
+                    return yComponent;
+                case Channel.Cb:
+                    byte[] cbComponent = new byte[cbSize];
+                    Array.Copy(frameBytes, ySize, cbComponent, 0, cbSize);
+                    return cbComponent;
+                case Channel.Cr:
+                    byte[] crComponent = new byte[crSize];
+                    Array.Copy(frameBytes, ySize + cbSize, crComponent, 0, crSize);
+                    return crComponent;
+            }
+
+            throw new Exception();
+        }
+
+        public enum Channel
+        {
+            Y,
+            Cb,
+            Cr,
+        }
+
         /// <summary>
         /// sets the byte sequence for a specific frame
         /// </summary>
