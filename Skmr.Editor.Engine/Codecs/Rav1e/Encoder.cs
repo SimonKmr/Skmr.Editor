@@ -17,6 +17,7 @@ namespace Skmr.Editor.Engine.Codecs.Rav1e
         private int height;
         private int fps;
 
+        private List<IntPtr> frames = new List<IntPtr>();
 
         public Encoder(int width, int height, int fps = 30)
         {
@@ -56,8 +57,8 @@ namespace Skmr.Editor.Engine.Codecs.Rav1e
 
             //Appends Frame on queue
             var status = Functions.rav1e_send_frame(context, frame);
-
-            //Free arrays for allocated planes
+            Functions.rav1e_frame_unref(frame);
+            //Free arrays 
             arr1.Free();
             arr2.Free();
             arr3.Free();
@@ -82,6 +83,7 @@ namespace Skmr.Editor.Engine.Codecs.Rav1e
                     //Save Packet to Array
                     var pktRes = Marshal.PtrToStructure<Packet>(ptr);
                     var bytes = new byte[(int)pktRes.len];
+
                     Marshal.Copy(pktRes.data, bytes, 0, bytes.Length);
 
                     //Allow Packet to be removed from Memory

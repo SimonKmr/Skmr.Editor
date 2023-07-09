@@ -23,7 +23,7 @@ namespace Skmr.Editor.Engine.Codecs.Rav1e.Api
         /// </summary>
         /// <param name="data"></param>
         [DllImport("Codecs/Dlls/rav1e.dll")]
-        public static extern void rav1e_data_unref(ref Data data);
+        public static extern void rav1e_data_unref(IntPtr data);
 
         #region config
         /// <summary>
