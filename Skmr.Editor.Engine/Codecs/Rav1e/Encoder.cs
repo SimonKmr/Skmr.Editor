@@ -17,8 +17,6 @@ namespace Skmr.Editor.Engine.Codecs.Rav1e
         private int height;
         private int fps;
 
-        private List<IntPtr> frames = new List<IntPtr>();
-
         public Encoder(int width, int height, int fps = 30)
         {
             this.width = width;
@@ -83,7 +81,6 @@ namespace Skmr.Editor.Engine.Codecs.Rav1e
                     //Save Packet to Array
                     var pktRes = Marshal.PtrToStructure<Packet>(ptr);
                     var bytes = new byte[(int)pktRes.len];
-
                     Marshal.Copy(pktRes.data, bytes, 0, bytes.Length);
 
                     //Allow Packet to be removed from Memory
