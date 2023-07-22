@@ -12,4 +12,9 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="LibAv\Codec\" />
+    <Folder Include="LibAv\Format\" />
+  </ItemGroup>
+
 </Project>
