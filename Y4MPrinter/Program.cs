@@ -1,19 +1,18 @@
-﻿using Skmr.Editor.Engine;
-using Skmr.Editor.Engine.Codecs.Rav1e.Api;
-using Rav1e = Skmr.Editor.Engine.Codecs.Rav1e;
+﻿using Skmr.Editor.Engine.Rav1e.Api;
+using Rav1e = Skmr.Editor.Engine.Rav1e;
+using Y4M = Skmr.Editor.Engine.Y4M;
 
 string path = @"C:\Users\darkf\Desktop\output - Kopie.y4m";
 string output = @"test3.ivf";
 
-var test = new Y4M(path);
+var test = new Y4M.File(path);
 
-
-
-using (var rav1e = new Rav1e.Encoder(1920, 1080, 30))
+using (Stream source = File.Open(output, FileMode.Create))
 {
-    int i = 0;
-    using (Stream source = File.Open(output, FileMode.Create))
+    using (var rav1e = new Rav1e.Encoder(1920, 1080, 30))
     {
+        int i = 0;
+
         foreach (var f in rav1e.ReceiveFrame())
         {
             if (i > 300)
@@ -22,10 +21,7 @@ using (var rav1e = new Rav1e.Encoder(1920, 1080, 30))
             }
             else if (f.status == EncoderStatus.NeedMoreData)
             {
-                var y = test.Get(i, Y4M.Channel.Y);
-                var cb = test.Get(i, Y4M.Channel.Cb);
-                var cr = test.Get(i, Y4M.Channel.Cr);
-                rav1e.SendFrame(y, cb, cr);
+                rav1e.SendFrame(test[i]);
                 i++;
             }
             else if (f.status == EncoderStatus.Success && f.data != null)
@@ -35,6 +31,5 @@ using (var rav1e = new Rav1e.Encoder(1920, 1080, 30))
         }
     }
 }
-
 
 while (true) ;
