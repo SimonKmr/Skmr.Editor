@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Skmr.Editor.Engine.Codecs.Rav1e.Api
+namespace Skmr.Editor.Engine.Codecs.Api
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct Data

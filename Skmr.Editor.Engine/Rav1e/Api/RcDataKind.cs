@@ -1,4 +1,4 @@
-﻿namespace Skmr.Editor.Engine.Codecs.Rav1e.Api
+﻿namespace Skmr.Editor.Engine.Rav1e.Api
 {
     public enum RcDataKind
     {

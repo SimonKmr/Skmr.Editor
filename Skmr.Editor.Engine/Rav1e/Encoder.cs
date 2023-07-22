@@ -1,12 +1,7 @@
-﻿using Skmr.Editor.Engine.Codecs.Rav1e.Api;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Skmr.Editor.Engine.Rav1e.Api;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Skmr.Editor.Engine.Codecs.Rav1e
+namespace Skmr.Editor.Engine.Rav1e
 {
     public class Encoder : IDisposable
     {
@@ -37,10 +32,13 @@ namespace Skmr.Editor.Engine.Codecs.Rav1e
             context = Functions.rav1e_context_new(config);
         }
 
-        public EncoderStatus SendFrame(byte[] y, byte[] cb, byte[] cr)
+        public EncoderStatus SendFrame(Y4M.Frame input)
         {
             //Creates a frame
             var frame = Functions.rav1e_frame_new(context);
+            var y = input.Get(Y4M.Channel.Y);
+            var cb = input.Get(Y4M.Channel.Cb);
+            var cr = input.Get(Y4M.Channel.Cr);
 
             //Create references of frame data
             GCHandle arr1 = GCHandle.Alloc(y, GCHandleType.Pinned);
