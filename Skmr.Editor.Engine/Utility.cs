@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Skmr.Editor.Engine.Y4M;
 
 namespace Skmr.Editor.Engine
 {
@@ -55,10 +51,10 @@ namespace Skmr.Editor.Engine
             return res;
         }
 
-        static public Image ToImage(this Y4M y4m,byte[] frame)
+        static public Image ToImage(this Frame y4m,byte[] frame)
         {
-            var width = y4m.Width;
-            var height = y4m.Height;
+            var width = y4m.Parent.Width;
+            var height = y4m.Parent.Height;
 
             //Size of the Y Cb Cr section
             int ySize = width * height;
