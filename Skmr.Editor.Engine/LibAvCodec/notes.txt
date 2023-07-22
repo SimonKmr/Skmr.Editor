@@ -1,0 +1,3 @@
+﻿https://ffmpeg.org/libavcodec.html
+https://trac.ffmpeg.org/wiki/Using%20libav*
+http://ffmpeg.org/doxygen/trunk/group__libavc.html
