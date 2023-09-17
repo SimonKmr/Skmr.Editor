@@ -19,4 +19,7 @@ The goal is to automate decisionmaking for cutting videos.
 
 The director Project is the link between engine and analyzer. This should simplify the process of getting image data to directions, like where a cut should be done inside a video.
 
+## Images
+
+Images are Functions that can be used to alter images aswell as generate new images.
   
