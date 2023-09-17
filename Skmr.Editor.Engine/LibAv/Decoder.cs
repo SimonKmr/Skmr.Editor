@@ -1,4 +1,4 @@
-﻿using FFmpeg.AutoGen;
+using FFmpeg.AutoGen;
 
 namespace Skmr.Editor.Engine.LibAv
 {
@@ -74,7 +74,5 @@ namespace Skmr.Editor.Engine.LibAv
             var pFormatContext = _pFormatContext;
             ffmpeg.avformat_close_input(&pFormatContext);
         }
-
-
     }
 }
