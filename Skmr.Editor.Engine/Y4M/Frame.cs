@@ -3,20 +3,27 @@
     public class Frame
     {
         private byte[] data;
-        public  IY4MContainer Parent { get; internal set; }
 
-        public Frame(IY4MContainer parent)
+        public int Width { get; }
+        public int Height { get; }
+
+        public int Size => (int)(Width * Height * 1.5f);
+
+        public Frame(int width, int height)
         {
-            this.Parent = parent;
-            data = new byte[parent.FrameBodySize];
+            Width = width;
+            Height = height;
+
+            data = new byte[Size];
         }
 
-        public Frame(IY4MContainer parent,byte[] data)
+        public Frame(int width, int height, byte[] data)
         {
-            if (parent.FrameBodySize != data.Length) 
-                throw new Exception();
+            Width = width;
+            Height = height;
 
-            this.Parent = parent;
+            if (data.Length != Size) throw new Exception();
+
             this.data = data;
         }
 
@@ -29,7 +36,7 @@
 
         public byte[] Get(Channel channel)
         {
-            int ySize = Parent.Width * Parent.Height;
+            int ySize = Width * Height;
             int cbSize = ySize / 4;
             int crSize = ySize / 4;
 
@@ -60,8 +67,8 @@
 
         private int GetIndex(Channel channel, int x, int y)
         {
-            int baseOffset = Parent.FrameHeaderSize;
-            int ySize = Parent.Width * Parent.Height;
+            int baseOffset = Size;
+            int ySize = Width * Height;
             int cbSize = ySize / 4;
 
             switch (channel)
@@ -72,14 +79,6 @@
             }
                 
             throw new Exception();
-        }
-
-        public Frame Clone()
-        {
-            return new Frame(Parent)
-            {
-                data = (byte[])data.Clone(),
-            };
         }
     }
 }
