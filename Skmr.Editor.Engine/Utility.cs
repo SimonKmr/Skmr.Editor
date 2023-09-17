@@ -137,14 +137,23 @@ namespace Skmr.Editor.Engine
                 );
         }
 
-        public static Image Open(string Path)
+        public unsafe static T[] Create<T>(T* ptr, int length) where T : unmanaged
         {
-            throw new NotImplementedException();
+            T[] array = new T[length];
+            for (int i = 0; i < length; i++)
+                array[i] = ptr[i];
+            return array;
         }
 
-        public static IEnumerable<Image> OpenAll(string path)
+        public unsafe static byte* ToPointer(this byte[] bytes)
         {
-            throw new NotImplementedException();
+            fixed (byte* ptr = bytes)
+            {
+                for (int i = 0; i < bytes.Length; i++)
+                    ptr[i]++;
+
+                return ptr;
+            }
         }
     }
 }

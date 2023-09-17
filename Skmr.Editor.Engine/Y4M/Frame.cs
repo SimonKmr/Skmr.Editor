@@ -4,7 +4,6 @@
     {
         private byte[] data;
 
-<<<<<<< HEAD
         public int Width { get; set; }
         public int Height { get; set; }
         public int Size 
@@ -15,36 +14,22 @@
 
         public int SizeBody
             => Width * Height * 3 / 2;
-=======
-        public int Width { get; }
-        public int Height { get; }
-
-        public int Size => (int)(Width * Height * 1.5f);
->>>>>>> ba52b126888bc894e876e48cab602e7ceaef74b3
 
         public Frame(int width, int height)
         {
             Width = width;
             Height = height;
-<<<<<<< HEAD
             data = new byte[SizeBody];
-=======
-
-            data = new byte[Size];
->>>>>>> ba52b126888bc894e876e48cab602e7ceaef74b3
         }
 
         public Frame(int width, int height, byte[] data)
         {
             Width = width;
             Height = height;
-<<<<<<< HEAD
-            if (data.Length != SizeBody) throw new Exception();
-=======
 
-            if (data.Length != Size) throw new Exception();
+            if (data.Length != SizeBody) 
+                throw new Exception();
 
->>>>>>> ba52b126888bc894e876e48cab602e7ceaef74b3
             this.data = data;
         }
 

@@ -1,4 +1,5 @@
 ﻿using FFmpeg.AutoGen;
+using System.Runtime.InteropServices;
 
 namespace Skmr.Editor.Engine.LibAv
 {
@@ -6,16 +7,13 @@ namespace Skmr.Editor.Engine.LibAv
     {
         public static AVPacket ToPackage(this byte[] bytes)
         {
-            AVPacket res = new AVPacket
-            {
-
-            };
+            AVPacket res = new AVPacket();
             
             unsafe
             {
-                ffmpeg.av_new_packet(&res, 1024);
+                ffmpeg.av_new_packet(&res, bytes.Length);
+                res.data = bytes.ToPointer();
             }
-
 
             return res;
         }

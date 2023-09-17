@@ -77,7 +77,7 @@ namespace Skmr.Editor.Engine.Rav1e
                 {
                     unsafe
                     {
-                        var bytes = Create(packet.Data, (int)packet.Len);
+                        var bytes = Utility.Create(packet.Data, (int)packet.Len);
                         //Allow Packet to be removed from Memory
                         Api.Rav1ePacketUnref(packet);
                         //Send Frame
@@ -102,12 +102,6 @@ namespace Skmr.Editor.Engine.Rav1e
             Api.Rav1eContextUnref(context);
         }
 
-        private unsafe static T[] Create<T>(T* ptr, int length) where T : unmanaged
-        {
-            T[] array = new T[length];
-            for (int i = 0; i < length; i++)
-                array[i] = ptr[i];
-            return array;
-        }
+
     }
 }

@@ -1,5 +1,4 @@
-﻿using Skmr.Editor.Engine.Rav1e.Api;
-using System.Collections;
+﻿using System.Collections;
 
 namespace Skmr.Editor.Engine.Y4M
 {
@@ -23,8 +22,7 @@ namespace Skmr.Editor.Engine.Y4M
         { 
             get => Frames[index]; set 
             {
-                var frame = value.Clone();
-                Frames[index] = frame;
+                Frames[index] = value;
             } 
         }
 
