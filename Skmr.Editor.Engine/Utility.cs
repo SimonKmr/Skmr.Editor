@@ -1,10 +1,11 @@
 ﻿using Skmr.Editor.Engine.Y4M;
+using System.Drawing;
 
 namespace Skmr.Editor.Engine
 {
-    public static class Utility
+    public static partial class Utility
     {
-        static public byte[] ToFrame(this Image image)
+        static public Frame ToFrame(this Image image)
         {
             int width = image.Width;
             int height = image.Height;
@@ -25,7 +26,7 @@ namespace Skmr.Editor.Engine
                 for (int y = 0; y < image.Height; y++)
                 {
                     var c = image.Get(x, y);
-                    yBytes[x + y * width] = RgbToYCbCr(c).y;
+                    yBytes[x + y * width] = c.ToYCbCr().y;
                 }
             }
 
@@ -36,25 +37,26 @@ namespace Skmr.Editor.Engine
                 {
                     var c = image.Get(x * 2, y * 2);
                     var index = x + y * width / 2;
-                    var yCbCr = RgbToYCbCr(c);
+                    var yCbCr = c.ToYCbCr();
 
                     cbBytes[index] = yCbCr.cb;
                     crBytes[index] = yCbCr.cr;
                 }
             }
 
-            byte[] res = new byte[ySize + cbSize + crSize];
-            Array.Copy(yBytes, 0, res, 0, ySize);
-            Array.Copy(cbBytes, 0, res, ySize, cbSize);
-            Array.Copy(cbBytes, 0, res, ySize + cbSize, crSize);
+            byte[] data = new byte[ySize + cbSize + crSize];
+            Array.Copy(yBytes, 0, data, 0, ySize);
+            Array.Copy(cbBytes, 0, data, ySize, cbSize);
+            Array.Copy(cbBytes, 0, data, ySize + cbSize, crSize);
 
-            return res;
+            return new Frame(width, height, data);
         }
 
-        static public Image ToImage(this Frame y4m,byte[] frame)
+        static public Image ToImage(this Frame y4m)
         {
-            var width = y4m.Parent.Width;
-            var height = y4m.Parent.Height;
+            var width = y4m.Width;
+            var height = y4m.Height;
+            var frame = y4m.GetData();
 
             //Size of the Y Cb Cr section
             int ySize = width * height;
@@ -90,38 +92,35 @@ namespace Skmr.Editor.Engine
             {
                 for (int y = 0; y < height; y++)
                 {
-                    // Get the Y, Cb, and Cr values of the pixel
-                    byte yValue = yComponent[x + y * width];
-                    byte cbValue = cbMap[x / 4, y / 4]; // Upsample Cb and Cr components
-                    byte crValue = crMap[x / 4, y / 4];
-
-                    (byte r, byte g, byte b) color = YCbCrToRgb(yValue, cbValue, crValue);
-
-                    image.Set(x, y, color);
+                    image.Set(x, y, 
+                        new YCbCr(
+                            yComponent[x + y * width], 
+                            cbMap[x / 4, y / 4], 
+                            crMap[x / 4, y / 4]).ToRgb());
                 }
             }
 
             return image;
         }
 
-        public static (byte r, byte g, byte b) YCbCrToRgb(byte y, byte cb, byte cr)
+        public static Rgb ToRgb(this YCbCr color)
         {
-            double Y = y;
-            double Cb = cb;
-            double Cr = cr;
+            double Y = color.y;
+            double Cb = color.cb;
+            double Cr = color.cr;
 
             int r = (int)(Y + 1.40200 * (Cr - 0x80));
             int g = (int)(Y - 0.34414 * (Cb - 0x80) - 0.71414 * (Cr - 0x80));
             int b = (int)(Y + 1.77200 * (Cb - 0x80));
 
-            r = Math.Max(0, Math.Min(255, r));
-            g = Math.Max(0, Math.Min(255, g));
-            b = Math.Max(0, Math.Min(255, b));
-
-            return ((byte)r, (byte)g, (byte)b);
+            return new Rgb(
+                (byte) Math.Max(0, Math.Min(255, r)),
+                (byte) Math.Max(0, Math.Min(255, g)),
+                (byte) Math.Max(0, Math.Min(255, b))
+                );
         }
 
-        public static (byte y, byte cb, byte cr) RgbToYCbCr((byte r, byte g, byte b) color)
+        public static YCbCr ToYCbCr(this Rgb color)
         {
             double R = (double)color.r / 255;
             double G = (double)color.g / 255;
@@ -131,11 +130,11 @@ namespace Skmr.Editor.Engine
             double Cb = -0.169 * R - 0.331 * G + 0.500 * B;
             double Cr = 0.500 * R - 0.419 * G - 0.081 * B;
 
-            byte y = (byte)(Y * 255);
-            byte cb = (byte)((Cb + 0.5) * 255);
-            byte cr = (byte)((Cr + 0.5) * 255);
-
-            return (y, cb, cr);
+            return new YCbCr(
+                (byte) (Y * 255),
+                (byte) ((Cb + 0.5) * 255),
+                (byte) ((Cr + 0.5) * 255)
+                );
         }
 
         public static Image Open(string Path)
