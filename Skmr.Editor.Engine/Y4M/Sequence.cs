@@ -1,39 +1,70 @@
-﻿namespace Skmr.Editor.Engine.Y4M
+﻿using Skmr.Editor.Engine.Rav1e.Api;
+using System.Collections;
+
+namespace Skmr.Editor.Engine.Y4M
 {
-    public class Sequence : IY4MContainer
+    public class Sequence : IList<Frame>
     {
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int FrameRate { get; set; }
+        public string ColorSpace { get; set; }
+        private List<Frame> Frames { get; set; }
+
+
+        public Sequence(int frameRate)
+        {
+            FrameRate = frameRate;
+            ColorSpace = "4:2:0";
+            Frames = new List<Frame>();
+        }
+
         public Frame this[int index] 
         { 
             get => Frames[index]; set 
             {
                 var frame = value.Clone();
-                frame.Parent = this;
                 Frames[index] = frame;
             } 
         }
 
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public int FrameRate { get; set; }
-        public string ColorSpace { get; set; }
-        private Frame[] Frames { get; set; }
+        public int Count => Frames.Count;
 
-        public int Size
-            => (FrameBodySize + FrameHeaderSize) * Frames.Length;
-        public int FrameSize
-            => FrameBodySize + FrameHeaderSize;
-        public int FrameBodySize
-            => Width * Height * 3 / 2;
-        public int FrameHeaderSize
-            => "FRAME\n".Length;
+        public bool IsReadOnly => false;
 
-        /// <summary>
-        /// Creates a frame for the sequence
-        /// </summary>
-        /// <returns></returns>
-        public Frame ProvideFrame()
+        public int IndexOf(Frame item)
+            => Frames.IndexOf(item);
+
+        public void Insert(int index, Frame item)
+            => Frames.Insert(index, item);
+
+        public void RemoveAt(int index)
+            => Frames.RemoveAt(index);
+
+        public void Add(Frame item)
         {
-            return new Frame(this);
+            if (Width != item.Width || Height != item.Height)
+                throw new Exception();
+
+            Frames.Add(item);
         }
+
+        public void Clear()
+            => Frames.Clear();
+
+        public bool Contains(Frame item)
+            => Frames.Contains(item);
+
+        public void CopyTo(Frame[] array, int arrayIndex)
+            => Frames.CopyTo(array, arrayIndex);
+
+        public bool Remove(Frame item)
+            => Frames.Remove(item);
+
+        public IEnumerator<Frame> GetEnumerator()
+            => Frames.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+            => Frames.GetEnumerator();
     } 
 }

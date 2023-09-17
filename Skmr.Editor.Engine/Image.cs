@@ -1,8 +1,10 @@
-﻿namespace Skmr.Editor.Engine
+﻿using static Skmr.Editor.Engine.Utility;
+
+namespace Skmr.Editor.Engine
 {
     public class Image
     {
-        private (byte, byte, byte)[,] pixels;
+        private Rgb[,] pixels;
 
         public int Width { get; }
         public int Height { get; }
@@ -11,12 +13,12 @@
         {
             Width = width;
             Height = height;
-            pixels = new (byte, byte, byte)[Width, Height];
+            pixels = new Rgb[Width, Height];
         }
 
-        public void Set(int x, int y, (byte, byte, byte) rgb)
+        public void Set(int x, int y, Rgb rgb)
             => pixels[x, y] = rgb;
-        public (byte r, byte g, byte b) Get(int x, int y)
+        public Rgb Get(int x, int y)
             => pixels[x, y];
 
         public byte[,,] GetByteBgrMap()

@@ -3,20 +3,30 @@
     public class Frame
     {
         private byte[] data;
-        public  IY4MContainer Parent { get; internal set; }
 
-        public Frame(IY4MContainer parent)
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int Size 
+            => SizeHeader + SizeBody;
+
+        public int SizeHeader
+            => "FRAME\n".Length;
+
+        public int SizeBody
+            => Width * Height * 3 / 2;
+
+        public Frame(int width, int height)
         {
-            this.Parent = parent;
-            data = new byte[parent.FrameBodySize];
+            Width = width;
+            Height = height;
+            data = new byte[SizeBody];
         }
 
-        public Frame(IY4MContainer parent,byte[] data)
+        public Frame(int width, int height, byte[] data)
         {
-            if (parent.FrameBodySize != data.Length) 
-                throw new Exception();
-
-            this.Parent = parent;
+            Width = width;
+            Height = height;
+            if (data.Length != SizeBody) throw new Exception();
             this.data = data;
         }
 
@@ -29,7 +39,7 @@
 
         public byte[] Get(Channel channel)
         {
-            int ySize = Parent.Width * Parent.Height;
+            int ySize = Width * Height;
             int cbSize = ySize / 4;
             int crSize = ySize / 4;
 
@@ -60,8 +70,8 @@
 
         private int GetIndex(Channel channel, int x, int y)
         {
-            int baseOffset = Parent.FrameHeaderSize;
-            int ySize = Parent.Width * Parent.Height;
+            int baseOffset = Size;
+            int ySize = Size * Size;
             int cbSize = ySize / 4;
 
             switch (channel)
@@ -74,12 +84,11 @@
             throw new Exception();
         }
 
-        public Frame Clone()
+        public byte[] GetData()
         {
-            return new Frame(Parent)
-            {
-                data = (byte[])data.Clone(),
-            };
+            var res = new byte[data.Length];
+            Array.Copy(data, res, data.Length);
+            return res;
         }
     }
 }
