@@ -53,8 +53,8 @@ namespace Skmr.Editor.Engine
 
         static public Image ToImage(this Frame y4m,byte[] frame)
         {
-            var width = y4m.Parent.Width;
-            var height = y4m.Parent.Height;
+            var width = y4m.Width;
+            var height = y4m.Height;
 
             //Size of the Y Cb Cr section
             int ySize = width * height;
