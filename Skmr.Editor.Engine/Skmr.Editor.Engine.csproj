@@ -4,7 +4,17 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="LibAv\Codec\**" />
+    <Compile Remove="LibAv\Format\**" />
+    <EmbeddedResource Remove="LibAv\Codec\**" />
+    <EmbeddedResource Remove="LibAv\Format\**" />
+    <None Remove="LibAv\Codec\**" />
+    <None Remove="LibAv\Format\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="Dlls\rav1e.dll">
@@ -13,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="LibAv\Codec\" />
-    <Folder Include="LibAv\Format\" />
+    <PackageReference Include="CppSharp" Version="1.0.54.626" />
+    <PackageReference Include="FFmpeg.AutoGen" Version="6.0.0.2" />
   </ItemGroup>
 
 </Project>
