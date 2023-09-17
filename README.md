@@ -20,7 +20,7 @@
 
 ## Analyzer
 ### Computer Vision
-### Machine Learning (with PyTorch)
+### Machine Learning (with Keras)
 ## Engine (todo)
 - Support reading metadata from codes
 - Support operations on [Y4M](https://wiki.multimedia.cx/index.php/YUV4MPEG2)
