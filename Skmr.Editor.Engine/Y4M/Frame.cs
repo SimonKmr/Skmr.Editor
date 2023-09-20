@@ -6,20 +6,15 @@
 
         public int Width { get; set; }
         public int Height { get; set; }
-        public int Size 
-            => SizeHeader + SizeBody;
 
-        public int SizeHeader
-            => "FRAME\n".Length;
-
-        public int SizeBody
+        public int Size
             => Width * Height * 3 / 2;
 
         public Frame(int width, int height)
         {
             Width = width;
             Height = height;
-            data = new byte[SizeBody];
+            data = new byte[Size];
         }
 
         public Frame(int width, int height, byte[] data)
@@ -27,7 +22,7 @@
             Width = width;
             Height = height;
 
-            if (data.Length != SizeBody) 
+            if (data.Length != Size) 
                 throw new Exception();
 
             this.data = data;
