@@ -1,6 +1,8 @@
-﻿using Rav1e = Skmr.Editor.Engine.Rav1e;
-using Y4M = Skmr.Editor.Engine.Y4M;
-using Skmr.Editor.Engine.OpenH264;
+﻿using Y4M = Skmr.Editor.Engine.Y4M;
+using Skmr.Editor.Engine.Codecs.Apis.Rav1e;
+using Skmr.Editor.Engine.Bitstreams.H264;
+using Skmr.Editor.Engine.Codecs;
+using H264 = Skmr.Editor.Engine.Bitstreams.H264;
 
 int width = 480;
 int height = 270;
@@ -14,11 +16,11 @@ void TestOpenH264()
 {
     string h264Test = @"C:\Users\Simon\Desktop\res.h264";
     int i = 0;
-    Decoder decoder = new Decoder(width, height);
+    OpenH264Dec decoder = new OpenH264Dec(width, height);
 
     using (Stream h264 = File.Open(h264Test, FileMode.Open))
     {
-        Reader reader = new Reader(h264);
+        H264.Reader reader = new H264.Reader(h264);
         while (true)
         {
             var data = reader.ReadFrame();
@@ -44,7 +46,7 @@ void TestRav1e()
     //Encoding
     using (Stream source = File.Open(output, FileMode.Create))
     {
-        using (var rav1e = new Rav1e.Encoder(width, height, 30))
+        using (var rav1e = new Rav1e(width, height, 30))
         {
             int i = 0;
 
@@ -52,18 +54,18 @@ void TestRav1e()
             {
                 var status = rav1e.ReceiveFrame(out byte[]? data);
 
-                if (status == Rav1e.Api.EncoderStatus.LimitReached) break;
+                if (status == EncoderStatus.LimitReached) break;
 
                 if (i > 300)
                 {
                     rav1e.Flush();
                 }
-                else if (status == Rav1e.Api.EncoderStatus.NeedMoreData)
+                else if (status == EncoderStatus.NeedMoreData)
                 {
                     rav1e.SendFrame(frame);
                     i++;
                 }
-                else if (status == Rav1e.Api.EncoderStatus.Success && data != null)
+                else if (status == EncoderStatus.Success && data != null)
                 {
                     source.Write(data, 0, data.Length);
                 }

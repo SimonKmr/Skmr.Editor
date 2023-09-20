@@ -2,10 +2,10 @@
 
 namespace Skmr.Editor.Engine.Bitstreams.H264
 {
-    public class StreamReader : IDisposable
+    public class Reader : IDisposable
     {
         private Stream _stream;
-        public StreamReader(Stream stream)
+        public Reader(Stream stream)
         {
             _stream = stream;
             _stream.Position = 4;

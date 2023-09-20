@@ -1,35 +1,35 @@
-using Skmr.Editor.Engine.Codecs.Api;
-using Skmr.Editor.Engine.Rav1e;
-using Skmr.Editor.Engine.Rav1e.Api;
+using Skmr.Editor.Engine.Codecs.Apis.Rav1e;
 using Y4M = Skmr.Editor.Engine.Y4M;
-using System;
+using H264 = Skmr.Editor.Engine.Bitstreams.H264;
+using Y4MB = Skmr.Editor.Engine.Bitstreams.Y4M;
+using Skmr.Editor.Engine.Codecs;
 
 namespace Skmr.Editor.Tests
 {
-    public class Rav1e
+    public class Engine
     {
         int width = 480;
         int height = 270;
 
         [Fact]
-        public void Test1()
+        public void TestRav1e()
         {
             string input = "resources\\input.y4m";
             string output = "results\\test1.ivf";
 
             Y4M.Frame frame;
 
-            using (var s = new Y4M.StreamReader(input))
+            using (var s = new H264.StreamReader(input))
             {
                 var data = new byte[width * height * 3 / 2];
-                s.Read(out frame);
+                s.ReadFrame(out frame);
             }
 
             if(File.Exists(output)) { File.Delete(output); }
 
             using (var s = File.Open(output, FileMode.CreateNew))
             {
-                using (var rav1e = new Encoder(width, height))
+                using (var rav1e = new Rav1e(width, height))
                 {
                     int i = 0;
 
@@ -58,18 +58,18 @@ namespace Skmr.Editor.Tests
         }
 
         [Fact]
-        public void Test2()
+        public void TestY4MReaderAndWriter()
         {
             string input = "resources\\input.y4m";
             string output = "results\\test3.y4m";
             Y4M.Frame frame;
 
-            using (var sr = new Y4M.StreamReader(input))
+            using (var sr = new Y4MB.StreamReader(input))
             {
                 sr.Read(out frame);
             }
 
-            using (var sw = new Y4M.StreamWriter(output, 480, 270))
+            using (var sw = new Y4MB.StreamWriter(output, 480, 270))
             {
                 sw.Write(frame);
             }

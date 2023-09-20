@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Skmr.Editor.Engine.Bitstreams.Y4M
 {
-    public class StreamWriter : IDisposable
+    public class Writer : IDisposable
     {
         private Stream stream;
 
-        public StreamWriter(Stream stream, int width, int height, int fps = 30)
+        public Writer(Stream stream, int width, int height, int fps = 30)
         {
             this.stream = stream;
 

@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Skmr.Editor.Engine.Bitstreams.Y4M
 {
-    public class StreamReader : IDisposable
+    public class Reader : IDisposable
     {
         private int width = 480;
         private int height = 270;
         private Stream stream;
 
-        public StreamReader(Stream stream)
+        public Reader(Stream stream)
         {
             this.stream = stream;
 
