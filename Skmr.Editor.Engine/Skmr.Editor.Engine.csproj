@@ -9,15 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="LibAv\Codec\**" />
-    <Compile Remove="LibAv\Format\**" />
-    <EmbeddedResource Remove="LibAv\Codec\**" />
-    <EmbeddedResource Remove="LibAv\Format\**" />
-    <None Remove="LibAv\Codec\**" />
-    <None Remove="LibAv\Format\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Dlls\avcodec-60.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
