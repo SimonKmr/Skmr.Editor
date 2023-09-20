@@ -51,7 +51,6 @@ namespace Skmr.Editor.Engine
 
             return new Frame(width, height, data);
         }
-
         static public Image ToImage(this Frame y4m)
         {
             var width = y4m.Width;
@@ -103,7 +102,7 @@ namespace Skmr.Editor.Engine
             return image;
         }
 
-        public static Rgb ToRgb(this YCbCr color)
+        public static RGB ToRgb(this YCbCr color)
         {
             double Y = color.y;
             double Cb = color.cb;
@@ -113,14 +112,37 @@ namespace Skmr.Editor.Engine
             int g = (int)(Y - 0.34414 * (Cb - 0x80) - 0.71414 * (Cr - 0x80));
             int b = (int)(Y + 1.77200 * (Cb - 0x80));
 
-            return new Rgb(
+            return new RGB(
                 (byte) Math.Max(0, Math.Min(255, r)),
                 (byte) Math.Max(0, Math.Min(255, g)),
                 (byte) Math.Max(0, Math.Min(255, b))
                 );
         }
+        public static RGB ToRgb(this YUV color)
+        {
+            // Conversion formula
+            double yd = color.y;
+            double ud = color.u - 128;
+            double vd = color.v - 128;
 
-        public static YCbCr ToYCbCr(this Rgb color)
+            var red = (int)Math.Round(yd + 1.13983 * vd);
+            var green = (int)Math.Round(yd - 0.39465 * ud - 0.58060 * vd);
+            var blue = (int)Math.Round(yd + 2.03211 * ud);
+
+            // Clamp the RGB values to the valid 8-bit range (0-255)
+            red = Math.Max(0, Math.Min(255, red));
+            green = Math.Max(0, Math.Min(255, green));
+            blue = Math.Max(0, Math.Min(255, blue));
+
+            return new RGB
+            {
+                r = (byte)red,
+                g = (byte)green,
+                b = (byte)blue,
+            };
+        }
+
+        public static YCbCr ToYCbCr(this RGB color)
         {
             double R = (double)color.r / 255;
             double G = (double)color.g / 255;
@@ -131,20 +153,74 @@ namespace Skmr.Editor.Engine
             double Cr = 0.500 * R - 0.419 * G - 0.081 * B;
 
             return new YCbCr(
-                (byte) (Y * 255),
-                (byte) ((Cb + 0.5) * 255),
-                (byte) ((Cr + 0.5) * 255)
+                    (byte) (Y * 255),
+                    (byte) ((Cb + 0.5) * 255),
+                    (byte) ((Cr + 0.5) * 255)
                 );
         }
+        public static YCbCr ToYCbCr(this YUV color)
+        {
+            return new YCbCr
+            {
+                y = color.y,
+                cr = (byte)(color.v - 128),
+                cb = (byte)(color.u - 128),
+            };
+        }
 
-        public unsafe static T[] Create<T>(T* ptr, int length) where T : unmanaged
+        public static YUV ToYUV(this RGB color)
+        {
+            // Conversion formula
+            double rd = color.r / 255.0;
+            double gd = color.g / 255.0;
+            double bd = color.b / 255.0;
+
+            var y = (int)Math.Round(0.299 * rd + 0.587 * gd + 0.114 * bd);
+            var u = (int)Math.Round(-0.14713 * rd - 0.28886 * gd + 0.436 * bd) + 128;
+            var v = (int)Math.Round(0.615 * rd - 0.51498 * gd - 0.10001 * bd) + 128;
+
+            // Clamp the YUV values to the valid 8-bit range
+            y = Math.Max(0, Math.Min(255, y));
+            u = Math.Max(0, Math.Min(255, u));
+            v = Math.Max(0, Math.Min(255, v));
+
+            return new YUV
+            {
+                y = (byte)y,
+                u = (byte)u,
+                v = (byte)v,
+            };
+        }
+        public static YUV ToYUV(this YCbCr color)
+        {
+            double yd = color.y;
+            double crd = color.cr - 128;
+            double cbd = color.cb - 128;
+
+            var yuvY = (int)Math.Round(yd + 1.402 * crd);
+            var yuvU = (int)Math.Round(yd - 0.34414 * cbd - 0.71414 * crd);
+            var yuvV = (int)Math.Round(yd + 1.772 * cbd);
+
+            // Clamp the YUV values to the valid 8-bit range
+            yuvY = Math.Max(0, Math.Min(255, yuvY));
+            yuvU = Math.Max(0, Math.Min(255, yuvU));
+            yuvV = Math.Max(0, Math.Min(255, yuvV));
+
+            return new YUV
+            {
+                y = (byte)yuvY,
+                u = (byte)yuvU,
+                v = (byte)yuvV,
+            };
+        }
+
+        public unsafe static T[] Create<T>(T* ptr, long length) where T : unmanaged
         {
             T[] array = new T[length];
             for (int i = 0; i < length; i++)
                 array[i] = ptr[i];
             return array;
         }
-
         public unsafe static byte* ToPointer(this byte[] bytes)
         {
             fixed (byte* ptr = bytes)

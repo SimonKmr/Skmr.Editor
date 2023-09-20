@@ -1,8 +1,8 @@
 ﻿namespace Skmr.Editor.Engine
 {
-    public struct Rgb
+    public struct RGB
     {
-        public Rgb(byte r, byte g, byte b)
+        public RGB(byte r, byte g, byte b)
         {
             this.r = r;
             this.g = g;

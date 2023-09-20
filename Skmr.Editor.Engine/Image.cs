@@ -4,7 +4,7 @@ namespace Skmr.Editor.Engine
 {
     public class Image
     {
-        private Rgb[,] pixels;
+        private RGB[,] pixels;
 
         public int Width { get; }
         public int Height { get; }
@@ -13,12 +13,12 @@ namespace Skmr.Editor.Engine
         {
             Width = width;
             Height = height;
-            pixels = new Rgb[Width, Height];
+            pixels = new RGB[Width, Height];
         }
 
-        public void Set(int x, int y, Rgb rgb)
+        public void Set(int x, int y, RGB rgb)
             => pixels[x, y] = rgb;
-        public Rgb Get(int x, int y)
+        public RGB Get(int x, int y)
             => pixels[x, y];
 
         public byte[,,] GetByteBgrMap()
