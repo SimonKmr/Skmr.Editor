@@ -11,37 +11,37 @@ namespace Skmr.Editor.Engine.Bitstreams.Y4M
     {
         private int width = 480;
         private int height = 270;
-        private FileStream _fileStream;
+        private Stream stream;
 
-        public StreamReader(string path)
+        public StreamReader(Stream stream)
         {
-            _fileStream = File.Open(path, FileMode.Open);
+            this.stream = stream;
 
             while (true)
             {
-                var value = _fileStream.ReadByte();
+                var value = this.stream.ReadByte();
                 var breakChar = (int)'\n';
                 if (value == breakChar) break;
             }
 
-            var end = (int)_fileStream.Position + 1;
-            _fileStream.Position = 0;
+            var end = (int)this.stream.Position + 1;
+            this.stream.Position = 0;
 
             var buffer = new byte[end];
-            _fileStream.Read(buffer, 0, end);
+            this.stream.Read(buffer, 0, end);
         }
 
         public void Read(out Frame frame)
         {
-            while (_fileStream.ReadByte() != '\n') ;
+            while (stream.ReadByte() != '\n') ;
             var buffer = new byte[width * height * 3 / 2];
-            _fileStream.Read(buffer, 0, buffer.Length);
+            stream.Read(buffer, 0, buffer.Length);
             frame = new Frame(width, height, buffer);
         }
 
         public void Dispose()
         {
-            _fileStream.Dispose();
+            stream.Dispose();
         }
     }
 }

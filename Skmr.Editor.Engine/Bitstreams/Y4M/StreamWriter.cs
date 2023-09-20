@@ -10,10 +10,11 @@ namespace Skmr.Editor.Engine.Bitstreams.Y4M
 {
     public class StreamWriter : IDisposable
     {
-        FileStream _fileStream;
-        public StreamWriter(string path, int width, int height, int fps = 30)
+        private Stream stream;
+
+        public StreamWriter(Stream stream, int width, int height, int fps = 30)
         {
-            _fileStream = File.Open(path, FileMode.OpenOrCreate);
+            this.stream = stream;
 
             var header = $"YUV4MPEG2 W{width} H{height} F{fps}:1 Ip A1:1 C420mpeg2\n";
             var chars = header.ToCharArray();
@@ -24,19 +25,19 @@ namespace Skmr.Editor.Engine.Bitstreams.Y4M
                 bytes[i] = (byte)chars[i];
             }
 
-            _fileStream.Write(bytes, 0, chars.Length);
+            this.stream.Write(bytes, 0, chars.Length);
         }
 
         public void Dispose()
         {
-            _fileStream.Dispose();
+            stream.Dispose();
         }
 
         public void Write(Frame frame)
         {
             byte[] frameHead = new byte[] { 0x46, 0x52, 0x41, 0x4D, 0x45, 0x0A };
-            _fileStream.Write(frameHead);
-            _fileStream.Write(frame.GetData());
+            stream.Write(frameHead);
+            stream.Write(frame.GetData());
         }
     }
 }

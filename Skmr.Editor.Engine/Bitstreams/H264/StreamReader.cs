@@ -1,6 +1,8 @@
-﻿namespace Skmr.Editor.Engine.Bitstreams.H264
+﻿using Skmr.Editor.Engine.Y4M;
+
+namespace Skmr.Editor.Engine.Bitstreams.H264
 {
-    public class StreamReader
+    public class StreamReader : IDisposable
     {
         private Stream _stream;
         public StreamReader(Stream stream)
@@ -9,7 +11,12 @@
             _stream.Position = 4;
         }
 
-        public byte[] ReadFrame()
+        public void Dispose()
+        {
+            _stream.Dispose();
+        }
+
+        public void ReadFrame(out Frame frame)
         {
             List<byte> tmp = new List<byte>();
             var buffer = new byte[4];
@@ -34,13 +41,7 @@
 
             Array.Copy(raw, 0, result, 4, raw.Length);
 
-            return result;
-        }
-
-        public enum State
-        {
-            Start,
-            End
+            frame = new Frame(480, 270, result);
         }
     }
 }
