@@ -1,6 +1,0 @@
-﻿https://ffmpeg.org/libavcodec.html
-https://trac.ffmpeg.org/wiki/Using%20libav*
-http://ffmpeg.org/doxygen/trunk/group__libavc.html
-https://superuser.com/questions/1440593/how-can-we-find-ffmpeg-library-file-like-any-so-or-dll-file
-https://github.com/BtbN/FFmpeg-Builds/releases
-	- shared has dlls
