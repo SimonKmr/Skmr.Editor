@@ -8,6 +8,9 @@ namespace Skmr.Editor.Engine.OpenH264
 {
     public class Decoder
     {
+        //https://encodingwissen.de/codecs/x264/technik/
+
+
         private const string dllPath = "Dlls\\openh264-2.3.1-win64.dll";
         private readonly OpenH264Lib.Decoder decoder;
 
@@ -22,7 +25,7 @@ namespace Skmr.Editor.Engine.OpenH264
             decoder = new OpenH264Lib.Decoder(dllPath);
         }
 
-        public unsafe bool Decode(byte[] frame, out Y4M.Frame? result)
+        public unsafe bool TryDecode(byte[] frame, out Y4M.Frame? result)
         {
             var size = Width * Height * 3 / 2;
             var bytes = decoder.Decode(frame, frame.Length);
