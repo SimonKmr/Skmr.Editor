@@ -5,10 +5,17 @@ namespace Skmr.Editor.Engine.Bitstreams.H264
     public class Reader : IDisposable
     {
         private Stream _stream;
-        public Reader(Stream stream)
+        private byte[] _buffer = new byte[4];
+        public int Width { get; }
+        public int Height { get; }
+
+        public Reader(Stream stream, int width, int height)
         {
+            Width = width;
+            Height = height;
+
             _stream = stream;
-            _stream.Position = 4;
+            _stream.Position = 0;
         }
 
         public void Dispose()
@@ -16,20 +23,29 @@ namespace Skmr.Editor.Engine.Bitstreams.H264
             _stream.Dispose();
         }
 
-        public void ReadFrame(out Frame frame)
+        public bool ReadFrame(out byte[]? frame)
         {
+            frame = null;
             List<byte> tmp = new List<byte>();
-            var buffer = new byte[4];
             int num = -1;
+
             while (num != 16777216)
             {
-                var b = (byte)_stream.ReadByte();
-                buffer[(_stream.Position - 1) % 4] = b;
-                num = BitConverter.ToInt32(buffer, 0);
+                var b = _stream.ReadByte();
+                if (b == -1)
+                    return false;
 
-                tmp.Add(b);
+                var bbyte = (byte)b;
+
+                _buffer[0] = _buffer[1];
+                _buffer[1] = _buffer[2];
+                _buffer[2] = _buffer[3];
+                _buffer[3] = bbyte;
+                num = BitConverter.ToInt32(_buffer, 0);
+                
+                tmp.Add(bbyte);
             }
-
+            Console.WriteLine((_stream.Position-4).ToString("x16"));
 
             var raw = tmp.ToArray()[0..(tmp.Count - 4)];
             var result = new byte[tmp.Count + 4];
@@ -40,8 +56,9 @@ namespace Skmr.Editor.Engine.Bitstreams.H264
             result[3] = 1;
 
             Array.Copy(raw, 0, result, 4, raw.Length);
+            frame = result;
 
-            frame = new Frame(480, 270, result);
+            return true;
         }
     }
 }
