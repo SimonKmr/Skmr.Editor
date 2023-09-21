@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace Skmr.Editor.Engine.Codecs
         //https://encodingwissen.de/codecs/x264/technik/
 
 
-        private const string dllPath = "Dlls\\openh264-2.3.1-win64.dll";
+        public const string dllPath = "Dlls\\openh264-2.3.1-win64.dll";
         private readonly OpenH264Lib.Decoder decoder;
 
         public int Width { get; set; }
@@ -27,18 +28,30 @@ namespace Skmr.Editor.Engine.Codecs
 
         public unsafe bool TryDecode(byte[] frame, out Y4M.Frame? result)
         {
-            var size = Width * Height * 3 / 2;
+            var size = Width * Height * 3;
             var bytes = decoder.Decode(frame, frame.Length);
             result = null;
 
             if (bytes == null) return false;
             var data = new byte[size];
 
-            for (int i = 0; i < size; i++)
-                data[i] = bytes[i];
-
             result = new Y4M.Frame(Width, Height, data);
             return true;
+        }
+
+        private Image<RGB> RGBArrayToImage(byte[] arr, int width, int height)
+        {
+            var result = new Image<RGB>(width, height);
+            for (int p = 0; p < arr.Length; p += 3)
+            {
+                var rgb = new RGB(arr[p + 2], arr[p + 1], arr[p + 0]);
+
+                var x = (p / 3) % width;
+                var y = (p / 3) / width;
+
+                result.Set(x, y, rgb);
+            }
+            return result;
         }
     }
 }
