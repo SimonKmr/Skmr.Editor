@@ -3,6 +3,7 @@ using Y4M = Skmr.Editor.Engine.Y4M;
 using H264 = Skmr.Editor.Engine.Bitstreams.H264;
 using Y4MB = Skmr.Editor.Engine.Bitstreams.Y4M;
 using Skmr.Editor.Engine.Codecs;
+using Skmr.Editor.Engine;
 
 namespace Skmr.Editor.Tests
 {
@@ -14,18 +15,29 @@ namespace Skmr.Editor.Tests
         [Fact]
         public void TestRav1e()
         {
-            string input = "resources\\input.y4m";
+            Image<RGB>? frame = null;
+
+            string input = "resources\\input.h264";
             string output = "results\\test1.ivf";
 
-            Y4M.Frame frame;
+            if(File.Exists(output)) { File.Delete(output); }
 
-            using (var s = new H264.StreamReader(input))
+            var inp = File.Open(input, FileMode.Open);
+            var reader = new H264.Reader(inp, width, height);
+            var decoder = new OpenH264Dec(width, height);
+
+            byte[]? frameData;
+
+            while(true)
             {
                 var data = new byte[width * height * 3 / 2];
-                s.ReadFrame(out frame);
-            }
+                reader.Read(out frameData);
 
-            if(File.Exists(output)) { File.Delete(output); }
+                if(decoder.TryDecode(frameData, out frame))
+                {
+                    break;
+                }
+            }
 
             using (var s = File.Open(output, FileMode.CreateNew))
             {
@@ -62,14 +74,18 @@ namespace Skmr.Editor.Tests
         {
             string input = "resources\\input.y4m";
             string output = "results\\test3.y4m";
-            Y4M.Frame frame;
-
-            using (var sr = new Y4MB.StreamReader(input))
+            
+            var i = File.Open(input, FileMode.Open);
+            var o = File.Open(output, FileMode.Create);
+            
+            Image<RGB> frame;
+            
+            using (var sr = new Y4MB.Reader(i, width, height))
             {
                 sr.Read(out frame);
             }
 
-            using (var sw = new Y4MB.StreamWriter(output, 480, 270))
+            using (var sw = new Y4MB.Writer(o, width, height))
             {
                 sw.Write(frame);
             }

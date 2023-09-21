@@ -27,6 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="resources\input.h264">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="resources\input.y4m">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
