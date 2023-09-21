@@ -5,7 +5,7 @@ namespace Skmr.Editor.Engine
 {
     public static partial class Utility
     {
-        static public Frame ToFrame(this Image image)
+        static public Frame ToFrame(this Image<RGB> image)
         {
             int width = image.Width;
             int height = image.Height;
@@ -51,7 +51,8 @@ namespace Skmr.Editor.Engine
 
             return new Frame(width, height, data);
         }
-        static public Image ToImage(this Frame y4m)
+
+        static public Image<RGB> ToImage(this Frame y4m)
         {
             var width = y4m.Width;
             var height = y4m.Height;
@@ -85,7 +86,7 @@ namespace Skmr.Editor.Engine
                 }
             }
 
-            Image image = new Image(width, height);
+            var image = new Image<RGB>(width, height);
 
             for (int x = 0; x < width; x++)
             {

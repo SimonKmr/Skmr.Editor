@@ -2,9 +2,9 @@
 
 namespace Skmr.Editor.Engine
 {
-    public class Image
+    public class Image<T>
     {
-        private RGB[,] pixels;
+        private T[,] pixels;
 
         public int Width { get; }
         public int Height { get; }
@@ -13,28 +13,12 @@ namespace Skmr.Editor.Engine
         {
             Width = width;
             Height = height;
-            pixels = new RGB[Width, Height];
+            pixels = new T[Width, Height];
         }
 
-        public void Set(int x, int y, RGB rgb)
+        public void Set(int x, int y, T rgb)
             => pixels[x, y] = rgb;
-        public RGB Get(int x, int y)
+        public T Get(int x, int y)
             => pixels[x, y];
-
-        public byte[,,] GetByteBgrMap()
-        {
-            var res = new byte[Width, Height,3];
-            for(int x = 0; x < Width; x++)
-            {
-                for(int y = 0; y < Height; y++)
-                {
-                    var channels = Get(x, y);
-                    res[x, y, 0] = channels.b;
-                    res[x, y, 1] = channels.g;
-                    res[x, y, 2] = channels.r;
-                }
-            }
-            return res;
-        }
     }
 }

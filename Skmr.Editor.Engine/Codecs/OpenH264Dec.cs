@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Skmr.Editor.Engine.Codecs
 {
-    public class OpenH264Dec
+    public class OpenH264Dec : IVideoDecoder
     {
         //https://encodingwissen.de/codecs/x264/technik/
 
@@ -26,16 +26,21 @@ namespace Skmr.Editor.Engine.Codecs
             decoder = new OpenH264Lib.Decoder(dllPath);
         }
 
-        public unsafe bool TryDecode(byte[] frame, out Y4M.Frame? result)
+        public unsafe bool TryDecode(byte[] frame, out Image<RGB>? result)
         {
             var size = Width * Height * 3;
-            var bytes = decoder.Decode(frame, frame.Length);
+            var data = decoder.Decode(frame, frame.Length);
             result = null;
 
-            if (bytes == null) return false;
-            var data = new byte[size];
+            if (data == null) return false;
 
-            result = new Y4M.Frame(Width, Height, data);
+            byte[] arr = new byte[size];
+            for (int p = 0; p < size; p++)
+            {
+                arr[p] = data[p];
+            }
+
+            result = RGBArrayToImage(arr, Width,Height);
             return true;
         }
 
@@ -52,6 +57,11 @@ namespace Skmr.Editor.Engine.Codecs
                 result.Set(x, y, rgb);
             }
             return result;
+        }
+
+        public void Dispose()
+        {
+            decoder.Dispose();
         }
     }
 }

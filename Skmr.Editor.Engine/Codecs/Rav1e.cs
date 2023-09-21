@@ -1,5 +1,4 @@
 ﻿using Skmr.Editor.Engine.Codecs.Apis.Rav1e;
-using Skmr.Editor.Engine.Codecs.Apis.Rav1e;
 using System.Runtime.InteropServices;
 
 namespace Skmr.Editor.Engine.Codecs
@@ -33,13 +32,30 @@ namespace Skmr.Editor.Engine.Codecs
             context = Functions.rav1e_context_new(config);
         }
 
-        public EncoderStatus SendFrame(Y4M.Frame input)
+        public EncoderState ReceiveFrame(out  Image<RGB> image)
         {
+            throw new NotImplementedException();
+        }
+
+        public void Flush()
+        {
+            Functions.rav1e_send_frame(context, IntPtr.Zero);
+        }
+
+        public void Dispose()
+        {
+            Functions.rav1e_config_unref(config);
+            Functions.rav1e_context_unref(context);
+        }
+
+        public EncoderStatus SendFrame(Image<RGB> input)
+        {
+            var ycbcr = input.ToFrame();
             //Creates a frame
             var frame = Functions.rav1e_frame_new(context);
-            var y = input.Get(Y4M.Channel.Y);
-            var cb = input.Get(Y4M.Channel.Cb);
-            var cr = input.Get(Y4M.Channel.Cr);
+            var y = ycbcr.Get(Y4M.Channel.Y);
+            var cb = ycbcr.Get(Y4M.Channel.Cb);
+            var cr = ycbcr.Get(Y4M.Channel.Cr);
 
             //Create references of frame data
             GCHandle arr1 = GCHandle.Alloc(y, GCHandleType.Pinned);
@@ -71,7 +87,13 @@ namespace Skmr.Editor.Engine.Codecs
 
                 //Request Packet
                 IntPtr ptr = IntPtr.Zero;
-                var status = Functions.rav1e_receive_packet(context, ref ptr);
+                EncoderStatus status;
+
+                //Wait till Frame is encoded
+                do
+                {
+                    status = Functions.rav1e_receive_packet(context, ref ptr);
+                } while (status == EncoderStatus.Encoded);
 
                 //Check if Packet is usable
                 if (status.Equals(EncoderStatus.LimitReached)) return status;
@@ -95,17 +117,6 @@ namespace Skmr.Editor.Engine.Codecs
                     return status;
                 }
             }
-        }
-
-        public void Flush()
-        {
-            Functions.rav1e_send_frame(context, IntPtr.Zero);
-        }
-
-        public void Dispose()
-        {
-            Functions.rav1e_config_unref(config);
-            Functions.rav1e_context_unref(context);
         }
     }
 }

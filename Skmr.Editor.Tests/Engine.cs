@@ -4,17 +4,29 @@ using H264 = Skmr.Editor.Engine.Bitstreams.H264;
 using Y4MB = Skmr.Editor.Engine.Bitstreams.Y4M;
 using Skmr.Editor.Engine.Codecs;
 using Skmr.Editor.Engine;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace Skmr.Editor.Tests
 {
     public class Engine
     {
+        private readonly ITestOutputHelper output;
+
+        public Engine(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+
         int width = 480;
         int height = 270;
 
         [Fact]
         public void TestRav1e()
         {
+            //packets go missing
+            //because OpenH264Dec fails to decode some packages
+
             Image<RGB>? frame = null;
 
             string input = "resources\\input.h264";
@@ -23,50 +35,53 @@ namespace Skmr.Editor.Tests
             if(File.Exists(output)) { File.Delete(output); }
 
             var inp = File.Open(input, FileMode.Open);
+            var outp = File.Open(output, FileMode.CreateNew);
+
             var reader = new H264.Reader(inp, width, height);
             var decoder = new OpenH264Dec(width, height);
 
+            var rav1e = new Rav1e(width, height);
+
             byte[]? frameData;
 
-            while(true)
-            {
-                var data = new byte[width * height * 3 / 2];
-                reader.Read(out frameData);
+            int framesRead = 0;
+            int decodingFailed = 0;
 
-                if(decoder.TryDecode(frameData, out frame))
+            while(reader.Read(out frameData))
+            {
+                framesRead++;
+
+                if (!decoder.TryDecode(frameData, out frame))
                 {
-                    break;
+                    decodingFailed++;
+                    this.output.WriteLine($"Failed in iteration: {framesRead}");
+                    continue;
+                }
+                
+                rav1e.SendFrame(frame);
+
+                var status = rav1e.ReceiveFrame(out byte[]? data);
+
+                if (status == EncoderStatus.Success && data != null)
+                {
+                    outp.Write(data, 0, data.Length);
                 }
             }
 
-            using (var s = File.Open(output, FileMode.CreateNew))
+            rav1e.Flush();
+
+            while (true)
             {
-                using (var rav1e = new Rav1e(width, height))
+                var status = rav1e.ReceiveFrame(out byte[]? data);
+
+                if (status == EncoderStatus.LimitReached) break;
+                if (status == EncoderStatus.Success && data != null)
                 {
-                    int i = 0;
-
-                    while (true)
-                    {
-                        var status = rav1e.ReceiveFrame(out byte[]? data);
-
-                        if (status == EncoderStatus.LimitReached) break;
-
-                        if (i > 300)
-                        {
-                            rav1e.Flush();
-                        }
-                        else if (status == EncoderStatus.NeedMoreData)
-                        {
-                            rav1e.SendFrame(frame);
-                            i++;
-                        }
-                        else if (status == EncoderStatus.Success && data != null)
-                        {
-                            s.Write(data, 0, data.Length);
-                        }
-                    }
+                    outp.Write(data, 0, data.Length);
                 }
             }
+            this.output.WriteLine($"framesRead: {framesRead}");
+            this.output.WriteLine($"decodingFailed: {decodingFailed}");
         }
 
         [Fact]

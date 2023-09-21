@@ -5,116 +5,99 @@ using Skmr.Editor.Engine.Codecs;
 using H264 = Skmr.Editor.Engine.Bitstreams.H264;
 using OpenH264Sample;
 using System.Drawing;
+using Skmr.Editor.Engine.Y4M;
+using Skmr.Editor.Engine;
+using System;
 
 int width = 480;
 int height = 270;
-Y4M.Frame frame;
-H264DecodeAvi(@"C:\Users\Simon\Desktop\test.avi",1920,1080);
+Image<RGB>? frame;
+Console.WriteLine("Decoding");
+H264DecodeAvi(@"C:\Users\Simon\Desktop\res.h264",480,270);
+Console.WriteLine("Done!");
 //TestOpenH264();
 //TestRav1e();
-Console.WriteLine("Done!");
+
 while (true) ;
 
 unsafe void H264DecodeAvi(string path, int width, int height)
 {
-    Console.WriteLine("Decoding");
+    
     // create decoder
-    var decoder = new OpenH264Lib.Decoder(OpenH264Dec.dllPath);
+    //var decoder = new OpenH264Lib.Decoder(OpenH264Dec.dllPath);
 
     // open file
-    var aviFile = File.OpenRead(path);
-    var riff = new RiffFile(aviFile);
+    var h264 = File.OpenRead(path);
+    var reader = new H264.Reader(h264,width,height);
 
-    //create enumerator
-    var frames = riff.Chunks.OfType<RiffChunk>().Where(x => x.FourCC == "00dc");
-    var enumerator = frames.GetEnumerator();
+    var decoder = new OpenH264Dec(width,height);
+    byte[] frameData;
 
-    // decode frames
-    int i = 0;
+    int countFramesRead = 0;
+    int countFramesDecoded = 0;
 
-    while (enumerator.MoveNext())
+    while (true)
     {
-        var chunk = enumerator.Current;
-        var frame = chunk.ReadToEnd();
-
-        var size = width * height * 3;
-        var data = decoder.Decode(frame, frame.Length);
-        var bitmap = new Bitmap(width, height);
-
-        var arr = new byte[size];
-
-        if (data == null) continue;
-
-        for (int p = 0; p < size; p++)
+        if(reader.Read(out frameData))
         {
-            arr[p] = data[p];
+            countFramesRead++;
+        }
+        else { break; }
+        
+        if(decoder.TryDecode(frameData, out frame))
+        {
+            countFramesDecoded++;
+            var bitmap = new Bitmap(width, height);
+            
+            for(int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    var color = frame.Get(x, y);
+                    bitmap.SetPixel(x, y, Color.FromArgb(color.r, color.g, color.b));
+                }
+            }
+            bitmap.Save($"imgs\\res_{countFramesDecoded}.png");
+            bitmap.Dispose();
         }
 
-        
-
-        Directory.CreateDirectory("imgs");
-        bitmap.Save($"imgs\\test_{i++}.png");
+        Console.WriteLine($"Read: {countFramesRead} Decoded: {countFramesDecoded}");
     }
 }
 
-//void TestOpenH264()
+
+//void TestRav1e()
 //{
-//    string h264Test = @"C:\Users\Simon\Desktop\res.h264";
-//    int i = 0;
-//    OpenH264Dec decoder = new OpenH264Dec(width, height);
+//    //Setup
+//    string output = @"test3.ivf";
 
-//    using (Stream h264 = File.Open(h264Test, FileMode.Open))
+//    //Encoding
+//    using (Stream source = File.Open(output, FileMode.Create))
 //    {
-//        H264.Reader reader = new H264.Reader(h264);
-//        while (true)
+//        using (var rav1e = new Rav1e(width, height, 30))
 //        {
-//            var data = reader.ReadFrame();
-//            if (data.Length == 0) continue;
+//            int i = 0;
 
-//            if (decoder.TryDecode(data, out frame))
+//            while (true)
 //            {
-//                if(i > 5)
+//                var status = rav1e.ReceiveFrame(out byte[]? data);
+
+//                if (status == EncoderStatus.LimitReached) break;
+
+//                if (i > 300)
 //                {
-//                    break;
+//                    rav1e.Flush();
 //                }
-//                i++;
+//                else if (status == EncoderStatus.NeedMoreData)
+//                {
+//                    rav1e.SendFrame(frame);
+//                    i++;
+//                }
+//                else if (status == EncoderStatus.Success && data != null)
+//                {
+//                    source.Write(data, 0, data.Length);
+//                }
 //            }
 //        }
 //    }
 //}
-
-void TestRav1e()
-{
-    //Setup
-    string output = @"test3.ivf";
-
-    //Encoding
-    using (Stream source = File.Open(output, FileMode.Create))
-    {
-        using (var rav1e = new Rav1e(width, height, 30))
-        {
-            int i = 0;
-
-            while (true)
-            {
-                var status = rav1e.ReceiveFrame(out byte[]? data);
-
-                if (status == EncoderStatus.LimitReached) break;
-
-                if (i > 300)
-                {
-                    rav1e.Flush();
-                }
-                else if (status == EncoderStatus.NeedMoreData)
-                {
-                    rav1e.SendFrame(frame);
-                    i++;
-                }
-                else if (status == EncoderStatus.Success && data != null)
-                {
-                    source.Write(data, 0, data.Length);
-                }
-            }
-        }
-    }
-}

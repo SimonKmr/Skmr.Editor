@@ -33,11 +33,11 @@ namespace Skmr.Editor.Engine.Bitstreams.Y4M
             stream.Dispose();
         }
 
-        public void Write(Frame frame)
+        public void Write(Image<RGB> frame)
         {
             byte[] frameHead = new byte[] { 0x46, 0x52, 0x41, 0x4D, 0x45, 0x0A };
             stream.Write(frameHead);
-            stream.Write(frame.GetData());
+            stream.Write(frame.ToFrame().GetData());
         }
     }
 }

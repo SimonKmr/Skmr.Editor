@@ -9,12 +9,15 @@ namespace Skmr.Editor.Engine.Bitstreams.Y4M
 {
     public class Reader : IDisposable
     {
-        private int width = 480;
-        private int height = 270;
+        public int Width { get; }
+        private int Height { get; }
         private Stream stream;
 
-        public Reader(Stream stream)
+        public Reader(Stream stream, int width, int height)
         {
+            Width = width;
+            Height = height;
+
             this.stream = stream;
 
             while (true)
@@ -31,12 +34,12 @@ namespace Skmr.Editor.Engine.Bitstreams.Y4M
             this.stream.Read(buffer, 0, end);
         }
 
-        public void Read(out Frame frame)
+        public void Read(out Image<RGB> frame)
         {
             while (stream.ReadByte() != '\n') ;
-            var buffer = new byte[width * height * 3 / 2];
+            var buffer = new byte[Width * Height * 3 / 2];
             stream.Read(buffer, 0, buffer.Length);
-            frame = new Frame(width, height, buffer);
+            frame = new Frame(Width, Height, buffer).ToImage();
         }
 
         public void Dispose()

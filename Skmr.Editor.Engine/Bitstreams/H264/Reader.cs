@@ -15,7 +15,6 @@ namespace Skmr.Editor.Engine.Bitstreams.H264
             Height = height;
 
             _stream = stream;
-            _stream.Position = 0;
         }
 
         public void Dispose()
@@ -23,7 +22,7 @@ namespace Skmr.Editor.Engine.Bitstreams.H264
             _stream.Dispose();
         }
 
-        public bool ReadFrame(out byte[]? frame)
+        public bool Read(out byte[]? frame)
         {
             frame = null;
             List<byte> tmp = new List<byte>();
@@ -45,7 +44,6 @@ namespace Skmr.Editor.Engine.Bitstreams.H264
                 
                 tmp.Add(bbyte);
             }
-            Console.WriteLine((_stream.Position-4).ToString("x16"));
 
             var raw = tmp.ToArray()[0..(tmp.Count - 4)];
             var result = new byte[tmp.Count + 4];
