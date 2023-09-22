@@ -3,20 +3,20 @@ using System.Runtime.InteropServices;
 
 namespace Skmr.Editor.Engine.Codecs
 {
-    public class Rav1e : IDisposable
+    public class Rav1e : IVideoEncoder
     {
         private IntPtr context;
         private IntPtr config;
 
-        private int width;
-        private int height;
-        private int fps;
+        public int Width { get; }
+        public int Height { get; }
+        public int Fps { get; }
 
         public Rav1e(int width, int height, int fps = 30)
         {
-            this.width = width;
-            this.height = height;
-            this.fps = fps;
+            this.Width = width;
+            this.Height = height;
+            this.Fps = fps;
 
             //Create a config file and set width and height
             config = Functions.rav1e_config_default();
@@ -32,9 +32,11 @@ namespace Skmr.Editor.Engine.Codecs
             context = Functions.rav1e_context_new(config);
         }
 
-        public EncoderState ReceiveFrame(out  Image<RGB> image)
+        public EncoderState SendFrame(Image<RGB> input)
         {
-            throw new NotImplementedException();
+            var ycbcr = input.ToFrame();
+            var status = SendFrame(ycbcr);
+            return ToState(status);
         }
 
         public void Flush()
@@ -48,9 +50,9 @@ namespace Skmr.Editor.Engine.Codecs
             Functions.rav1e_context_unref(context);
         }
 
-        public EncoderStatus SendFrame(Image<RGB> input)
+        public EncoderStatus SendFrame(Y4M.Frame ycbcr)
         {
-            var ycbcr = input.ToFrame();
+            
             //Creates a frame
             var frame = Functions.rav1e_frame_new(context);
             var y = ycbcr.Get(Y4M.Channel.Y);
@@ -64,9 +66,9 @@ namespace Skmr.Editor.Engine.Codecs
 
             //move frame data into encoder frame
             //Stride => count of bytes till next line
-            Functions.rav1e_frame_fill_plane(frame, 0, arr1.AddrOfPinnedObject(), new IntPtr(y.Length), new IntPtr(width), 1);
-            Functions.rav1e_frame_fill_plane(frame, 1, arr2.AddrOfPinnedObject(), new IntPtr(cb.Length), new IntPtr(width / 2), 1);
-            Functions.rav1e_frame_fill_plane(frame, 2, arr3.AddrOfPinnedObject(), new IntPtr(cr.Length), new IntPtr(width / 2), 1);
+            Functions.rav1e_frame_fill_plane(frame, 0, arr1.AddrOfPinnedObject(), new IntPtr(y.Length), new IntPtr(Width), 1);
+            Functions.rav1e_frame_fill_plane(frame, 1, arr2.AddrOfPinnedObject(), new IntPtr(cb.Length), new IntPtr(Width / 2), 1);
+            Functions.rav1e_frame_fill_plane(frame, 2, arr3.AddrOfPinnedObject(), new IntPtr(cr.Length), new IntPtr(Width / 2), 1);
 
             //Appends Frame on queue
             var status = Functions.rav1e_send_frame(context, frame);
@@ -79,7 +81,7 @@ namespace Skmr.Editor.Engine.Codecs
             return status;
         }
 
-        public EncoderStatus ReceiveFrame(out byte[]? data)
+        public EncoderState ReceiveFrame(out byte[]? data)
         {
             while (true)
             {
@@ -96,7 +98,7 @@ namespace Skmr.Editor.Engine.Codecs
                 } while (status == EncoderStatus.Encoded);
 
                 //Check if Packet is usable
-                if (status.Equals(EncoderStatus.LimitReached)) return status;
+                if (status.Equals(EncoderStatus.LimitReached)) return ToState(status);
 
                 //If Decoding was successful
                 if (status == EncoderStatus.Success)
@@ -110,13 +112,26 @@ namespace Skmr.Editor.Engine.Codecs
                     Functions.rav1e_packet_unref(ptr);
 
                     //Send Frame
-                    return status;
+                    return ToState(status);
                 }
                 else
                 {
-                    return status;
+                    return ToState(status);
                 }
             }
         }
+
+        private static EncoderState ToState(EncoderStatus status)
+        {
+            switch (status)
+            {
+                case EncoderStatus.LimitReached:
+                    return EncoderState.Ended;
+                case EncoderStatus.Success:
+                    return EncoderState.Success;
+                default:
+                    return EncoderState.Unknown;
+            }
+        } 
     }
 }

@@ -22,7 +22,7 @@ namespace Skmr.Editor.Tests
         int height = 270;
 
         [Fact]
-        public void TestRav1e()
+        public void TestFullRun()
         {
             //packets go missing
             //because OpenH264Dec fails to decode some packages
@@ -38,9 +38,9 @@ namespace Skmr.Editor.Tests
             var outp = File.Open(output, FileMode.CreateNew);
 
             var reader = new H264.Reader(inp, width, height);
-            var decoder = new OpenH264Dec(width, height);
 
-            var rav1e = new Rav1e(width, height);
+            IVideoDecoder decoder = new OpenH264Dec(width, height);
+            IVideoEncoder rav1e = new Rav1e(width, height);
 
             byte[]? frameData;
 
@@ -62,7 +62,7 @@ namespace Skmr.Editor.Tests
 
                 var status = rav1e.ReceiveFrame(out byte[]? data);
 
-                if (status == EncoderStatus.Success && data != null)
+                if (status == EncoderState.Success && data != null)
                 {
                     outp.Write(data, 0, data.Length);
                 }
@@ -74,8 +74,8 @@ namespace Skmr.Editor.Tests
             {
                 var status = rav1e.ReceiveFrame(out byte[]? data);
 
-                if (status == EncoderStatus.LimitReached) break;
-                if (status == EncoderStatus.Success && data != null)
+                if (status == EncoderState.Ended) break;
+                if (status == EncoderState.Success && data != null)
                 {
                     outp.Write(data, 0, data.Length);
                 }
@@ -104,12 +104,6 @@ namespace Skmr.Editor.Tests
             {
                 sw.Write(frame);
             }
-        }
-
-        [Fact]
-        public void Test3()
-        {
-
         }
     }
 }

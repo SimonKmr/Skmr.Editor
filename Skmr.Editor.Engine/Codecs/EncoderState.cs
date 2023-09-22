@@ -2,6 +2,8 @@
 {
     public enum EncoderState
     {
-
+        Unknown,
+        Success,
+        Ended,
     }
 }

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Skmr.Editor.Engine.Codecs
 {
-    internal interface IVideoDecoder : IDisposable
+    public interface IVideoDecoder : IDisposable
     {
+        public bool TryDecode(byte[] frame, out Image<RGB>? result);
     }
 }
