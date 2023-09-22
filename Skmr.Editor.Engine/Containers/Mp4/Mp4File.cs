@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Skmr.Editor.Engine.Containers.Mp4
 {
-    internal class Mp4File
+    public class Mp4File : IVideoContainer
     {
+        //https://wiki.multimedia.cx/index.php/QuickTime_container
+        //https://developer.apple.com/documentation/quicktime-file-format
         public string Path { get; set; }
 
         public Mp4File(string path)
@@ -26,6 +28,12 @@ namespace Skmr.Editor.Engine.Containers.Mp4
             AssignLeafsAtomClasses(leafs);
             return rootAtoms;
         }
+
+        public Stream[] GetVideoStreams()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Write()
         {
             throw new NotImplementedException();
@@ -126,5 +134,7 @@ namespace Skmr.Editor.Engine.Containers.Mp4
 
             return new Atom(start, length, type, original);
         }
+
+
     }
 }
