@@ -2,7 +2,7 @@
 
 ## Engine
 
-The engine is the part that manages file input and output. It also manages the en-/decoding of the files with LibAV.
+The engine is the part that manages file input and output. It contains datastructures to read files and implements decoders to decode bitstreams of h264.
 
 This will also be extendet for simple tasks to adjust the images like intrapolation for scaling images more effective.
 
