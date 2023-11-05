@@ -1,4 +1,5 @@
-﻿using Skmr.Editor.Engine.Y4M;
+﻿using Skmr.Editor.Engine.Codecs.Apis.Rav1e;
+using Skmr.Editor.Engine.Y4M;
 
 namespace Skmr.Editor.Engine.Bitstreams.H264
 {
@@ -55,6 +56,46 @@ namespace Skmr.Editor.Engine.Bitstreams.H264
 
             Array.Copy(raw, 0, result, 4, raw.Length);
             frame = result;
+
+            return true;
+        }
+
+        public bool ByStartCode(out byte[]? frame)
+        {
+            frame = null;
+            List<byte> tmp = new List<byte>();
+            int num = -1;
+
+            while (num != 16777216)
+            {
+                var b = _stream.ReadByte();
+                if (b == -1)
+                    return false;
+
+                var bbyte = (byte)b;
+
+                _buffer[0] = _buffer[1];
+                _buffer[1] = _buffer[2];
+                _buffer[2] = _buffer[3];
+                _buffer[3] = bbyte;
+                num = BitConverter.ToInt32(_buffer, 0);
+
+                tmp.Add(bbyte);
+            }
+
+            frame = tmp.ToArray()[0..(tmp.Count - 4)];
+
+            return true;
+        }
+
+        public bool ByLength(out byte[]? frame)
+        {
+            var frameLengthBuffer = new byte[4];
+            _stream.Read(frameLengthBuffer, 0, 4);
+            var frameLength = BitConverter.ToInt32(frameLengthBuffer);
+
+            frame = new byte[frameLength];
+            _stream.Read(frame);
 
             return true;
         }

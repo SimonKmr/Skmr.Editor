@@ -11,10 +11,12 @@ namespace Skmr.Editor.Engine.Containers.Mp4
         //https://wiki.multimedia.cx/index.php/QuickTime_container
         //https://developer.apple.com/documentation/quicktime-file-format
         public string Path { get; set; }
+        public Atom[] Atoms { get; }
 
         public Mp4File(string path)
         {
             Path = path;
+            Atoms = Read();
         }
 
         public Atom[] Read()
@@ -31,7 +33,9 @@ namespace Skmr.Editor.Engine.Containers.Mp4
 
         public Stream[] GetVideoStreams()
         {
-            throw new NotImplementedException();
+            var leafs = GetLeafAtoms(Atoms);
+            var mdat = leafs.Where(x => x.Type == "mdat").First();
+            return new[] { new MemoryStream(mdat.DataRaw) };
         }
 
         public void Write()

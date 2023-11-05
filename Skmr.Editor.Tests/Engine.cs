@@ -47,10 +47,12 @@ namespace Skmr.Editor.Tests
             int framesRead = 0;
             int decodingFailed = 0;
 
+            //Read Frames
             while(reader.Read(out frameData))
             {
                 framesRead++;
 
+                //Decode Frames
                 if (!decoder.TryDecode(frameData, out frame))
                 {
                     decodingFailed++;
@@ -58,8 +60,10 @@ namespace Skmr.Editor.Tests
                     continue;
                 }
                 
+                //Reencode Frames
                 rav1e.SendFrame(frame);
 
+                //Get Finished Frames
                 var status = rav1e.ReceiveFrame(out byte[]? data);
 
                 if (status == EncoderState.Success && data != null)
@@ -68,10 +72,13 @@ namespace Skmr.Editor.Tests
                 }
             }
 
+            //No more new Frames
             rav1e.Flush();
 
+            //Get Remaining Frames
             while (true)
             {
+                
                 var status = rav1e.ReceiveFrame(out byte[]? data);
 
                 if (status == EncoderState.Ended) break;
@@ -80,6 +87,8 @@ namespace Skmr.Editor.Tests
                     outp.Write(data, 0, data.Length);
                 }
             }
+
+            //Output Stats about en-/decoding
             this.output.WriteLine($"framesRead: {framesRead}");
             this.output.WriteLine($"decodingFailed: {decodingFailed}");
         }
