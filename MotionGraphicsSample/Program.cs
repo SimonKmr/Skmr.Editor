@@ -1,17 +1,82 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
+using Skmr.Editor.Images.Patterns;
 using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Structs;
 
 Sequence seq = new Sequence(1920, 1080);
 
+var ptnGrid = new Grid();
+ptnGrid.Offset.Keyframes.Add(
+    new Keyframe<AVec2D>
+    {
+        Frame = 1,
+        Transition = Functions.Linear,
+        Value = new AVec2D(0,0)
+    });
+
+ptnGrid.Offset.Keyframes.Add(
+    new Keyframe<AVec2D>
+    {
+        Frame = 240,
+        Transition = Functions.Linear,
+        Value = new AVec2D(50, 50)
+    });
+
+ptnGrid.TileSize.Keyframes.Add(
+    new Keyframe<AInt>
+    {
+        Frame = 1,
+        Transition = Functions.Linear,
+        Value = new AInt(50),
+    });
+
+ptnGrid.Color.Keyframes.Add(
+    new Keyframe<RGBA>
+    {
+        Frame = 1,
+        Transition = Functions.Linear,
+        Value = new RGBA(0xFF, 0xFF, 0xFF, 0x10),
+    });
+
+ptnGrid.Resolution.Keyframes.Add(
+    new Keyframe<AVec2D>
+    {
+        Frame = 1,
+        Transition = Functions.Linear,
+        Value = new AVec2D(1920 / 3, 1080),
+    });
+
+ptnGrid.Position.Keyframes.Add(
+    new Keyframe<AVec2D>
+    {
+        Frame = 0,
+        Transition = Functions.Linear,
+        Value = new AVec2D(1920/2 - 1920/6, 0)
+    });
+
+ptnGrid.StrokeWidth.Keyframes.Add(
+    new Keyframe<AInt>
+    {
+        Frame = 2,
+        Transition = Functions.Cubic,
+        Value = new AInt(0),
+    });
+ptnGrid.StrokeWidth.Keyframes.Add(
+    new Keyframe<AInt>
+    {
+        Frame = 30,
+        Transition = Functions.Cubic,
+        Value = new AInt(4),
+    });
+
 var txtTitle = new Text();
 
 txtTitle.SourceText = "TITLE";
 txtTitle.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Black.otf";
-txtTitle.TextSize = 100.0f;
+txtTitle.TextSize = 120.0f;
 
 txtTitle.Color.Keyframes.Add(
     new Keyframe<RGBA>
@@ -237,6 +302,7 @@ fncLogo.Position.Keyframes.Add(
     });
 
 //seq.Elements.Add(imgMain);
+seq.Elements.Add(ptnGrid);
 seq.Elements.Add(txtTitle);
 seq.Elements.Add(txtVs);
 seq.Elements.Add(txtTeam01);
@@ -244,12 +310,30 @@ seq.Elements.Add(txtTeam02);
 seq.Elements.Add(mdkLogo);
 seq.Elements.Add(fncLogo);
 
-for (int i = 0; i < 240; i++)
+//Benchmark array
+var frames = 240;
+double[] frameTimes = new double[240];
+
+for (int i = 0; i < frames; i++)
 {
+    DateTime start;
+    DateTime end;
     using (var writer = new StreamWriter(new FileStream($"result\\{i:D5}.png",FileMode.Create)))
     {
+        start = DateTime.Now;
         var bytes = seq.Render(i);
+        end = DateTime.Now;
         writer.BaseStream.Write(bytes,0,bytes.Length);
     }
-    Console.WriteLine($"{i:D5}");
+
+    var FrameTime = end - start;
+    frameTimes[i] = FrameTime.TotalMilliseconds;
+    Console.WriteLine($"{i:D5} - {FrameTime.TotalMilliseconds} ms");
 }
+
+double sum = 0;
+for(int i = 0;i < frames; i++)
+{
+    sum += frameTimes[i];
+}
+Console.WriteLine($"avr. frame time {sum/frames} ms per frame");
