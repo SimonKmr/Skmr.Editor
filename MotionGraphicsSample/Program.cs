@@ -4,11 +4,13 @@ using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Images.Patterns;
 using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Elements;
+using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics.Structs;
 
 Sequence seq = new Sequence(1920, 1080);
 
 var ptnGrid = new Grid();
+
 ptnGrid.Offset.Keyframes.Add(
     new Keyframe<AVec2D>
     {
@@ -64,12 +66,13 @@ ptnGrid.StrokeWidth.Keyframes.Add(
         Transition = Functions.Cubic,
         Value = new AInt(0),
     });
+
 ptnGrid.StrokeWidth.Keyframes.Add(
     new Keyframe<AInt>
     {
         Frame = 30,
         Transition = Functions.Cubic,
-        Value = new AInt(4),
+        Value = new AInt(2),
     });
 
 var txtTitle = new Text();
@@ -301,14 +304,77 @@ fncLogo.Position.Keyframes.Add(
             1080 / 2 - 225 - 50 + 50),
     });
 
+var mapDots = new DotMap();
+
+var map00 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Assets\00.png");
+var map01 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Assets\01.png");
+var map02 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Assets\02.png");
+
+mapDots.Map.Keyframes.Add(
+    new Keyframe<AMap>
+    {
+        Frame = 1,
+        Transition = Functions.Linear,
+        Value = map00
+    });
+
+mapDots.Map.Keyframes.Add(
+    new Keyframe<AMap>
+    {
+        Frame = 120,
+        Transition = Functions.Linear,
+        Value = map01
+    });
+
+mapDots.Map.Keyframes.Add(
+    new Keyframe<AMap>
+    {
+        Frame = 240,
+        Transition = Functions.Linear,
+        Value = map02
+    });
+
+mapDots.Color.Keyframes.Add(
+    new Keyframe<RGBA>
+    {
+        Frame = 1,
+        Transition = Functions.Logistic,
+        Value = new RGBA(0xFF, 0xFF, 0xFF, 0x40)
+    });
+
+mapDots.Resolution.Keyframes.Add(
+    new Keyframe<AVec2D>
+    {
+        Frame = 1,
+        Transition = Functions.Logistic,
+        Value = new AVec2D(1920,1080)
+    });
+
+mapDots.MinMaxSize.Keyframes.Add(
+    new Keyframe<AVec2D>
+    {
+        Frame = 1,
+        Transition = Functions.Linear,
+        Value = new AVec2D(0, 5)
+    });
+
+mapDots.Spaceing.Keyframes.Add(
+    new Keyframe<AInt>
+    {
+        Frame = 1,
+        Transition = Functions.Linear,
+        Value = new AInt(10)
+    });
+
 //seq.Elements.Add(imgMain);
-seq.Elements.Add(ptnGrid);
+//seq.Elements.Add(ptnGrid);
 seq.Elements.Add(txtTitle);
 seq.Elements.Add(txtVs);
 seq.Elements.Add(txtTeam01);
 seq.Elements.Add(txtTeam02);
 seq.Elements.Add(mdkLogo);
 seq.Elements.Add(fncLogo);
+seq.Elements.Add(mapDots);
 
 //Benchmark array
 var frames = 240;
@@ -318,6 +384,7 @@ for (int i = 0; i < frames; i++)
 {
     DateTime start;
     DateTime end;
+
     using (var writer = new StreamWriter(new FileStream($"result\\{i:D5}.png",FileMode.Create)))
     {
         start = DateTime.Now;
