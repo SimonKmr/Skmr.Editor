@@ -51,7 +51,7 @@ namespace Skmr.Editor.MotionGraphics.Structs
             {
                 for (int y = 0; y < height; y++)
                 {
-                    result[y * width + x] = left.value[x, y] + right.value[x,y];
+                    result[y * width + x] = left.value[x, y] - right.value[x,y];
                 }
             }
             
@@ -69,6 +69,25 @@ namespace Skmr.Editor.MotionGraphics.Structs
             }
 
             return new Difference<AMap>(result);
+        }
+
+        public static AMap FromFile(string path)
+        {
+            var image = SKImage.FromEncodedData(path);
+            var bm = SKBitmap.FromImage(image);
+            var map = new float[image.Width, image.Height];
+            var max = float.MinValue;
+            
+            for(int x = 0; x < image.Width; x++)
+            {
+                for (int y = 0; y < image.Height; y++)
+                {
+                    bm.GetPixel(x, y).ToHsv(out float h, out float s, out float v);
+                    map[x, y] = v / 100f;
+                }
+            }
+
+            return new AMap(map);
         }
     }
 }
