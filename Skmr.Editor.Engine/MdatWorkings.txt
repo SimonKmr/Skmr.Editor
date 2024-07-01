@@ -9,3 +9,7 @@
 00 00 1C 08 7.176
 00 00 34 68 13.416
 00 00 6F 0D 28.429
+
+https://developer.apple.com/documentation/quicktime-file-format/interleaving_movie_data
+
+Container -> Demuxer (Cares about how data was interleaved) -> Bytestream (separates the frames) -> Codec (Converts frames into y4m/rgb)

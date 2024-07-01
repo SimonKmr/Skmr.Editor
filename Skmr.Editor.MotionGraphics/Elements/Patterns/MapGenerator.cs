@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Skmr.Editor.Images.Utility;
 
 namespace Skmr.Editor.Images
 {
@@ -162,7 +161,6 @@ namespace Skmr.Editor.Images
             return result;
         }
         #endregion
-
 
         public static double[,] Copy (this double[,] map)
         {

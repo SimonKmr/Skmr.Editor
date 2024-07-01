@@ -90,6 +90,14 @@ namespace Skmr.Editor.Engine.Bitstreams.H264
 
         public bool ByLength(out byte[]? frame)
         {
+            frame = null;
+
+            var b = _stream.ReadByte();
+            if (b == -1)
+                return false;
+
+            _stream.Position--;
+
             var frameLengthBuffer = new byte[4];
             _stream.Read(frameLengthBuffer, 0, 4);
             var frameLength = BitConverter.ToInt32(frameLengthBuffer);

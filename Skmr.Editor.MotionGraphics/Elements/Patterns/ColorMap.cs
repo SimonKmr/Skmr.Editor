@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Skmr.Editor.Images.Patterns
 {
-    public class ColorMap : ICommand
+    public class ColorMap
     {
         public double[,] map;
         public ColorMap(double[,] map)
@@ -21,7 +21,7 @@ namespace Skmr.Editor.Images.Patterns
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public void Draw()
+        public void DrawOn(int frame, SKCanvas canvas)
         {
             SKBitmap bitmap = new SKBitmap(Width, Height);
             for (int x = 0; x < map.GetLength(0); x ++)
@@ -42,7 +42,6 @@ namespace Skmr.Editor.Images.Patterns
                         );
                     bitmap.SetPixel(x, y, color);
                 }
-            var canvas = new SKCanvas(Bitmap);
             canvas.DrawBitmap(bitmap, 0, 0);
         }
     }
