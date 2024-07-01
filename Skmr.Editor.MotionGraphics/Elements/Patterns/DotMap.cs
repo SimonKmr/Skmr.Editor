@@ -22,8 +22,10 @@ namespace Skmr.Editor.MotionGraphics.Patterns
 
         public void DrawOn(int frame, SKCanvas canvas)
         {
-            float xOffset = (Resolution.Interpolate(frame).x % Spaceing.Interpolate(frame).value) / 2;
-            float yOffset = (Resolution.Interpolate(frame).y % Spaceing.Interpolate(frame).value) / 2;
+            var spaceing = Spaceing.Interpolate(frame).value;
+
+            float xOffset = (Resolution.Interpolate(frame).x % spaceing) / 2;
+            float yOffset = (Resolution.Interpolate(frame).y % spaceing) / 2;
 
             var map = Map.Interpolate(frame).value;
             var color = Color.Interpolate(frame);
@@ -35,11 +37,14 @@ namespace Skmr.Editor.MotionGraphics.Patterns
                 color.b,
                 color.a);
             
-            for (int x = (int)xOffset; x < map.GetLength(0); x += Spaceing.Interpolate(frame).value)
-                for (int y = (int)yOffset; y < map.GetLength(1); y += Spaceing.Interpolate(frame).value)
+            for (int x = (int)xOffset; x < map.GetLength(0); x += spaceing)
+                for (int y = (int)yOffset; y < map.GetLength(1); y += spaceing)
                 {
-                    var radius = DotSizeFunction((float)map[x, y]) * MinMaxSize.Interpolate(frame).x + 
-                        MinMaxSize.Interpolate(frame).y;
+                    var dotSizePercent = DotSizeFunction((float)map[x, y]);
+                    var min = MinMaxSize.Interpolate(frame).x;
+                    var max = MinMaxSize.Interpolate(frame).y;
+                    var radius = dotSizePercent * max + min;
+                        ;
                     
                     canvas.DrawCircle(
                         new SKPoint(x, y),
