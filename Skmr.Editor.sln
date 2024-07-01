@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skmr.Editor.Data", "Skmr.Ed
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotionGraphicsSample", "MotionGraphicsSample\MotionGraphicsSample.csproj", "{2789D460-9BC6-4349-8E04-52429F9CB4A0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3D7E8825-FCAC-4861-87FF-7AC396B3F5A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -152,6 +154,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{41D16C76-F3DD-43E7-B6C2-2ABA28BD6C4D} = {295D9740-8E35-41D8-B8E9-7377041C9B03}
+		{B055C32C-A280-4901-BDCD-2D9A244D8793} = {3D7E8825-FCAC-4861-87FF-7AC396B3F5A6}
 		{2789D460-9BC6-4349-8E04-52429F9CB4A0} = {295D9740-8E35-41D8-B8E9-7377041C9B03}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
