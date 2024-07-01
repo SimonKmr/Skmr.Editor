@@ -162,7 +162,6 @@ namespace Skmr.Editor.Images
         }
         #endregion
 
-
         public static double[,] Copy (this double[,] map)
         {
             double[,] result = new double[map.GetLength(0), map.GetLength(1)];
