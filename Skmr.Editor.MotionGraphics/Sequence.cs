@@ -11,6 +11,9 @@ namespace Skmr.Editor.MotionGraphics
         public Sequence(int width, int height)
         {
             Resolution = (width, height);
+            var info = new SKImageInfo(Resolution.width, Resolution.height);
+            surface = SKSurface.Create(info);
+            canvas = surface.Canvas;
         }
 
         public (int width, int height) Resolution { get; set; }
@@ -22,10 +25,8 @@ namespace Skmr.Editor.MotionGraphics
         /// <returns></returns>
         public byte[] Render(int index)
         {
-            //Create a Canvas
-            var info = new SKImageInfo(Resolution.width, Resolution.height);
-            surface = SKSurface.Create(info);
-            canvas = surface.Canvas;
+            //Clear a Canvas
+            canvas.Clear();
 
             //Draws the elements on the canvas
             foreach (var element in Elements)
@@ -39,7 +40,6 @@ namespace Skmr.Editor.MotionGraphics
             {
                 return data.ToArray();
             }
-            
         }
 
         public void Dispose()

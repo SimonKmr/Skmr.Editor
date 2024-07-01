@@ -15,7 +15,7 @@ namespace Skmr.Editor.MotionGraphics
     {
         public List<Keyframe<T>> Keyframes { get; set; } = new List<Keyframe<T>>();
 
-        public T Intrapolate(int frame)
+        public T Interpolate(int frame)
         {
             var k = Keyframes;
             int i = k.Count - 1;

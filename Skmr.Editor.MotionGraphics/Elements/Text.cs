@@ -44,8 +44,8 @@ namespace Skmr.Editor.MotionGraphics.Elements
                 int cIndex = Color.Keyframes.Count - 1;
                 int pIndex = Position.Keyframes.Count - 1;          
 
-                var pos = Position.Intrapolate(frame);
-                var color = Color.Intrapolate(frame);
+                var pos = Position.Interpolate(frame);
+                var color = Color.Interpolate(frame);
 
                 paint.Color = new SKColor(
                     color.r, 

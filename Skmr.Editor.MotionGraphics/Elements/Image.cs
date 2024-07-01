@@ -27,10 +27,10 @@ namespace Skmr.Editor.MotionGraphics.Elements
             var bm = SKBitmap.FromImage(image);
             var paint = new SKPaint();
 
-            var alpha = Alpha.Intrapolate(frame).value;
+            var alpha = Alpha.Interpolate(frame).value;
             if (alpha == 0) return;
 
-            var pos = Position.Intrapolate(frame);
+            var pos = Position.Interpolate(frame);
 
             if (alpha != 255) paint.Color = new SKColor(0, 0, 0, alpha);
             
