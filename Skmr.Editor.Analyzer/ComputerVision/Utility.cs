@@ -19,7 +19,7 @@ namespace Skmr.Editor.Analyzer.ComputerVision
             return image;
         }
 
-        public static void AddPositionsToList(List<Position> list, Image<Gray, Byte> imgColor)
+        public static void AddPositionsToList(List<Feature> list, Image<Gray, Byte> imgColor)
         {
             VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint();
             Mat hirarchy = new Mat();
@@ -28,7 +28,7 @@ namespace Skmr.Editor.Analyzer.ComputerVision
             {
                 if (contours[i].Size > 4 && contours[i].Size < 40)
                 {
-                    var p = Position.Create("Healthbar", contours[i].ToArray());
+                    var p = Feature.Create("Healthbar", contours[i].ToArray());
                     if (p.Length > 10 && p.Height > 5)
                     {
                         list.Add(p);

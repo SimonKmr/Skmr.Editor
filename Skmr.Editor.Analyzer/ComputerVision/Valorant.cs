@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
 {
-    public class Valorant
+    public class Valorant : IVision
     {
         public static bool IsValorant(Bitmap image)
         {
             return true;
         }
 
-        public static Position[] GetEnemyPositions(Bitmap image)
+        public static Feature[] GetEnemyPositions(Bitmap image)
         {
-            List<Position> positions = new List<Position>();
+            List<Feature> positions = new List<Feature>();
             using (Bitmap bitmap = image)
             {
                 Image<Bgr, Byte> img = bitmap.ToImage<Bgr, Byte>();
@@ -38,7 +38,7 @@ namespace Skmr.Editor.Analyzer.ComputerVision
                 {
                     if (contours[i].Size > 4 && contours[i].Size < 40)
                     {
-                        var p = Position.Create("Healthbar", contours[i].ToArray());
+                        var p = Feature.Create("Healthbar", contours[i].ToArray());
                         if (p.Length > 10 && p.Height > 5)
                         {
                             positions.Add(p);
@@ -62,6 +62,11 @@ namespace Skmr.Editor.Analyzer.ComputerVision
             return image;
         }
         public static VectorOfPoint GetValorantMask()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Feature[] Detect(Engine.Image image)
         {
             throw new NotImplementedException();
         }

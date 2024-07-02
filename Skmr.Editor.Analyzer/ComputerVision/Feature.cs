@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
 {
-    public class Position
+    public class Feature
     {
         public string Name { get; set; }
         
@@ -20,9 +20,9 @@ namespace Skmr.Editor.Analyzer.ComputerVision
         public int Length { get => Top.X - Bottom.X; }
         public int Height { get => Right.Y - Left.Y;}
 
-        public static Position Create(string name, Point[] contour)
+        public static Feature Create(string name, Point[] contour)
         {
-            var position = new Position();
+            var position = new Feature();
 
 
             var pAvr = new Point(0, 0);

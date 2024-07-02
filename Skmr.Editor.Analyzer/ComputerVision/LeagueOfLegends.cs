@@ -1,20 +1,16 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using skmr = Skmr.Editor.Engine;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
 {
-    public class LeagueOfLegends
+    public class LeagueOfLegends : IVision
     {
-        public static Position[] GetHealthbars(Bitmap image)
+        public static Feature[] GetHealthbars(skmr.Image image)
         {
-            List<Position> positions = new List<Position>();
+            List<Feature> positions = new List<Feature>();
             using (Bitmap bitmap = image)
             {
                 Image<Bgr, Byte> img = bitmap.ToImage<Bgr, Byte>();
@@ -60,6 +56,11 @@ namespace Skmr.Editor.Analyzer.ComputerVision
         public static VectorOfPoint GetMask()
         {
             throw new NotImplementedException();
+        }
+
+        public Feature[] Detect(skmr.Image image)
+        {
+            return GetHealthbars(image);
         }
     }
 }

@@ -6,16 +6,16 @@ using System.Drawing;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
 {
-    public class LostArk
+    public class LostArk : IVision
     {
-        public static Position[] GetPositions(skmr.Image image)
+        public static Feature[] GetPositions(skmr.Image image)
         {
-            Position[] healthbars = GetHealthbarPositions(image);
+            Feature[] healthbars = GetHealthbarPositions(image);
             throw new NotImplementedException();
         }
-        public static Position[] GetHealthbarPositions(skmr.Image image)
+        public static Feature[] GetHealthbarPositions(skmr.Image image)
         {
-            List<Position> positions = new List<Position>();
+            List<Feature> positions = new List<Feature>();
 
             Image<Bgr, Byte> img = new Image<Bgr, Byte>( image.GetByteBgrMap());
 
@@ -53,6 +53,11 @@ namespace Skmr.Editor.Analyzer.ComputerVision
                 new Point(1660,980),
                 new Point(300,980)
             });
+        }
+
+        public Feature[] Detect(skmr.Image image)
+        {
+            return GetHealthbarPositions(image);
         }
     }
 }
