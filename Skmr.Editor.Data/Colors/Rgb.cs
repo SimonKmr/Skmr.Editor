@@ -1,7 +1,7 @@
 ﻿using Skmr.Editor.Data.Colors;
 using System.Numerics;
 
-namespace Skmr.Editor.Engine.Data.Colors
+namespace Skmr.Editor.Data.Colors
 {
     public struct RGB :
             ISubtractionOperators<RGBA, RGBA, Difference<RGBA>>,
