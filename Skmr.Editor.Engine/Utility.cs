@@ -1,6 +1,5 @@
-﻿using Skmr.Editor.Engine.Colors;
+﻿using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Engine.Y4M;
-using System.Drawing;
 
 namespace Skmr.Editor.Engine
 {
