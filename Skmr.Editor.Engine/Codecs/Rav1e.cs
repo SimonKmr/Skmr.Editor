@@ -1,10 +1,10 @@
-﻿using Skmr.Editor.Engine.Codecs.Apis.Rav1e;
-using Skmr.Editor.Engine.Colors;
+﻿using Skmr.Editor.Data.Colors;
+using Skmr.Editor.Engine.Codecs.Apis.Rav1e;
 using System.Runtime.InteropServices;
 
 namespace Skmr.Editor.Engine.Codecs
 {
-    public class Rav1e : IVideoEncoder
+    public class Rav1e : IVideoEncoder, IDisposable
     {
         private IntPtr context;
         private IntPtr config;
