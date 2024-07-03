@@ -8,74 +8,10 @@ using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics.Structs;
 using Skmr.Editor.Engine;
 using Skmr.Editor.Engine.Codecs;
+using Skmr.Editor.MotionGraphics.Structs.Noise;
+using System.Drawing;
 
 Sequence seq = new Sequence(1920, 1080);
-
-var ptnGrid = new Grid();
-
-ptnGrid.Offset.Keyframes.Add(
-    new Keyframe<Vec2D>
-    {
-        Frame = 1,
-        Transition = Functions.Linear,
-        Value = new Vec2D(0,0)
-    });
-
-ptnGrid.Offset.Keyframes.Add(
-    new Keyframe<Vec2D>
-    {
-        Frame = 240,
-        Transition = Functions.Linear,
-        Value = new Vec2D(50, 50)
-    });
-
-ptnGrid.TileSize.Keyframes.Add(
-    new Keyframe<AInt>
-    {
-        Frame = 1,
-        Transition = Functions.Linear,
-        Value = new AInt(50),
-    });
-
-ptnGrid.Color.Keyframes.Add(
-    new Keyframe<RGBA>
-    {
-        Frame = 1,
-        Transition = Functions.Linear,
-        Value = new RGBA(0xFF, 0xFF, 0xFF, 0x10),
-    });
-
-ptnGrid.Resolution.Keyframes.Add(
-    new Keyframe<Vec2D>
-    {
-        Frame = 1,
-        Transition = Functions.Linear,
-        Value = new Vec2D(1920 / 3, 1080),
-    });
-
-ptnGrid.Position.Keyframes.Add(
-    new Keyframe<Vec2D>
-    {
-        Frame = 0,
-        Transition = Functions.Linear,
-        Value = new Vec2D(1920/2 - 1920/6, 0)
-    });
-
-ptnGrid.StrokeWidth.Keyframes.Add(
-    new Keyframe<AInt>
-    {
-        Frame = 2,
-        Transition = Functions.Cubic,
-        Value = new AInt(0),
-    });
-
-ptnGrid.StrokeWidth.Keyframes.Add(
-    new Keyframe<AInt>
-    {
-        Frame = 30,
-        Transition = Functions.Cubic,
-        Value = new AInt(2),
-    });
 
 var txtTitle = new Text();
 
@@ -83,15 +19,15 @@ txtTitle.SourceText = "TITLE";
 txtTitle.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Black.otf";
 txtTitle.TextSize = 120.0f;
 
-txtTitle.Color.Keyframes.Add(
+var txtTitleColor = new InterpolatedAttribute<RGBA>();
+txtTitleColor.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 1,
-        Transition = (Functions.Cubic),
+        Transition = (Function.Cubic),
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0x00)
     });
-
-txtTitle.Color.Keyframes.Add(
+txtTitleColor.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 40,
@@ -99,15 +35,18 @@ txtTitle.Color.Keyframes.Add(
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0xFF)
     });
 
-txtTitle.Position.Keyframes.Add(
+txtTitle.Color = txtTitleColor;
+
+var txtTitlePosition = new InterpolatedAttribute<Vec2D>();
+txtTitlePosition.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 1,
-        Transition = (Functions.Cubic),
+        Transition = (Function.Cubic),
         Value = new Vec2D(1920 / 2, 1080 / 4 - 130),
     });
 
-txtTitle.Position.Keyframes.Add(
+txtTitlePosition.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 40,
@@ -115,20 +54,24 @@ txtTitle.Position.Keyframes.Add(
         Value = new Vec2D(1920 / 2, 1080 / 4 - 20),
     });
 
+txtTitle.Position = txtTitlePosition;
+
 var txtVs = new Text();
 
 txtVs.SourceText = "vs";
 txtVs.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Extra Light Italic.otf";
 
-txtVs.Color.Keyframes.Add(
+var txtVsColor = new InterpolatedAttribute<RGBA>();
+
+txtVsColor.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 40,
-        Transition = (Functions.Cubic),
+        Transition = (Function.Cubic),
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0x00)
     });
 
-txtVs.Color.Keyframes.Add(
+txtVsColor.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 80,
@@ -136,15 +79,19 @@ txtVs.Color.Keyframes.Add(
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0xFF)
     });
 
-txtVs.Position.Keyframes.Add(
+txtVs.Color = txtVsColor;
+
+var txtVsPosition = new InterpolatedAttribute<Vec2D>();
+
+txtVsPosition.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 40,
-        Transition = (Functions.Cubic),
+        Transition = (Function.Cubic),
         Value = new Vec2D(1920 / 2, 1080 / 2 - 32),
     });
 
-txtVs.Position.Keyframes.Add(
+txtVsPosition.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 80,
@@ -152,20 +99,24 @@ txtVs.Position.Keyframes.Add(
         Value = new Vec2D(1920 / 2, 1080 / 2 + 32),
     });
 
+txtVs.Position = txtVsPosition;
+
 var txtTeam01 = new Text();
 
 txtTeam01.SourceText = "Mad Lions Koi";
 txtTeam01.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Bold.otf";
 
-txtTeam01.Color.Keyframes.Add(
+var txtTeam01Color = new InterpolatedAttribute<RGBA>();
+
+txtTeam01Color.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 50,
-        Transition = (Functions.Cubic),
+        Transition = (Function.Cubic),
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0x00)
     });
 
-txtTeam01.Color.Keyframes.Add(
+txtTeam01Color.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 90,
@@ -173,15 +124,19 @@ txtTeam01.Color.Keyframes.Add(
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0xFF)
     });
 
-txtTeam01.Position.Keyframes.Add(
+txtTeam01.Color = txtTeam01Color;
+
+var txtTeam01Position = new InterpolatedAttribute<Vec2D>();
+
+txtTeam01Position.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 50,
-        Transition = (Functions.Cubic),
+        Transition = (Function.Cubic),
         Value = new Vec2D(1920 / 4 - 50, 1080 / 3 * 2 + 100),
     });
 
-txtTeam01.Position.Keyframes.Add(
+txtTeam01Position.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 90,
@@ -189,20 +144,24 @@ txtTeam01.Position.Keyframes.Add(
         Value = new Vec2D(1920 / 4, 1080 / 3 * 2 + 100),
     });
 
+txtTeam01.Position = txtTeam01Position;
+
 var txtTeam02 = new Text();
 
 txtTeam02.SourceText = "Fnatic";
 txtTeam02.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Bold.otf";
 
-txtTeam02.Color.Keyframes.Add(
+var txtTeam02Color = new InterpolatedAttribute<RGBA>();
+
+txtTeam02Color.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 50,
-        Transition = (Functions.Cubic),
+        Transition = (Function.Cubic),
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0x00)
     });
 
-txtTeam02.Color.Keyframes.Add(
+txtTeam02Color.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 90,
@@ -210,15 +169,19 @@ txtTeam02.Color.Keyframes.Add(
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0xFF)
     });
 
-txtTeam02.Position.Keyframes.Add(
+txtTeam02.Color = txtTeam02Color;
+
+var txtTeam02Position = new InterpolatedAttribute<Vec2D>();
+
+txtTeam02Position.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 50,
-        Transition = (Functions.Cubic),
+        Transition = (Function.Cubic),
         Value = new Vec2D(1920 / 4 * 3 + 50, 1080 / 3 * 2 + 100),
     });
 
-txtTeam02.Position.Keyframes.Add(
+txtTeam02Position.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 90,
@@ -226,85 +189,103 @@ txtTeam02.Position.Keyframes.Add(
         Value = new Vec2D(1920 / 4 * 3, 1080 / 3 * 2 + 100),
     });
 
+txtTeam02.Position = txtTeam02Position;
+
 var mdkLogo = new Image();
 
 mdkLogo.ImagePath = @"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Team Logos\white\mdk.png";
 
-mdkLogo.Alpha.Keyframes.Add(
+var mdkLogoAlpha = new InterpolatedAttribute<AByte>();
+
+mdkLogoAlpha.Keyframes.Add(
     new Keyframe<AByte>
     {
         Frame = 20,
-        Transition = Functions.Cubic,
+        Transition = Function.Cubic,
         Value = new AByte(0),
     });
 
-mdkLogo.Alpha.Keyframes.Add(
+mdkLogoAlpha.Keyframes.Add(
     new Keyframe<AByte>
     {
         Frame = 60,
-        Transition = Functions.Cubic,
+        Transition = Function.Cubic,
         Value = new AByte(255),
     });
 
-mdkLogo.Position.Keyframes.Add(
+mdkLogo.Alpha = mdkLogoAlpha;
+
+var mdkLogoPosition = new InterpolatedAttribute<Vec2D>();
+
+mdkLogoPosition.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 20,
-        Transition = Functions.Cubic,
+        Transition = Function.Cubic,
         Value = new Vec2D(
             1920 / 4 - 225, 
             1080 / 2 - 225 - 100),
     });
 
-mdkLogo.Position.Keyframes.Add(
+mdkLogoPosition.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 60,
-        Transition = Functions.Linear,
+        Transition = Function.Linear,
         Value = new Vec2D(
             1920 / 4 - 225, 
             1080 / 2 - 225 - 50),
     });
 
+mdkLogo.Position = mdkLogoPosition;
+
 var fncLogo = new Image();
 
 fncLogo.ImagePath = @"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Team Logos\white\fnatic.png";
 
-fncLogo.Alpha.Keyframes.Add(
+var fncLogoAlpha = new InterpolatedAttribute<AByte>();
+
+fncLogoAlpha.Keyframes.Add(
     new Keyframe<AByte>
     {
         Frame = 60,
-        Transition = Functions.Cubic,
+        Transition = Function.Cubic,
         Value = new AByte(0),
     });
 
-fncLogo.Alpha.Keyframes.Add(
+fncLogoAlpha.Keyframes.Add(
     new Keyframe<AByte>
     {
         Frame = 100,
-        Transition = Functions.Cubic,
+        Transition = Function.Cubic,
         Value = new AByte(255),
     });
 
-fncLogo.Position.Keyframes.Add(
+fncLogo.Alpha = fncLogoAlpha;
+
+var fncLogoPosition = new InterpolatedAttribute<Vec2D>();
+
+fncLogoPosition.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 60,
-        Transition = Functions.Cubic,
+        Transition = Function.Cubic,
         Value = new Vec2D(
             1920 / 4 * 3 - 225,
             1080 / 2 - 225 - 100 + 50),
     });
 
-fncLogo.Position.Keyframes.Add(
+fncLogoPosition.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 100,
-        Transition = Functions.Linear,
+        Transition = Function.Linear,
         Value = new Vec2D(
             1920 / 4 * 3 - 225,
             1080 / 2 - 225 - 50 + 50),
     });
+
+fncLogo.Position = fncLogoPosition;
 
 var mapDots = new DotMap();
 
@@ -312,61 +293,57 @@ var map00 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\image
 var map01 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Assets\01.png");
 var map02 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Assets\02.png");
 
-mapDots.Map.Keyframes.Add(
-    new Keyframe<AMap>
-    {
-        Frame = 1,
-        Transition = Functions.Linear,
-        Value = map00
-    });
+var mapDotsMap = new ProcedualAttribute<AMap>();
+mapDotsMap.Generator = (x) => Perlin.CreateNoiseMap(1920, 1080, 256, (double)(x/200));
+mapDots.Map = mapDotsMap;
 
-mapDots.Map.Keyframes.Add(
-    new Keyframe<AMap>
-    {
-        Frame = 120,
-        Transition = Functions.Linear,
-        Value = map01
-    });
+var mapDotsColor = new InterpolatedAttribute<RGBA>();
 
-mapDots.Map.Keyframes.Add(
-    new Keyframe<AMap>
-    {
-        Frame = 240,
-        Transition = Functions.Linear,
-        Value = map02
-    });
-
-mapDots.Color.Keyframes.Add(
+mapDotsColor.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 1,
-        Transition = Functions.Logistic,
+        Transition = Function.Logistic,
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0x40)
     });
 
-mapDots.Resolution.Keyframes.Add(
+mapDots.Color = mapDotsColor;
+
+var mapDotsResolution = new InterpolatedAttribute<Vec2D>();
+
+mapDotsResolution.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 1,
-        Transition = Functions.Logistic,
-        Value = new Vec2D(1920,1080)
+        Transition = Function.Logistic,
+        Value = new Vec2D(1920, 1080)
     });
 
-mapDots.MinMaxSize.Keyframes.Add(
+mapDots.Resolution = mapDotsResolution;
+
+var mapDotsMinMaxSize = new InterpolatedAttribute<Vec2D>();
+
+mapDotsMinMaxSize.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 1,
-        Transition = Functions.Linear,
-        Value = new Vec2D(0, 5)
+        Transition = Function.Linear,
+        Value = new Vec2D(-7, 12)
     });
 
-mapDots.Spaceing.Keyframes.Add(
+mapDots.MinMaxSize = mapDotsMinMaxSize;
+
+var mapDotsSpaceing = new InterpolatedAttribute<AInt>();
+
+mapDotsSpaceing.Keyframes.Add(
     new Keyframe<AInt>
     {
         Frame = 1,
-        Transition = Functions.Linear,
+        Transition = Function.Linear,
         Value = new AInt(10)
     });
+
+mapDots.Spaceing = mapDotsSpaceing;
 
 //seq.Elements.Add(imgMain);
 //seq.Elements.Add(ptnGrid);
@@ -378,7 +355,7 @@ seq.Elements.Add(mdkLogo);
 seq.Elements.Add(fncLogo);
 seq.Elements.Add(mapDots);
 
-seq.EncodeAsPng = false;
+seq.Encoding = Encoding.Raw;
 
 //Benchmark array
 var frames = 240;
