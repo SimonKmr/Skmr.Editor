@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.MotionGraphics.Elements;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Skmr.Editor.MotionGraphics
@@ -9,7 +10,7 @@ namespace Skmr.Editor.MotionGraphics
         public SKCanvas Canvas { get; private set; }
         private SKSurface surface;
 
-        public bool EncodeAsPng { get; set; }
+        public Encoding Encoding { get; set; }
 
         public Sequence(int width, int height)
         {
@@ -40,17 +41,17 @@ namespace Skmr.Editor.MotionGraphics
             using var image = surface.Snapshot();
 
             //returns the canvas as a bmp byte array
-            if (EncodeAsPng)
+            switch (Encoding)
             {
-                using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
-                {
-                    return data.ToArray();
-                }
+                case Encoding.Png:
+                    using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+                    {
+                        return data.ToArray();
+                    }
+                default:
+                    SKBitmap bitmap = SKBitmap.FromImage(image);
+                    return bitmap.Bytes;
             }
-
-            //returns raw data
-            SKBitmap bitmap = SKBitmap.FromImage(image);
-            return bitmap.Bytes;
         }
 
         public void Dispose()
