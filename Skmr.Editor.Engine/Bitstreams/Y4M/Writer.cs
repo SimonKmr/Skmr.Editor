@@ -1,11 +1,4 @@
-﻿using Skmr.Editor.Engine.Colors;
-using Skmr.Editor.Engine.Y4M;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Skmr.Editor.Data.Colors;
 
 namespace Skmr.Editor.Engine.Bitstreams.Y4M
 {
