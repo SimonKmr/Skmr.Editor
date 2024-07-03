@@ -1,39 +1,21 @@
 ﻿using Skmr.Editor.Engine;
 using Skmr.Editor.Analyzer.ComputerVision;
+using Skmr.Editor.Data.Colors;
 
 
 namespace Skmr.Editor.Director
 {
     public class FrameInfo
     {
-        Feature[][] Positions { get; set; }
-        public FrameInfo(Feature[][] positions)
+        Feature[] Features { get; set; }
+        public FrameInfo(Feature[] features)
         {
-            Positions = positions;
+            Features = features;
         }
 
-        public FrameInfo(string folder)
+        public FrameInfo(Image<RGB> image)
         {
-            List<Feature[]> screenshotInfo = new List<Feature[]>();
-                //screenshotInfo.Add(LostArk.GetHealthbarPositions(screenshotImage));
 
-            Positions = screenshotInfo.ToArray();
-        }
-
-        public int[] ToTimepoints()
-        {
-            List<int> timepoints = new List<int>();
-            for (int i = 0; i < Positions.Length; i++)
-            {
-                if (Positions[i].Length > 0) timepoints.Add(i);
-            }
-            return timepoints.ToArray();
-        }
-        public Timeline ToTimeline()
-        {
-            int[] timeline = new int[Positions.Length];
-            for (int i = 0; i < Positions.Length; i++) timeline[i] = Positions[i].Length;
-            return new Timeline(timeline);
         }
     }
 }
