@@ -1,6 +1,6 @@
 ﻿namespace Skmr.Editor.Engine.Containers.Mp4
 {
-    public partial class Atom
+    public class Atom
     {
         public ulong Index { get; set; }
         public ulong Length { get; set; }
@@ -11,8 +11,8 @@
         public ulong DataStart { get => Index + 8; }
         public ulong DataEnd { get => Index + Length; }
         public byte[] DataRaw { get; set; }
-        public object Data { get; set; }
 
+        public Atom() { }
         public Atom(ulong index, ulong length, string type, byte[] bytes)
         {
             Index = index;

@@ -47,24 +47,24 @@ namespace Skmr.Editor.Engine.Containers.Mp4
         {
             for(int i = 0; i < atoms.Length; i++)
             {
-                if (atoms[i].Type == "mvhd") atoms[i].Data = new Atom.MovieHeader(atoms[i].DataRaw);
-                if (atoms[i].Type == "tkhd") atoms[i].Data = new Atom.TrackHeader(atoms[i].DataRaw);
-                if (atoms[i].Type == "elst") atoms[i].Data = new Atom.EditList(atoms[i].DataRaw);
+                if (atoms[i].Type == "mvhd") atoms[i] = new MovieHeader(atoms[i].DataRaw);
+                if (atoms[i].Type == "tkhd") atoms[i] = new TrackHeader(atoms[i].DataRaw);
+                if (atoms[i].Type == "elst") atoms[i] = new EditList(atoms[i].DataRaw);
                 if (atoms[i].Type == "clef" || atoms[i].Type == "prof" || atoms[i].Type == "enof") 
-                    atoms[i].Data = new Atom.EditList(atoms[i].DataRaw);
-                if (atoms[i].Type == "mdhd") atoms[i].Data = new Atom.MediaHeader(atoms[i].DataRaw);
-                if (atoms[i].Type == "hdlr") atoms[i].Data = new Atom.HandlerReference(atoms[i].DataRaw);
-                if (atoms[i].Type == "smhd") atoms[i].Data = new Atom.SoundMediaInformationHeader(atoms[i].DataRaw);
-                if (atoms[i].Type == "dref") atoms[i].Data = new Atom.DataReference(atoms[i].DataRaw);
-                if (atoms[i].Type == "ctab") atoms[i].Data = new Atom.ColorTable(atoms[i].DataRaw);
-                if (atoms[i].Type == "stts") atoms[i].Data = new Atom.TimeToSample(atoms[i].DataRaw);
-                if (atoms[i].Type == "stsc") atoms[i].Data = new Atom.SampleToChunk(atoms[i].DataRaw);
-                if (atoms[i].Type == "stsd") atoms[i].Data = new Atom.SampleDescription(atoms[i].DataRaw); //not completely Implemented Missing Media Data Types
-                if (atoms[i].Type == "stsz") atoms[i].Data = new Atom.SampleSize(atoms[i].DataRaw);
-                if (atoms[i].Type == "stco") atoms[i].Data = new Atom.ChunkOffset(atoms[i].DataRaw);
-                if (atoms[i].Type == "vmhd") atoms[i].Data = new Atom.VideoMediaInformationHeader(atoms[i].DataRaw);
-                if (atoms[i].Type == "stss") atoms[i].Data = new Atom.SyncSample(atoms[i].DataRaw);
-                if (atoms[i].Type == "ctts") atoms[i].Data = new Atom.CompositionOffset(atoms[i].DataRaw);
+                    atoms[i] = new EditList(atoms[i].DataRaw);
+                if (atoms[i].Type == "mdhd") atoms[i] = new MediaHeader(atoms[i].DataRaw);
+                if (atoms[i].Type == "hdlr") atoms[i] = new HandlerReference(atoms[i].DataRaw);
+                if (atoms[i].Type == "smhd") atoms[i] = new SoundMediaInformationHeader(atoms[i].DataRaw);
+                if (atoms[i].Type == "dref") atoms[i] = new DataReference(atoms[i].DataRaw);
+                if (atoms[i].Type == "ctab") atoms[i] = new ColorTable(atoms[i].DataRaw);
+                if (atoms[i].Type == "stts") atoms[i] = new TimeToSample(atoms[i].DataRaw);
+                if (atoms[i].Type == "stsc") atoms[i] = new SampleToChunk(atoms[i].DataRaw);
+                if (atoms[i].Type == "stsd") atoms[i] = new SampleDescription(atoms[i].DataRaw); //not completely Implemented Missing Media Data Types
+                if (atoms[i].Type == "stsz") atoms[i] = new SampleSize(atoms[i].DataRaw);
+                if (atoms[i].Type == "stco") atoms[i] = new ChunkOffset(atoms[i].DataRaw);
+                if (atoms[i].Type == "vmhd") atoms[i] = new VideoMediaInformationHeader(atoms[i].DataRaw);
+                if (atoms[i].Type == "stss") atoms[i] = new SyncSample(atoms[i].DataRaw);
+                if (atoms[i].Type == "ctts") atoms[i] = new CompositionOffset(atoms[i].DataRaw);
             }
         }
         public static Atom[] GetLeafAtoms(Atom[] atoms)
