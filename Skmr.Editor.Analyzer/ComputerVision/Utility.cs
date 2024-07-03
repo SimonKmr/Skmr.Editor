@@ -36,5 +36,11 @@ namespace Skmr.Editor.Analyzer.ComputerVision
                 }
             }
         }
+
+        public static byte[,,] ToBgrMap(this Engine.Image<Data.Colors.RGB> image1)
+        {
+            
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,23 +1,23 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using skmr = Skmr.Editor.Engine;
+using Skmr.Editor;
 using System.Drawing;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
 {
     public class LostArk : IVision
     {
-        public static Feature[] GetPositions(skmr.Image image)
+        public static Feature[] GetPositions(Engine.Image<Data.Colors.RGB> image)
         {
             Feature[] healthbars = GetHealthbarPositions(image);
             throw new NotImplementedException();
         }
-        public static Feature[] GetHealthbarPositions(skmr.Image image)
+        public static Feature[] GetHealthbarPositions(Engine.Image<Data.Colors.RGB> image)
         {
             List<Feature> positions = new List<Feature>();
-
-            Image<Bgr, Byte> img = new Image<Bgr, Byte>( image.GetByteBgrMap());
+            var bgrMap = image.ToBgrMap();
+            Image<Bgr, Byte> img = new Image<Bgr, Byte>(bgrMap);
 
             //Split off Red Segments
             var imgHSV = img.Convert<Hsv, Byte>();
@@ -55,7 +55,7 @@ namespace Skmr.Editor.Analyzer.ComputerVision
             });
         }
 
-        public Feature[] Detect(skmr.Image image)
+        public Feature[] Detect(Engine.Image<Data.Colors.RGB> image)
         {
             return GetHealthbarPositions(image);
         }
