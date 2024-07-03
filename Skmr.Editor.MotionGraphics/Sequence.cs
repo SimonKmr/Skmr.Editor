@@ -1,19 +1,22 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.MotionGraphics.Elements;
+using System.Runtime.InteropServices;
 
 namespace Skmr.Editor.MotionGraphics
 {
     public class Sequence : IDisposable
     {
-        private SKCanvas canvas;
+        public SKCanvas Canvas { get; private set; }
         private SKSurface surface;
+
+        public bool EncodeAsPng { get; set; }
 
         public Sequence(int width, int height)
         {
             Resolution = (width, height);
             var info = new SKImageInfo(Resolution.width, Resolution.height);
             surface = SKSurface.Create(info);
-            canvas = surface.Canvas;
+            Canvas = surface.Canvas;
         }
 
         public (int width, int height) Resolution { get; set; }
@@ -26,20 +29,28 @@ namespace Skmr.Editor.MotionGraphics
         public byte[] Render(int index)
         {
             //Clear a Canvas
-            canvas.Clear();
+            Canvas.Clear();
 
             //Draws the elements on the canvas
             foreach (var element in Elements)
             {
-                element.DrawOn(index,canvas);
+                element.DrawOn(index, Canvas);
             }
 
-            //returns the canvas as a bmp byte array
             using var image = surface.Snapshot();
-            using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+
+            //returns the canvas as a bmp byte array
+            if (EncodeAsPng)
             {
-                return data.ToArray();
+                using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+                {
+                    return data.ToArray();
+                }
             }
+
+            //returns raw data
+            SKBitmap bitmap = SKBitmap.FromImage(image);
+            return bitmap.Bytes;
         }
 
         public void Dispose()

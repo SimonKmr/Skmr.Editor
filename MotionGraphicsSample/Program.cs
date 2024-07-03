@@ -6,25 +6,27 @@ using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics.Structs;
+using Skmr.Editor.Engine;
+using Skmr.Editor.Engine.Codecs;
 
 Sequence seq = new Sequence(1920, 1080);
 
 var ptnGrid = new Grid();
 
 ptnGrid.Offset.Keyframes.Add(
-    new Keyframe<AVec2D>
+    new Keyframe<Vec2D>
     {
         Frame = 1,
         Transition = Functions.Linear,
-        Value = new AVec2D(0,0)
+        Value = new Vec2D(0,0)
     });
 
 ptnGrid.Offset.Keyframes.Add(
-    new Keyframe<AVec2D>
+    new Keyframe<Vec2D>
     {
         Frame = 240,
         Transition = Functions.Linear,
-        Value = new AVec2D(50, 50)
+        Value = new Vec2D(50, 50)
     });
 
 ptnGrid.TileSize.Keyframes.Add(
@@ -44,19 +46,19 @@ ptnGrid.Color.Keyframes.Add(
     });
 
 ptnGrid.Resolution.Keyframes.Add(
-    new Keyframe<AVec2D>
+    new Keyframe<Vec2D>
     {
         Frame = 1,
         Transition = Functions.Linear,
-        Value = new AVec2D(1920 / 3, 1080),
+        Value = new Vec2D(1920 / 3, 1080),
     });
 
 ptnGrid.Position.Keyframes.Add(
-    new Keyframe<AVec2D>
+    new Keyframe<Vec2D>
     {
         Frame = 0,
         Transition = Functions.Linear,
-        Value = new AVec2D(1920/2 - 1920/6, 0)
+        Value = new Vec2D(1920/2 - 1920/6, 0)
     });
 
 ptnGrid.StrokeWidth.Keyframes.Add(
@@ -98,19 +100,19 @@ txtTitle.Color.Keyframes.Add(
     });
 
 txtTitle.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 1,
         Transition = (Functions.Cubic),
-        Value = new Pos2D(1920 / 2, 1080 / 4 - 130),
+        Value = new Vec2D(1920 / 2, 1080 / 4 - 130),
     });
 
 txtTitle.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 40,
         Transition = ((x) => x),
-        Value = new Pos2D(1920 / 2, 1080 / 4 - 20),
+        Value = new Vec2D(1920 / 2, 1080 / 4 - 20),
     });
 
 var txtVs = new Text();
@@ -135,19 +137,19 @@ txtVs.Color.Keyframes.Add(
     });
 
 txtVs.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 40,
         Transition = (Functions.Cubic),
-        Value = new Pos2D(1920 / 2, 1080 / 2 - 32),
+        Value = new Vec2D(1920 / 2, 1080 / 2 - 32),
     });
 
 txtVs.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 80,
         Transition = ((x) => x),
-        Value = new Pos2D(1920 / 2, 1080 / 2 + 32),
+        Value = new Vec2D(1920 / 2, 1080 / 2 + 32),
     });
 
 var txtTeam01 = new Text();
@@ -172,19 +174,19 @@ txtTeam01.Color.Keyframes.Add(
     });
 
 txtTeam01.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 50,
         Transition = (Functions.Cubic),
-        Value = new Pos2D(1920 / 4 - 50, 1080 / 3 * 2 + 100),
+        Value = new Vec2D(1920 / 4 - 50, 1080 / 3 * 2 + 100),
     });
 
 txtTeam01.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 90,
         Transition = ((x) => x),
-        Value = new Pos2D(1920 / 4, 1080 / 3 * 2 + 100),
+        Value = new Vec2D(1920 / 4, 1080 / 3 * 2 + 100),
     });
 
 var txtTeam02 = new Text();
@@ -209,19 +211,19 @@ txtTeam02.Color.Keyframes.Add(
     });
 
 txtTeam02.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 50,
         Transition = (Functions.Cubic),
-        Value = new Pos2D(1920 / 4 * 3 + 50, 1080 / 3 * 2 + 100),
+        Value = new Vec2D(1920 / 4 * 3 + 50, 1080 / 3 * 2 + 100),
     });
 
 txtTeam02.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 90,
         Transition = ((x) => x),
-        Value = new Pos2D(1920 / 4 * 3, 1080 / 3 * 2 + 100),
+        Value = new Vec2D(1920 / 4 * 3, 1080 / 3 * 2 + 100),
     });
 
 var mdkLogo = new Image();
@@ -245,21 +247,21 @@ mdkLogo.Alpha.Keyframes.Add(
     });
 
 mdkLogo.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 20,
         Transition = Functions.Cubic,
-        Value = new Pos2D(
+        Value = new Vec2D(
             1920 / 4 - 225, 
             1080 / 2 - 225 - 100),
     });
 
 mdkLogo.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 60,
         Transition = Functions.Linear,
-        Value = new Pos2D(
+        Value = new Vec2D(
             1920 / 4 - 225, 
             1080 / 2 - 225 - 50),
     });
@@ -285,21 +287,21 @@ fncLogo.Alpha.Keyframes.Add(
     });
 
 fncLogo.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 60,
         Transition = Functions.Cubic,
-        Value = new Pos2D(
+        Value = new Vec2D(
             1920 / 4 * 3 - 225,
             1080 / 2 - 225 - 100 + 50),
     });
 
 fncLogo.Position.Keyframes.Add(
-    new Keyframe<Pos2D>
+    new Keyframe<Vec2D>
     {
         Frame = 100,
         Transition = Functions.Linear,
-        Value = new Pos2D(
+        Value = new Vec2D(
             1920 / 4 * 3 - 225,
             1080 / 2 - 225 - 50 + 50),
     });
@@ -343,19 +345,19 @@ mapDots.Color.Keyframes.Add(
     });
 
 mapDots.Resolution.Keyframes.Add(
-    new Keyframe<AVec2D>
+    new Keyframe<Vec2D>
     {
         Frame = 1,
         Transition = Functions.Logistic,
-        Value = new AVec2D(1920,1080)
+        Value = new Vec2D(1920,1080)
     });
 
 mapDots.MinMaxSize.Keyframes.Add(
-    new Keyframe<AVec2D>
+    new Keyframe<Vec2D>
     {
         Frame = 1,
         Transition = Functions.Linear,
-        Value = new AVec2D(0, 5)
+        Value = new Vec2D(0, 5)
     });
 
 mapDots.Spaceing.Keyframes.Add(
@@ -376,27 +378,61 @@ seq.Elements.Add(mdkLogo);
 seq.Elements.Add(fncLogo);
 seq.Elements.Add(mapDots);
 
+seq.EncodeAsPng = false;
+
 //Benchmark array
 var frames = 240;
 double[] frameTimes = new double[240];
 
+DateTime start;
+DateTime stop;
+
+//encodeing with Rav1e
+var outp = File.Open("out_file.ivf", FileMode.Create);
+
+Rav1e rav1e = new Rav1e(1920, 1080, 60);
+Image<RGB>? frame = null;
+
 for (int i = 0; i < frames; i++)
 {
-    DateTime start;
-    DateTime end;
+    start = DateTime.Now;
+    //Create Frame
+    var bytes = seq.Render(i);
+    frame = Utility.RawToImageRGB(bytes, 1920, 1080);
 
-    using (var writer = new StreamWriter(new FileStream($"result\\{i:D5}.png",FileMode.Create)))
+    //Encode Frames
+    rav1e.SendFrame(frame);
+
+    //Get Finished Frames
+    var status = rav1e.ReceiveFrame(out byte[]? data);
+
+    // if a frame is ready, write it to the file
+    if (status == EncoderState.Success && data != null)
     {
-        start = DateTime.Now;
-        var bytes = seq.Render(i);
-        end = DateTime.Now;
-        writer.BaseStream.Write(bytes,0,bytes.Length);
+        outp.Write(data, 0, data.Length);
     }
 
-    var FrameTime = end - start;
-    frameTimes[i] = FrameTime.TotalMilliseconds;
-    Console.WriteLine($"{i:D5} - {FrameTime.TotalMilliseconds} ms");
+    stop = DateTime.Now;
+
+    Console.WriteLine($"Frame: {i:D5} - {(stop-start).TotalMilliseconds} ms");
 }
+
+//No more new Frames
+rav1e.Flush();
+
+//Get Remaining Frames
+while (true)
+{
+    var status = rav1e.ReceiveFrame(out byte[]? encData);
+
+    if (status == EncoderState.Ended) break;
+    if (status == EncoderState.Success && encData != null)
+    {
+        outp.Write(encData, 0, encData.Length);
+    }
+}
+
+outp.Close();
 
 double sum = 0;
 for(int i = 0;i < frames; i++)

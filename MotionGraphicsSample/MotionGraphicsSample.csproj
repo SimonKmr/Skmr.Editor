@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Skmr.Editor.Engine\Skmr.Editor.Engine.csproj" />
     <ProjectReference Include="..\Skmr.Editor.MotionGraphics\Skmr.Editor.MotionGraphics.csproj" />
   </ItemGroup>
 

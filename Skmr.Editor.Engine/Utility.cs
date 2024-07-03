@@ -232,5 +232,41 @@ namespace Skmr.Editor.Engine
                 return ptr;
             }
         }
+        public static Image<RGBA> RawToImageRGBA(byte[] bytes, int width, int height)
+        {
+            int i = 0;
+            var result = new Image<RGBA>(width,height);
+            
+            for (int x = 0; x < 1080; x++)
+                for (int y = 0; y < 1920; y++)
+                {
+                    var c = new RGBA(bytes[i + 0], bytes[i + 1], bytes[i + 2], bytes[i + 3]);
+                    result.Set(y, x, c);
+                    i += 4;
+                }
+            
+            return result;
+        }
+
+        public static Image<RGB> RawToImageRGB(byte[] bytes, int width, int height)
+        {
+            int i = 0;
+            var result = new Image<RGB>(width, height);
+
+            for (int x = 0; x < 1080; x++)
+                for (int y = 0; y < 1920; y++)
+                {
+                    var r = bytes[i + 0];
+                    var g = bytes[i + 1];
+                    var b = bytes[i + 2];
+                    
+                    var c = new RGB(r, g, b);
+                    result.Set(y, x, c);
+                    
+                    i += 4;
+                }
+
+            return result;
+        }
     }
 }
