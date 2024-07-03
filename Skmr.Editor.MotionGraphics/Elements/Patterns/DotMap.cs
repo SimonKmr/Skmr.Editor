@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Structs;
@@ -14,8 +15,8 @@ namespace Skmr.Editor.MotionGraphics.Patterns
     {
         public Attribute<AMap> Map { get; set; } = new Attribute<AMap>();
         public Attribute<RGBA> Color { get; set; } = new Attribute<RGBA>();
-        public Attribute<AVec2D> Resolution { get; set; } = new Attribute<AVec2D>();
-        public Attribute<AVec2D> MinMaxSize { get; set; } = new Attribute<AVec2D>();
+        public Attribute<Vec2D> Resolution { get; set; } = new Attribute<Vec2D>();
+        public Attribute<Vec2D> MinMaxSize { get; set; } = new Attribute<Vec2D>();
         public Attribute<AInt> Spaceing { get; set; } = new Attribute<AInt>();
 
         public Func<float, float> DotSizeFunction { get; set; } = Functions.Linear;

@@ -14,14 +14,14 @@ namespace Skmr.Editor.MotionGraphics.Elements
         public string SourceText { get; set; } = String.Empty;
         public string FontFile { get; set; } = String.Empty;
         public float TextSize { get; set; } = 64.0f;
-        public Attribute<Pos2D> Position { get; }
+        public Attribute<Vec2D> Position { get; }
         public Attribute<RGBA> Color { get; }
 
 
         public Text()
         {
             Color = new Attribute<RGBA>();
-            Position = new Attribute<Pos2D>();
+            Position = new Attribute<Vec2D>();
         }
 
         public void DrawOn(int frame, SKCanvas canvas)

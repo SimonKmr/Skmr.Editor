@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Elements;
@@ -14,9 +15,9 @@ namespace Skmr.Editor.Images.Patterns
     public class Grid : IElement
     {
         public Attribute<RGBA> Color { get; set; } = new Attribute<RGBA>();
-        public Attribute<AVec2D> Resolution { get; set; } = new Attribute<AVec2D>();
-        public Attribute<AVec2D> Offset { get; set; } = new Attribute<AVec2D>();
-        public Attribute<AVec2D> Position { get; set; } = new Attribute<AVec2D>();
+        public Attribute<Vec2D> Resolution { get; set; } = new Attribute<Vec2D>();
+        public Attribute<Vec2D> Offset { get; set; } = new Attribute<Vec2D>();
+        public Attribute<Vec2D> Position { get; set; } = new Attribute<Vec2D>();
         public Attribute<AInt> TileSize { get; set; } = new Attribute<AInt>();
         public Attribute<AInt> StrokeWidth { get; set; } = new Attribute<AInt>();
 
