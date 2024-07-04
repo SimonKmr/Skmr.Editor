@@ -19,16 +19,18 @@ namespace Skmr.Editor.MotionGraphics.Attributes
         public T GetFrame(int frame)
         {
             var k = Keyframes;
+            int i = k.Count - 1;
+            
+            //move index to latest frame
+            while (k[i].Frame > frame && i > 0) i--;
 
             //if there is only one keyframe or it's the last keyframe
             //skip the method and return the value
             //used for performance improvements
-            if (k.Count == 1 || (k.Count - 1) == info.CurrentKeyframeIndex) return Keyframes[0].Value;
+            if (k.Count == 1 ) return Keyframes[0].Value;
+            if (k.Count - 1 == i) return Keyframes[k.Count - 1].Value;
 
-            int i = k.Count - 1;
-            //move index to latest frame
-            while (k[i].Frame > frame && i > 0) i--;
-
+            //if it's the same keyframe as previously, then skip the calculations
             if (i != info.CurrentKeyframeIndex)
             {
                 info.CurrentKeyframeIndex = i;
