@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.Data.Colors;
+using Skmr.Editor.Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,8 @@ namespace Skmr.Editor.MotionGraphics.Structs
         IMultiplyOperators<AMap, float, AMap>,
         IMultiplyOperators<AMap, AMap, AMap>,
         IDivisionOperators<AMap, AMap, AMap>,
-        IDivisionOperators<AMap, float, AMap>
+        IDivisionOperators<AMap, float, AMap>,
+        IDefault<AMap>
     {
         public float[,] value;
 
@@ -209,9 +211,9 @@ namespace Skmr.Editor.MotionGraphics.Structs
             return this * 0.5f + other * 0.5f;
         }
 
-        public AMap CreatePerlinNoise()
+        public static AMap GetDefault()
         {
-            throw new NotImplementedException();
+            return new AMap(new float[,] { });
         }
     }
 }

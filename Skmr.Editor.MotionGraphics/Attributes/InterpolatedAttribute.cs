@@ -1,4 +1,5 @@
 ﻿using Skmr.Editor.Data.Colors;
+using Skmr.Editor.Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace Skmr.Editor.MotionGraphics.Attributes
     public class InterpolatedAttribute<T> : IAttribute<T> where T :
         ISubtractionOperators<T, T, Difference<T>>,
         IMultiplyOperators<Difference<T>, float, Difference<T>>,
-        IAdditionOperators<T, Difference<T>, T>
+        IAdditionOperators<T, Difference<T>, T>,
+        IDefault<T>
     {
         public List<Keyframe<T>> Keyframes { get; set; } = new List<Keyframe<T>>();
         private CurrentFrameInfo info = new CurrentFrameInfo();
@@ -20,7 +22,10 @@ namespace Skmr.Editor.MotionGraphics.Attributes
         {
             var k = Keyframes;
             int i = k.Count - 1;
-            
+
+            //if no values was defined, in the keyframes, return the default value
+            if (i < 0) return T.GetDefault();
+
             //move index to latest frame
             while (k[i].Frame > frame && i > 0) i--;
 

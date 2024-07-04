@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Skmr.Editor.Data.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -8,9 +9,10 @@ using System.Threading.Tasks;
 namespace Skmr.Editor.Data.Colors
 {
     public struct RGBA :
-            ISubtractionOperators<RGBA, RGBA, Difference<RGBA>>,
-            IMultiplyOperators<Difference<RGBA>, float, Difference<RGBA>>,
-            IAdditionOperators<RGBA, Difference<RGBA>, RGBA>
+        ISubtractionOperators<RGBA, RGBA, Difference<RGBA>>,
+        IMultiplyOperators<Difference<RGBA>, float, Difference<RGBA>>,
+        IAdditionOperators<RGBA, Difference<RGBA>, RGBA>,
+        IDefault<RGBA>
     {
         public RGBA(byte r, byte g, byte b, byte a)
         {
@@ -58,6 +60,11 @@ namespace Skmr.Editor.Data.Colors
                 (byte)(left.b + right.Values[2]),
                 (byte)(left.a + right.Values[3]));
             return res;
+        }
+
+        public static RGBA GetDefault()
+        {
+            return new RGBA(0, 0, 0, 255);
         }
     }
 }

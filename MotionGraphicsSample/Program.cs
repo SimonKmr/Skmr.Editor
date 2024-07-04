@@ -10,6 +10,7 @@ using Skmr.Editor.Engine.Codecs;
 using Skmr.Editor.MotionGraphics.Structs.Noise;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Enums;
+using Presets = Skmr.Editor.MotionGraphics.Presets;
 
 Sequence seq = new Sequence(1920, 1080);
 
@@ -18,6 +19,7 @@ var txtTitle = new Text();
 txtTitle.SourceText = "TITLE";
 txtTitle.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Black.otf";
 txtTitle.TextSize = 120.0f;
+txtTitle.CustomAnimation = Presets.Text.LetterAnimation;
 
 var txtTitleColor = new InterpolatedAttribute<RGBA>();
 txtTitleColor.Keyframes.Add(
@@ -297,53 +299,13 @@ var mapDotsMap = new ProcedualAttribute<AMap>();
 mapDotsMap.Generator = (x) => Perlin.CreateNoiseMap(1920, 1080, 256, (double)(x/200));
 mapDots.Map = mapDotsMap;
 
-var mapDotsColor = new InterpolatedAttribute<RGBA>();
+mapDots.Color = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xFF, 0xFF, 0x40));
 
-mapDotsColor.Keyframes.Add(
-    new Keyframe<RGBA>
-    {
-        Frame = 1,
-        Transition = Function.Logistic,
-        Value = new RGBA(0xFF, 0xFF, 0xFF, 0x40)
-    });
+mapDots.Resolution = new StaticAttribute<Vec2D>(new Vec2D(1920, 1080));
 
-mapDots.Color = mapDotsColor;
+mapDots.MinMaxSize = new StaticAttribute<Vec2D>(new Vec2D(-7, 12));
 
-var mapDotsResolution = new InterpolatedAttribute<Vec2D>();
-
-mapDotsResolution.Keyframes.Add(
-    new Keyframe<Vec2D>
-    {
-        Frame = 1,
-        Transition = Function.Logistic,
-        Value = new Vec2D(1920, 1080)
-    });
-
-mapDots.Resolution = mapDotsResolution;
-
-var mapDotsMinMaxSize = new InterpolatedAttribute<Vec2D>();
-
-mapDotsMinMaxSize.Keyframes.Add(
-    new Keyframe<Vec2D>
-    {
-        Frame = 1,
-        Transition = Function.Linear,
-        Value = new Vec2D(-7, 12)
-    });
-
-mapDots.MinMaxSize = mapDotsMinMaxSize;
-
-var mapDotsSpaceing = new InterpolatedAttribute<AInt>();
-
-mapDotsSpaceing.Keyframes.Add(
-    new Keyframe<AInt>
-    {
-        Frame = 1,
-        Transition = Function.Linear,
-        Value = new AInt(10)
-    });
-
-mapDots.Spaceing = mapDotsSpaceing;
+mapDots.Spaceing = new StaticAttribute<AInt>(new AInt(10));
 
 //seq.Elements.Add(imgMain);
 //seq.Elements.Add(ptnGrid);
@@ -355,9 +317,6 @@ seq.Elements.Add(mdkLogo);
 seq.Elements.Add(fncLogo);
 seq.Elements.Add(mapDots);
 
-
-
-
 var frames = 240;
 seq.Encoding = Encoding.Png;
 
@@ -365,7 +324,7 @@ DateTime start;
 DateTime stop;
 DateTime startTotal = DateTime.Now;
 
-for (int i = 0; i < frames; i++)
+for (int i = 200; i < frames; i++)
 {
     start = DateTime.Now;
     using (var outImg = File.Open(@$"result/{i:D5}.png", FileMode.Create))

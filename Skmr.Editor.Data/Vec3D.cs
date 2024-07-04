@@ -1,4 +1,5 @@
 ﻿using Skmr.Editor.Data.Colors;
+using Skmr.Editor.Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,10 @@ using System.Threading.Tasks;
 namespace Skmr.Editor.Data
 {
     public struct Vec3D :
-            ISubtractionOperators<Vec3D, Vec3D, Difference<Vec3D>>,
-            IMultiplyOperators<Difference<Vec3D>, float, Difference<Vec3D>>,
-            IAdditionOperators<Vec3D, Difference<Vec3D>, Vec3D>
+        ISubtractionOperators<Vec3D, Vec3D, Difference<Vec3D>>,
+        IMultiplyOperators<Difference<Vec3D>, float, Difference<Vec3D>>,
+        IAdditionOperators<Vec3D, Difference<Vec3D>, Vec3D>,
+        IDefault<Vec3D>
     {
         public Vec3D(float x, float y, float z)
         {
@@ -42,6 +44,11 @@ namespace Skmr.Editor.Data
                 left.x + right.Values[0], 
                 left.y + right.Values[1],
                 left.z + right.Values[2]);
+        }
+
+        public static Vec3D GetDefault()
+        {
+            return new Vec3D(0, 0, 0);
         }
     }
 }

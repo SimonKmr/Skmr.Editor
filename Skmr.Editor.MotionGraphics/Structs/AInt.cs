@@ -1,4 +1,5 @@
 ﻿using Skmr.Editor.Data.Colors;
+using Skmr.Editor.Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,10 @@ using System.Threading.Tasks;
 namespace Skmr.Editor.MotionGraphics.Structs
 {
     public struct AInt :
-            ISubtractionOperators<AInt, AInt, Difference<AInt>>,
-            IMultiplyOperators<Difference<AInt>, float, Difference<AInt>>,
-            IAdditionOperators<AInt, Difference<AInt>, AInt>
+        ISubtractionOperators<AInt, AInt, Difference<AInt>>,
+        IMultiplyOperators<Difference<AInt>, float, Difference<AInt>>,
+        IAdditionOperators<AInt, Difference<AInt>, AInt>,
+        IDefault<AInt>
     {
         public int value;
 
@@ -39,6 +41,11 @@ namespace Skmr.Editor.MotionGraphics.Structs
         public static AInt operator +(AInt left, Difference<AInt> right)
         {
             return new AInt((byte)(left.value + right.Values[0]));
+        }
+
+        public static AInt GetDefault()
+        {
+            return new AInt(0);
         }
     }
 }
