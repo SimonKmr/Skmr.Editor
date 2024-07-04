@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.MotionGraphics.Elements;
+using Skmr.Editor.MotionGraphics.Enums;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 

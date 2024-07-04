@@ -1,7 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
-using Skmr.Editor.Images.Patterns;
 using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Patterns;
@@ -9,7 +8,8 @@ using Skmr.Editor.MotionGraphics.Structs;
 using Skmr.Editor.Engine;
 using Skmr.Editor.Engine.Codecs;
 using Skmr.Editor.MotionGraphics.Structs.Noise;
-using System.Drawing;
+using Skmr.Editor.MotionGraphics.Attributes;
+using Skmr.Editor.MotionGraphics.Enums;
 
 Sequence seq = new Sequence(1920, 1080);
 
@@ -355,14 +355,39 @@ seq.Elements.Add(mdkLogo);
 seq.Elements.Add(fncLogo);
 seq.Elements.Add(mapDots);
 
-seq.Encoding = Encoding.Raw;
 
-//Benchmark array
+
+
 var frames = 240;
-double[] frameTimes = new double[240];
+seq.Encoding = Encoding.Png;
 
 DateTime start;
 DateTime stop;
+DateTime startTotal = DateTime.Now;
+
+for (int i = 0; i < frames; i++)
+{
+    start = DateTime.Now;
+    using (var outImg = File.Open(@$"result/{i:D5}.png", FileMode.Create))
+    {
+        var pngBytes = seq.Render(i);
+        outImg.Write(pngBytes);
+    }
+    stop = DateTime.Now;
+    Console.WriteLine($"Frame: {i:D5} - {(stop - start).TotalMilliseconds} ms");
+}
+
+var totalTime = DateTime.Now - startTotal;
+Console.WriteLine(
+    $"avr. frame time {totalTime.TotalMilliseconds / frames} ms per frame\n" +
+    $"total time: {totalTime.ToString("mm':'ss")} ");
+
+//Benchmark array
+
+seq.Encoding = Encoding.Raw;
+double[] frameTimes = new double[240];
+
+return;
 
 //encodeing with Rav1e
 var outp = File.Open("out_file.ivf", FileMode.Create);
@@ -388,10 +413,6 @@ for (int i = 0; i < frames; i++)
     {
         outp.Write(data, 0, data.Length);
     }
-
-    stop = DateTime.Now;
-
-    Console.WriteLine($"Frame: {i:D5} - {(stop-start).TotalMilliseconds} ms");
 }
 
 //No more new Frames
@@ -411,9 +432,3 @@ while (true)
 
 outp.Close();
 
-double sum = 0;
-for(int i = 0;i < frames; i++)
-{
-    sum += frameTimes[i];
-}
-Console.WriteLine($"avr. frame time {sum/frames} ms per frame");

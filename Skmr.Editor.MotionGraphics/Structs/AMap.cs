@@ -10,9 +10,15 @@ using System.Threading.Tasks;
 namespace Skmr.Editor.MotionGraphics.Structs
 {
     public struct AMap :
-            ISubtractionOperators<AMap, AMap, Difference<AMap>>,
-            IMultiplyOperators<Difference<AMap>, float, Difference<AMap>>,
-            IAdditionOperators<AMap, Difference<AMap>, AMap>
+        ISubtractionOperators<AMap, AMap, Difference<AMap>>,
+        ISubtractionOperators<AMap, AMap, AMap>,
+        IMultiplyOperators<Difference<AMap>, float, Difference<AMap>>,
+        IAdditionOperators<AMap, Difference<AMap>, AMap>,
+        IAdditionOperators<AMap, AMap, AMap>,
+        IMultiplyOperators<AMap, float, AMap>,
+        IMultiplyOperators<AMap, AMap, AMap>,
+        IDivisionOperators<AMap, AMap, AMap>,
+        IDivisionOperators<AMap, float, AMap>
     {
         public float[,] value;
 
@@ -71,6 +77,99 @@ namespace Skmr.Editor.MotionGraphics.Structs
             return new Difference<AMap>(result);
         }
 
+        static AMap ISubtractionOperators<AMap, AMap, AMap>.operator -(AMap left, AMap right)
+        {
+            var width = left.value.GetLength(0);
+            var height = left.value.GetLength(1);
+            float[,] result = new float[width,height];
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    result[x,y] = left.value[x, y] - right.value[x, y];
+                }
+            }
+
+            return new AMap(result);
+        }
+
+        public static AMap operator *(AMap left, float right)
+        {
+            var width = left.value.GetLength(0);
+            var height = left.value.GetLength(1);
+            var result = new float[width,height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    result[x, y] = left.value[x, y] * right;
+                }
+            }
+
+            return new AMap(result);
+        }
+        public static AMap operator *(AMap left, AMap right)
+        {
+            var width = left.value.GetLength(0);
+            var height = left.value.GetLength(1);
+            var result = new float[width, height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    result[x, y] = left.value[x, y] * right.value[x, y];
+                }
+            }
+
+            return new AMap(result);
+        }
+        public static AMap operator +(AMap left, AMap right)
+        {
+            var width = left.value.GetLength(0);
+            var height = left.value.GetLength(1);
+            var result = new float[width, height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    result[x, y] = left.value[x, y] + right.value[x, y];
+                }
+            }
+
+            return new AMap(result);
+        }
+        public static AMap operator /(AMap left, AMap right)
+        {
+            var width = left.value.GetLength(0);
+            var height = left.value.GetLength(1);
+            var result = new float[width, height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    result[x, y] = left.value[x, y] / right.value[x, y];
+                }
+            }
+
+            return new AMap(result);
+        }
+        public static AMap operator /(AMap left, float right)
+        {
+            var width = left.value.GetLength(0);
+            var height = left.value.GetLength(1);
+            var result = new float[width, height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    result[x, y] = left.value[x, y] / right;
+                }
+            }
+
+            return new AMap(result);
+        }
+
         public static AMap FromFile(string path)
         {
             var image = SKImage.FromEncodedData(path);
@@ -88,6 +187,31 @@ namespace Skmr.Editor.MotionGraphics.Structs
             }
 
             return new AMap(map);
+        }
+
+        public AMap Interpolate(AMap other)
+        {
+            //Distribute points on the map (Poisson disk sampling)
+
+            //get values of the points on this map and other map
+
+            //select points that are high values from this and other map and pair them up
+
+            //draw a line between those points and points on the line
+
+            //on each point
+
+            throw new NotImplementedException();
+        }
+
+        public AMap Average(AMap other)
+        {
+            return this * 0.5f + other * 0.5f;
+        }
+
+        public AMap CreatePerlinNoise()
+        {
+            throw new NotImplementedException();
         }
     }
 }

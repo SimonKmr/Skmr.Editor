@@ -1,6 +1,7 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
+using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Structs;
 using System;
@@ -13,23 +14,33 @@ namespace Skmr.Editor.MotionGraphics.Patterns
 {
     public class DotMap : IElement
     {
-        public Attribute<AMap> Map { get; set; } = new Attribute<AMap>();
-        public Attribute<RGBA> Color { get; set; } = new Attribute<RGBA>();
-        public Attribute<Vec2D> Resolution { get; set; } = new Attribute<Vec2D>();
-        public Attribute<Vec2D> MinMaxSize { get; set; } = new Attribute<Vec2D>();
-        public Attribute<AInt> Spaceing { get; set; } = new Attribute<AInt>();
+        public IAttribute<AMap> Map { get; set; }
+        public IAttribute<RGBA> Color { get; set; }
+        public IAttribute<Vec2D> Resolution { get; set; }
+        public IAttribute<Vec2D> MinMaxSize { get; set; }
+        public IAttribute<AInt> Spaceing { get; set; }
 
-        public Func<float, float> DotSizeFunction { get; set; } = Functions.Linear;
+        public DotMap()
+        {
+            Map = new InterpolatedAttribute<AMap>();
+            Color = new InterpolatedAttribute<RGBA>();
+            Resolution = new InterpolatedAttribute<Vec2D>();
+            MinMaxSize = new InterpolatedAttribute<Vec2D>();
+            Spaceing = new InterpolatedAttribute<AInt>();
+        }
+
+        public Func<float, float> DotSizeFunction { get; set; } = Function.Linear;
 
         public void DrawOn(int frame, SKCanvas canvas)
         {
-            var spaceing = Spaceing.Interpolate(frame).value;
+            var spaceing = Spaceing.GetFrame(frame).value;
+            var resolution = Resolution.GetFrame(frame);
 
-            float xOffset = (Resolution.Interpolate(frame).x % spaceing) / 2;
-            float yOffset = (Resolution.Interpolate(frame).y % spaceing) / 2;
+            float xOffset = (resolution.x % spaceing) / 2;
+            float yOffset = (resolution.y % spaceing) / 2;
 
-            var map = Map.Interpolate(frame).value;
-            var color = Color.Interpolate(frame);
+            var map = Map.GetFrame(frame).value;
+            var color = Color.GetFrame(frame);
             var paint = new SKPaint();
 
             paint.Color = new SKColor(
@@ -42,10 +53,10 @@ namespace Skmr.Editor.MotionGraphics.Patterns
                 for (int y = (int)yOffset; y < map.GetLength(1); y += spaceing)
                 {
                     var dotSizePercent = DotSizeFunction((float)map[x, y]);
-                    var min = MinMaxSize.Interpolate(frame).x;
-                    var max = MinMaxSize.Interpolate(frame).y;
+                    var minmax = MinMaxSize.GetFrame(frame);
+                    var min = minmax.x;
+                    var max = minmax.y;
                     var radius = dotSizePercent * max + min;
-                        ;
                     
                     canvas.DrawCircle(
                         new SKPoint(x, y),

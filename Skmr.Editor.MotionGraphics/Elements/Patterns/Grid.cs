@@ -2,6 +2,7 @@
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics;
+using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Structs;
 using System;
@@ -14,40 +15,50 @@ namespace Skmr.Editor.Images.Patterns
 {
     public class Grid : IElement
     {
-        public Attribute<RGBA> Color { get; set; } = new Attribute<RGBA>();
-        public Attribute<Vec2D> Resolution { get; set; } = new Attribute<Vec2D>();
-        public Attribute<Vec2D> Offset { get; set; } = new Attribute<Vec2D>();
-        public Attribute<Vec2D> Position { get; set; } = new Attribute<Vec2D>();
-        public Attribute<AInt> TileSize { get; set; } = new Attribute<AInt>();
-        public Attribute<AInt> StrokeWidth { get; set; } = new Attribute<AInt>();
+        public IAttribute<RGBA> Color { get; set; }
+        public IAttribute<Vec2D> Resolution { get; set; }
+        public IAttribute<Vec2D> Offset { get; set; }
+        public IAttribute<Vec2D> Position { get; set; }
+        public IAttribute<AInt> TileSize { get; set; }
+        public IAttribute<AInt> StrokeWidth { get; set; }
+
+        public Grid()
+        {
+            Color = new InterpolatedAttribute<RGBA>();
+            Resolution = new InterpolatedAttribute<Vec2D>();
+            Offset = new InterpolatedAttribute<Vec2D>();
+            Position = new InterpolatedAttribute<Vec2D>();
+            TileSize = new InterpolatedAttribute<AInt>();
+            StrokeWidth = new InterpolatedAttribute<AInt>();
+        }
 
         public void DrawOn(int frame, SKCanvas canvas)
         {
             var paint = new SKPaint();
-            paint.Color = new SKColor(Color.Interpolate(frame).r, Color.Interpolate(frame).g, Color.Interpolate(frame).b, Color.Interpolate(frame).a);
-            paint.StrokeWidth = StrokeWidth.Interpolate(frame).value;
+            paint.Color = new SKColor(Color.GetFrame(frame).r, Color.GetFrame(frame).g, Color.GetFrame(frame).b, Color.GetFrame(frame).a);
+            paint.StrokeWidth = StrokeWidth.GetFrame(frame).value;
 
-            var resX = Resolution.Interpolate(frame).x;
-            var tileSize = TileSize.Interpolate(frame).value;
-            var offsetX = Offset.Interpolate(frame).x;
+            var resX = Resolution.GetFrame(frame).x;
+            var tileSize = TileSize.GetFrame(frame).value;
+            var offsetX = Offset.GetFrame(frame).x;
             
-            var x = Position.Interpolate(frame).x;
-            var y = Position.Interpolate(frame).y;
+            var x = Position.GetFrame(frame).x;
+            var y = Position.GetFrame(frame).y;
 
             float xOffset = resX % tileSize / 2 + offsetX;
-            float yOffset = Resolution.Interpolate(frame).y % TileSize.Interpolate(frame).value / 2 + Offset.Interpolate(frame).y;
+            float yOffset = Resolution.GetFrame(frame).y % TileSize.GetFrame(frame).value / 2 + Offset.GetFrame(frame).y;
 
-            float width = Resolution.Interpolate(frame).x;
-            float height = Resolution.Interpolate(frame).y;
+            float width = Resolution.GetFrame(frame).x;
+            float height = Resolution.GetFrame(frame).y;
 
             //vertical
-            for (int i = (int)xOffset; i < width; i += TileSize.Interpolate(frame).value)
+            for (int i = (int)xOffset; i < width; i += TileSize.GetFrame(frame).value)
                 canvas.DrawLine(
                     new SKPoint(x + i,y),
                     new SKPoint(x + i,y + height),
                     paint);
 
-            for (int i = (int)yOffset; i < height; i += TileSize.Interpolate(frame).value)
+            for (int i = (int)yOffset; i < height; i += TileSize.GetFrame(frame).value)
                 canvas.DrawLine(
                     new SKPoint(x, y + i),
                     new SKPoint(x + width, y + i),

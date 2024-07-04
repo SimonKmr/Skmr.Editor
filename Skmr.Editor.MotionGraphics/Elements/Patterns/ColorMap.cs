@@ -1,4 +1,6 @@
 ﻿using SkiaSharp;
+using Skmr.Editor.Data.Colors;
+using Skmr.Editor.MotionGraphics.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +16,9 @@ namespace Skmr.Editor.Images.Patterns
         {
             this.map = map;
         }
-        public (byte r, byte g, byte b) Color1 { get; set; }
-        public (byte r, byte g, byte b) Color2 { get; set; }
+        public IAttribute<RGB> Color1 { get; set; }
+        public IAttribute<RGB> Color2 { get; set; }
 
-        public SKBitmap Bitmap { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
 
@@ -29,9 +30,9 @@ namespace Skmr.Editor.Images.Patterns
                 {
                     (int r, int g , int b) colorfactor =
                         (
-                            (int)(Color1.r * map[x, y] + Color2.r * (1 - map[x, y])),
-                            (int)(Color1.g * map[x, y] + Color2.g * (1 - map[x, y])),
-                            (int)(Color1.b * map[x, y] + Color2.b * (1 - map[x, y]))
+                            (int)(Color1.GetFrame(frame).r * map[x, y] + Color2.GetFrame(frame).r * (1 - map[x, y])),
+                            (int)(Color1.GetFrame(frame).g * map[x, y] + Color2.GetFrame(frame).g * (1 - map[x, y])),
+                            (int)(Color1.GetFrame(frame).b * map[x, y] + Color2.GetFrame(frame).b * (1 - map[x, y]))
                         );
 
                     var color = new SKColor

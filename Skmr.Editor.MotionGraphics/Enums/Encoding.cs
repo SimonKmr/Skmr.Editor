@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Skmr.Editor.MotionGraphics
+namespace Skmr.Editor.MotionGraphics.Enums
 {
     public enum Encoding
     {

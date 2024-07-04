@@ -1,39 +1,48 @@
 ﻿using SkiaSharp;
+using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics;
+using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Structs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.Images.Patterns
 {
     public class Cross: IElement
     {
-        public Attribute<RGBA> Color { get; set; } = new Attribute<RGBA>();
-        public Attribute<AVec2D> Resolution { get; set; } = new Attribute<AVec2D>();
-        public Attribute<AVec2D> Offset { get; set; } = new Attribute<AVec2D>();
+        public IAttribute<RGBA> Color { get; set; }
+        public IAttribute<Vec2D> Resolution { get; set; }
+        public IAttribute<Vec2D> Offset { get; set; }
 
-        public Attribute<AInt> TileSize { get; set; } = new Attribute<AInt>();
-        public Attribute<AInt> CrossSize { get; set; } = new Attribute<AInt>();
+        public IAttribute<AInt> TileSize { get; set; }
+        public IAttribute<AInt> CrossSize { get; set; }
+
+        public Cross()
+        {
+            Color = new InterpolatedAttribute<RGBA>();
+            Resolution = new InterpolatedAttribute<Vec2D>();
+            Offset = new InterpolatedAttribute<Vec2D>();
+            TileSize = new InterpolatedAttribute<AInt>();
+            CrossSize = new InterpolatedAttribute<AInt>();
+        }
 
         public void DrawOn(int frame, SKCanvas canvas)
         {
             var paint = new SKPaint();
+
+            var color = Color.GetFrame(frame);
             paint.Color = new SKColor(
-                Color.Interpolate(frame).r,
-                Color.Interpolate(frame).g,
-                Color.Interpolate(frame).b,
-                Color.Interpolate(frame).a);
+                color.r,
+                color.g,
+                color.b,
+                color.a);
 
-            float width = Resolution.Interpolate(frame).x;
-            float height = Resolution.Interpolate(frame).y;
+            var resolution = Resolution.GetFrame(frame);
+            int tileSize = TileSize.GetFrame(frame).value;
+            int crossSize = CrossSize.GetFrame(frame).value;
 
-            int tileSize = TileSize.Interpolate(frame).value;
-            int crossSize = CrossSize.Interpolate(frame).value;
+            float width = resolution.x;
+            float height = resolution.y;
 
             int xOffset = (int)(width % tileSize / 2 - tileSize);
             int yOffset = (int)(height % tileSize / 2 - tileSize);

@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.Data;
+using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Structs;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,13 @@ namespace Skmr.Editor.MotionGraphics.Elements
     public class Image : IElement
     {
         public string ImagePath { get; set; } = String.Empty;
-        public Attribute<AByte> Alpha { get; set; }
-        public Attribute<Vec2D> Position { get; set; }
+        public IAttribute<AByte> Alpha { get; set; }
+        public IAttribute<Vec2D> Position { get; set; }
 
         public Image()
         {
-            Alpha = new Attribute<AByte>();
-            Position = new Attribute<Vec2D>();
+            Alpha = new InterpolatedAttribute<AByte>();
+            Position = new InterpolatedAttribute<Vec2D>();
         }
 
         public void DrawOn(int frame, SKCanvas canvas)
@@ -27,10 +28,10 @@ namespace Skmr.Editor.MotionGraphics.Elements
             var bm = SKBitmap.FromImage(image);
             var paint = new SKPaint();
 
-            var alpha = Alpha.Interpolate(frame).value;
+            var alpha = Alpha.GetFrame(frame).value;
             if (alpha == 0) return;
 
-            var pos = Position.Interpolate(frame);
+            var pos = Position.GetFrame(frame);
 
             if (alpha != 255) paint.Color = new SKColor(0, 0, 0, alpha);
             
