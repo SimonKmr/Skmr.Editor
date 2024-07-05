@@ -6,19 +6,16 @@ using System.Runtime.InteropServices;
 
 namespace Skmr.Editor.MotionGraphics
 {
-    public class Sequence : IDisposable
+    public class Sequence
     {
-        public SKCanvas Canvas { get; private set; }
-        private SKSurface surface;
+        private SKImageInfo info;
 
         public Encoding Encoding { get; set; }
 
         public Sequence(int width, int height)
         {
             Resolution = (width, height);
-            var info = new SKImageInfo(Resolution.width, Resolution.height);
-            surface = SKSurface.Create(info);
-            Canvas = surface.Canvas;
+            info = new SKImageInfo(Resolution.width, Resolution.height);
         }
 
         public (int width, int height) Resolution { get; set; }
@@ -30,13 +27,16 @@ namespace Skmr.Editor.MotionGraphics
         /// <returns></returns>
         public byte[] Render(int index)
         {
+            using var surface = SKSurface.Create(info);
+            using var canvas = surface.Canvas;
+                
             //Clear a Canvas
-            Canvas.Clear();
+            canvas.Clear();
 
             //Draws the elements on the canvas
             foreach (var element in Elements)
             {
-                element.DrawOn(index, Canvas);
+                element.DrawOn(index, canvas);
             }
 
             using var image = surface.Snapshot();
@@ -53,11 +53,6 @@ namespace Skmr.Editor.MotionGraphics
                     SKBitmap bitmap = SKBitmap.FromImage(image);
                     return bitmap.Bytes;
             }
-        }
-
-        public void Dispose()
-        {
-            surface.Dispose();
         }
     }
 }

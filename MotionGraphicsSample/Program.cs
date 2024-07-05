@@ -320,33 +320,34 @@ seq.Elements.Add(mapDots);
 var frames = 240;
 seq.Encoding = Encoding.Png;
 
-DateTime start;
-DateTime stop;
 DateTime startTotal = DateTime.Now;
 
-for (int i = 200; i < frames; i++)
+var res = Parallel.For(0, frames, (i, state) =>
 {
-    start = DateTime.Now;
+    DateTime start = DateTime.Now;
     using (var outImg = File.Open(@$"result/{i:D5}.png", FileMode.Create))
     {
         var pngBytes = seq.Render(i);
         outImg.Write(pngBytes);
     }
-    stop = DateTime.Now;
-    Console.WriteLine($"Frame: {i:D5} - {(stop - start).TotalMilliseconds} ms");
-}
+    DateTime stop = DateTime.Now;
+    //Console.WriteLine($"Frame: {i:D5} - {(stop - start).TotalMilliseconds} ms");
+});
+
+while (!res.IsCompleted) ;
+
 
 var totalTime = DateTime.Now - startTotal;
 Console.WriteLine(
     $"avr. frame time {totalTime.TotalMilliseconds / frames} ms per frame\n" +
     $"total time: {totalTime.ToString("mm':'ss")} ");
 
-//Benchmark array
+return;
 
+//Benchmark array
 seq.Encoding = Encoding.Raw;
 double[] frameTimes = new double[240];
 
-return;
 
 //encodeing with Rav1e
 var outp = File.Open("out_file.ivf", FileMode.Create);
@@ -356,7 +357,7 @@ Image<RGB>? frame = null;
 
 for (int i = 0; i < frames; i++)
 {
-    start = DateTime.Now;
+    DateTime start = DateTime.Now;
     //Create Frame
     var bytes = seq.Render(i);
     frame = Utility.RawToImageRGB(bytes, 1920, 1080);
