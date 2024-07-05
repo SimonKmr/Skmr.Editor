@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace Skmr.Editor.MotionGraphics.Sequence
+namespace Skmr.Editor.MotionGraphics.Sequences
 {
     public class Sequence : ISequence
     {

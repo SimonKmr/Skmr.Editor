@@ -11,7 +11,7 @@ using Skmr.Editor.MotionGraphics.Structs.Noise;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Enums;
 using Presets = Skmr.Editor.MotionGraphics.Presets;
-using Skmr.Editor.MotionGraphics.Sequence;
+using Skmr.Editor.MotionGraphics.Sequences;
 
 (int w, int h) resolution = (1920, 1080);
 

@@ -1,11 +1,9 @@
-﻿using Silk.NET.GLFW;
-using Silk.NET.OpenGL;
-using Silk.NET.Windowing;
+﻿using Silk.NET.Windowing;
 using SkiaSharp;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Enums;
 
-namespace Skmr.Editor.MotionGraphics.Sequence
+namespace Skmr.Editor.MotionGraphics.Sequences
 {
     public class SequenceGPU : ISequence
     {

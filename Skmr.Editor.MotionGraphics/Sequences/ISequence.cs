@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Skmr.Editor.MotionGraphics.Sequence
+namespace Skmr.Editor.MotionGraphics.Sequences
 {
     public interface ISequence
     {
