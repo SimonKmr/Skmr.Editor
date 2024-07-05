@@ -5,16 +5,15 @@ using SkiaSharp;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Enums;
 
-namespace Skmr.Editor.MotionGraphics
+namespace Skmr.Editor.MotionGraphics.Sequence
 {
-    public class SequenceGPU
+    public class SequenceGPU : ISequence
     {
         private IWindow window;
-        
+
         private GRGlInterface skiaGlInterface = null;
         private GRContext skiaBackendContext = null;
         private GRBackendRenderTarget skiaBackendRenderTarget = null;
-        private GL gl;
 
         private SKSurface surface;
         private SKCanvas canvas;
@@ -26,16 +25,16 @@ namespace Skmr.Editor.MotionGraphics
         public int StartFrame { get; set; }
         public int CurrentFrame { get; set; }
         public int EndFrame { get; set; }
-        
-        public Action<int,byte[]> FrameRendered { get; set; } = delegate { };
+
+        public Action<int, byte[]> FrameRendered { get; set; } = delegate { };
 
         public SequenceGPU(int width, int height)
         {
-            
+
             WindowOptions options = WindowOptions.Default;
-            options.Size = new Silk.NET.Maths.Vector2D<int> (width, height);
+            options.Size = new Silk.NET.Maths.Vector2D<int>(width, height);
             window = Window.Create(options);
-            
+
             window.Load += Window_Load;
             window.Render += Window_Render;
             Resolution = (width, height);
@@ -44,48 +43,54 @@ namespace Skmr.Editor.MotionGraphics
 
         private void Window_Render(double deltaTime)
         {
-            if (Index >= EndFrame) return;
-
+            
             //Clear a Canvas
-            canvas.Clear(new SKColor(0,0,0));
-
-            foreach (var element in Elements)
-            {
-                element.DrawOn(Index, canvas);
-            }
+            canvas.Clear(new SKColor(0, 0, 0));
 
             //Draws the elements on the canvas
-            canvas.DrawText($"{deltaTime} sec",20,20, new SKPaint()
+            if (Index <= EndFrame)
             {
-                Color = new SKColor(0, 0, 255)
-            });
+                foreach (var element in Elements)
+                {
+                    element.DrawOn(Index, canvas);
+                }
 
-            using var image = surface.Snapshot();
+                //Screenshots
+                using var image = surface.Snapshot();
+                
+                //returns the canvas as a bmp byte array
+                byte[] imgbyte;
+                switch (Encoding)
+                {
+                    case Encoding.Png:
+                        using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
+                        {
+                            imgbyte = data.ToArray();
+                        }
+                        break;
+                    default:
+                        SKBitmap bitmap = SKBitmap.FromImage(image);
+                        imgbyte = bitmap.Bytes;
+                        break;
+                }
 
-            var imgbyte = new byte[0];
-            
-            //returns the canvas as a bmp byte array
-            switch (Encoding)
-            {
-                case Encoding.Png:
-                    using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
-                    {
-                        imgbyte = data.ToArray();
-                    }
-                    break;
-                default:
-                    SKBitmap bitmap = SKBitmap.FromImage(image);
-                    imgbyte = bitmap.Bytes;
-                    break;
+                FrameRendered(Index, imgbyte);
             }
-
-            FrameRendered(Index,imgbyte);
-
-            canvas.DrawText($"{1 / deltaTime} fps", 20, 40, new SKPaint()
+            
+            //Draws controll elements on the canvas
+            canvas.DrawText($"{deltaTime} sec", 20, 60, new SKPaint()
             {
-                Color = new SKColor(0, 0, 255)
+                Color = new SKColor(255, 255, 255)
             });
-
+            canvas.DrawText($"{1 / deltaTime} fps", 20, 80, new SKPaint()
+            {
+                Color = new SKColor(255, 255, 255)
+            });
+            canvas.DrawText($"current frame: {Index}", 20, 100, new SKPaint()
+            {
+                Color = new SKColor(255, 255, 255)
+            });
+            
             canvas.Flush();
 
             Index++;
@@ -99,7 +104,7 @@ namespace Skmr.Editor.MotionGraphics
             {
                 if (window.GLContext.TryGetProcAddress(name, out nint fn))
                     return fn;
-                return (nint)0;
+                return 0;
             });
 
             skiaBackendContext = GRContext.CreateGl(skiaGlInterface);
@@ -114,9 +119,9 @@ namespace Skmr.Editor.MotionGraphics
                     format.ToGlSizedFormat()
                     )
                 );
-            
 
-            surface = SKSurface.Create(skiaBackendContext,skiaBackendRenderTarget,format);
+
+            surface = SKSurface.Create(skiaBackendContext, skiaBackendRenderTarget, format);
             canvas = surface.Canvas;
         }
 

@@ -11,8 +11,11 @@ using Skmr.Editor.MotionGraphics.Structs.Noise;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Enums;
 using Presets = Skmr.Editor.MotionGraphics.Presets;
+using Skmr.Editor.MotionGraphics.Sequence;
 
-SequenceGPU seq = new SequenceGPU(1920, 1080);
+(int w, int h) resolution = (1920, 1080);
+
+Sequence seq = new Sequence(resolution.w, resolution.h);
 
 var txtTitle = new Text();
 
@@ -45,7 +48,7 @@ txtTitlePosition.Keyframes.Add(
     {
         Frame = 1,
         Transition = (Function.Cubic),
-        Value = new Vec2D(1920 / 2, 1080 / 4 - 130),
+        Value = new Vec2D(resolution.w / 2, resolution.h / 4 - 130),
     });
 
 txtTitlePosition.Keyframes.Add(
@@ -53,7 +56,7 @@ txtTitlePosition.Keyframes.Add(
     {
         Frame = 40,
         Transition = ((x) => x),
-        Value = new Vec2D(1920 / 2, 1080 / 4 - 20),
+        Value = new Vec2D(resolution.w / 2, resolution.h / 4 - 20),
     });
 
 txtTitle.Position = txtTitlePosition;
@@ -90,7 +93,7 @@ txtVsPosition.Keyframes.Add(
     {
         Frame = 40,
         Transition = (Function.Cubic),
-        Value = new Vec2D(1920 / 2, 1080 / 2 - 32),
+        Value = new Vec2D(resolution.w / 2, resolution.h / 2 - 32),
     });
 
 txtVsPosition.Keyframes.Add(
@@ -98,7 +101,7 @@ txtVsPosition.Keyframes.Add(
     {
         Frame = 80,
         Transition = ((x) => x),
-        Value = new Vec2D(1920 / 2, 1080 / 2 + 32),
+        Value = new Vec2D(resolution.w / 2, resolution.h / 2 + 32),
     });
 
 txtVs.Position = txtVsPosition;
@@ -135,7 +138,7 @@ txtTeam01Position.Keyframes.Add(
     {
         Frame = 50,
         Transition = (Function.Cubic),
-        Value = new Vec2D(1920 / 4 - 50, 1080 / 3 * 2 + 100),
+        Value = new Vec2D(resolution.w / 4 - 50, resolution.h / 3 * 2 + 100),
     });
 
 txtTeam01Position.Keyframes.Add(
@@ -143,7 +146,7 @@ txtTeam01Position.Keyframes.Add(
     {
         Frame = 90,
         Transition = ((x) => x),
-        Value = new Vec2D(1920 / 4, 1080 / 3 * 2 + 100),
+        Value = new Vec2D(resolution.w / 4, resolution.h / 3 * 2 + 100),
     });
 
 txtTeam01.Position = txtTeam01Position;
@@ -180,7 +183,7 @@ txtTeam02Position.Keyframes.Add(
     {
         Frame = 50,
         Transition = (Function.Cubic),
-        Value = new Vec2D(1920 / 4 * 3 + 50, 1080 / 3 * 2 + 100),
+        Value = new Vec2D(resolution.w / 4 * 3 + 50, resolution.h / 3 * 2 + 100),
     });
 
 txtTeam02Position.Keyframes.Add(
@@ -188,7 +191,7 @@ txtTeam02Position.Keyframes.Add(
     {
         Frame = 90,
         Transition = ((x) => x),
-        Value = new Vec2D(1920 / 4 * 3, 1080 / 3 * 2 + 100),
+        Value = new Vec2D(resolution.w / 4 * 3, resolution.h / 3 * 2 + 100),
     });
 
 txtTeam02.Position = txtTeam02Position;
@@ -225,8 +228,8 @@ mdkLogoPosition.Keyframes.Add(
         Frame = 20,
         Transition = Function.Cubic,
         Value = new Vec2D(
-            1920 / 4 - 225, 
-            1080 / 2 - 225 - 100),
+            resolution.w / 4 - 225,
+            resolution.h / 2 - 225 - 100),
     });
 
 mdkLogoPosition.Keyframes.Add(
@@ -235,8 +238,8 @@ mdkLogoPosition.Keyframes.Add(
         Frame = 60,
         Transition = Function.Linear,
         Value = new Vec2D(
-            1920 / 4 - 225, 
-            1080 / 2 - 225 - 50),
+            resolution.w / 4 - 225,
+            resolution.h / 2 - 225 - 50),
     });
 
 mdkLogo.Position = mdkLogoPosition;
@@ -273,8 +276,8 @@ fncLogoPosition.Keyframes.Add(
         Frame = 60,
         Transition = Function.Cubic,
         Value = new Vec2D(
-            1920 / 4 * 3 - 225,
-            1080 / 2 - 225 - 100 + 50),
+            resolution.w / 4 * 3 - 225,
+            resolution.h / 2 - 225 - 100 + 50),
     });
 
 fncLogoPosition.Keyframes.Add(
@@ -283,8 +286,8 @@ fncLogoPosition.Keyframes.Add(
         Frame = 100,
         Transition = Function.Linear,
         Value = new Vec2D(
-            1920 / 4 * 3 - 225,
-            1080 / 2 - 225 - 50 + 50),
+            resolution.w / 4 * 3 - 225,
+            resolution.h / 2 - 225 - 50 + 50),
     });
 
 fncLogo.Position = fncLogoPosition;
@@ -315,7 +318,7 @@ seq.Elements.Add(txtTeam01);
 seq.Elements.Add(txtTeam02);
 seq.Elements.Add(mdkLogo);
 seq.Elements.Add(fncLogo);
-seq.Elements.Add(mapDots);
+//seq.Elements.Add(mapDots);
 
 var frames = 240;
 seq.Encoding = Encoding.Png;
@@ -332,7 +335,7 @@ seq.FrameRendered = (i, bytes) =>
     DateTime stop = DateTime.Now;
 };
 
-seq.Render(0);
+seq.Render();
 
 
 var totalTime = DateTime.Now - startTotal;
