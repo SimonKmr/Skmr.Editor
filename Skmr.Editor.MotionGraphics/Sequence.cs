@@ -9,7 +9,7 @@ namespace Skmr.Editor.MotionGraphics
     public class Sequence
     {
         private SKImageInfo info;
-
+        
         public Encoding Encoding { get; set; }
 
         public Sequence(int width, int height)

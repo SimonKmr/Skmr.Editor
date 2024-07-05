@@ -12,7 +12,7 @@ using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Enums;
 using Presets = Skmr.Editor.MotionGraphics.Presets;
 
-Sequence seq = new Sequence(1920, 1080);
+SequenceGPU seq = new SequenceGPU(1920, 1080);
 
 var txtTitle = new Text();
 
@@ -321,20 +321,18 @@ var frames = 240;
 seq.Encoding = Encoding.Png;
 
 DateTime startTotal = DateTime.Now;
-
-var res = Parallel.For(0, frames, (i, state) =>
+seq.EndFrame = frames;
+seq.FrameRendered = (i, bytes) =>
 {
     DateTime start = DateTime.Now;
     using (var outImg = File.Open(@$"result/{i:D5}.png", FileMode.Create))
     {
-        var pngBytes = seq.Render(i);
-        outImg.Write(pngBytes);
+        outImg.Write(bytes);
     }
     DateTime stop = DateTime.Now;
-    //Console.WriteLine($"Frame: {i:D5} - {(stop - start).TotalMilliseconds} ms");
-});
+};
 
-while (!res.IsCompleted) ;
+seq.Render(0);
 
 
 var totalTime = DateTime.Now - startTotal;
@@ -359,8 +357,8 @@ for (int i = 0; i < frames; i++)
 {
     DateTime start = DateTime.Now;
     //Create Frame
-    var bytes = seq.Render(i);
-    frame = Utility.RawToImageRGB(bytes, 1920, 1080);
+    //var bytes = seq.Render(i);
+    //frame = Utility.RawToImageRGB(bytes, 1920, 1080);
 
     //Encode Frames
     rav1e.SendFrame(frame);
