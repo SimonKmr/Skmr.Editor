@@ -17,7 +17,8 @@ namespace Skmr.Editor.MotionGraphics.Elements
         public string SourceText { get; set; } = String.Empty;
         public string FontFile { get; set; } = String.Empty;
         public float TextSize { get; set; } = 64.0f;
-        public HorizontalAlignment TextAlignment { get; set; } = HorizontalAlignment.Center;
+        public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Center;
+        public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Center;
         public IAttribute<Vec2D> Position { get; set; }
         public IAttribute<RGBA> Color { get; set; }
         public LetterAnimation CustomAnimation { get; set; }
@@ -61,7 +62,7 @@ namespace Skmr.Editor.MotionGraphics.Elements
                 paint.TextSize = TextSize;
                 paint.IsAntialias = true;
                 paint.IsStroke = false;
-                paint.TextAlign = ToSKTextAlign(TextAlignment);
+                paint.TextAlign = ToSKTextAlign(HorizontalAlignment);
 
                 var color = Color.GetFrame(frame);
 
@@ -72,7 +73,17 @@ namespace Skmr.Editor.MotionGraphics.Elements
                     color.a);
 
                 var pos = Position.GetFrame(frame);
-                
+
+                switch (VerticalAlignment)
+                {
+                    case VerticalAlignment.Top:
+                        pos.y -= (float)(TextSize / 0.75);
+                        break;
+                    case VerticalAlignment.Center:
+                        pos.y -= (float)(TextSize / 0.75) / 2;
+                        break;
+                }
+
                 canvas.DrawText(
                     SourceText,
                     pos.x,

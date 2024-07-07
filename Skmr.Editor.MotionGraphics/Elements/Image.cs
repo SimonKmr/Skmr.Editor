@@ -1,6 +1,7 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.MotionGraphics.Attributes;
+using Skmr.Editor.MotionGraphics.Enums;
 using Skmr.Editor.MotionGraphics.Structs;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,9 @@ namespace Skmr.Editor.MotionGraphics.Elements
         public string ImagePath { get; set; } = String.Empty;
         public IAttribute<AByte> Alpha { get; set; }
         public IAttribute<Vec2D> Position { get; set; }
+
+        public HorizontalAlignment HorizontalAlignment { get; set; }
+        public VerticalAlignment VerticalAlignment { get; set; }
 
         public Image()
         {
@@ -31,9 +35,30 @@ namespace Skmr.Editor.MotionGraphics.Elements
             var alpha = Alpha.GetFrame(frame).value;
             if (alpha == 0) return;
 
-            var pos = Position.GetFrame(frame);
+            Vec2D pos = Position.GetFrame(frame);
 
-            if (alpha != 255) paint.Color = new SKColor(0, 0, 0, alpha);
+            switch (HorizontalAlignment)
+            {
+                case HorizontalAlignment.Left:
+                    pos.x -= image.Width;
+                    break;
+                case HorizontalAlignment.Center: 
+                    pos.x -= image.Width/2;
+                    break;
+            }
+
+            switch (VerticalAlignment)
+            {
+                case VerticalAlignment.Top:
+                    pos.y -= image.Height;
+                    break;
+                case VerticalAlignment.Center:
+                    pos.y -= image.Height / 2;
+                    break;
+            }
+
+            paint.IsStroke = true;
+            if (alpha != 255) paint.Color = new SKColor(0xFF, 0xFF, 0xFF, alpha);
             
             canvas.DrawBitmap(bm, pos.x, pos.y, paint);
         }
