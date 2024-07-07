@@ -5,7 +5,7 @@ using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics.Structs;
-using Skmr.Editor.Engine;
+using Engine = Skmr.Editor.Engine;
 using Skmr.Editor.Engine.Codecs;
 using Skmr.Editor.MotionGraphics.Structs.Noise;
 using Skmr.Editor.MotionGraphics.Attributes;
@@ -19,7 +19,7 @@ Sequence seq = new Sequence(resolution.w, resolution.h);
 
 var txtTitle = new Text();
 
-txtTitle.SourceText = "TITLE";
+txtTitle.SourceText = "ESPORTS WORLD CUP";
 txtTitle.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Black.otf";
 txtTitle.TextSize = 120.0f;
 txtTitle.CustomAnimation = Presets.Text.LetterAnimation;
@@ -56,7 +56,7 @@ txtTitlePosition.Keyframes.Add(
     {
         Frame = 40,
         Transition = ((x) => x),
-        Value = new Vec2D(resolution.w / 2, resolution.h / 4 - 20),
+        Value = new Vec2D(resolution.w / 2, resolution.h / 4 + 5),
     });
 
 txtTitle.Position = txtTitlePosition;
@@ -93,7 +93,7 @@ txtVsPosition.Keyframes.Add(
     {
         Frame = 40,
         Transition = (Function.Cubic),
-        Value = new Vec2D(resolution.w / 2, resolution.h / 2 - 32),
+        Value = new Vec2D(resolution.w / 2, resolution.h / 2),
     });
 
 txtVsPosition.Keyframes.Add(
@@ -101,7 +101,7 @@ txtVsPosition.Keyframes.Add(
     {
         Frame = 80,
         Transition = ((x) => x),
-        Value = new Vec2D(resolution.w / 2, resolution.h / 2 + 32),
+        Value = new Vec2D(resolution.w / 2, resolution.h / 2 + 20),
     });
 
 txtVs.Position = txtVsPosition;
@@ -138,7 +138,7 @@ txtTeam01Position.Keyframes.Add(
     {
         Frame = 50,
         Transition = (Function.Cubic),
-        Value = new Vec2D(resolution.w / 4 - 50, resolution.h / 3 * 2 + 100),
+        Value = new Vec2D(resolution.w / 4 - 50, resolution.h / 3 * 2 + 175),
     });
 
 txtTeam01Position.Keyframes.Add(
@@ -146,7 +146,7 @@ txtTeam01Position.Keyframes.Add(
     {
         Frame = 90,
         Transition = ((x) => x),
-        Value = new Vec2D(resolution.w / 4, resolution.h / 3 * 2 + 100),
+        Value = new Vec2D(resolution.w / 4, resolution.h / 3 * 2 + 175),
     });
 
 txtTeam01.Position = txtTeam01Position;
@@ -183,7 +183,7 @@ txtTeam02Position.Keyframes.Add(
     {
         Frame = 50,
         Transition = (Function.Cubic),
-        Value = new Vec2D(resolution.w / 4 * 3 + 50, resolution.h / 3 * 2 + 100),
+        Value = new Vec2D(resolution.w / 4 * 3 + 50, resolution.h / 3 * 2 + 175),
     });
 
 txtTeam02Position.Keyframes.Add(
@@ -191,17 +191,18 @@ txtTeam02Position.Keyframes.Add(
     {
         Frame = 90,
         Transition = ((x) => x),
-        Value = new Vec2D(resolution.w / 4 * 3, resolution.h / 3 * 2 + 100),
+        Value = new Vec2D(resolution.w / 4 * 3, resolution.h / 3 * 2 + 175),
     });
 
 txtTeam02.Position = txtTeam02Position;
 
 var mdkLogo = new Image();
-
+mdkLogo.HorizontalAlignment = HorizontalAlignment.Center;
+mdkLogo.VerticalAlignment = VerticalAlignment.Center;
 mdkLogo.ImagePath = @"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Team Logos\white\mdk.png";
 
-var mdkLogoAlpha = new InterpolatedAttribute<AByte>();
 
+var mdkLogoAlpha = new InterpolatedAttribute<AByte>();
 mdkLogoAlpha.Keyframes.Add(
     new Keyframe<AByte>
     {
@@ -228,8 +229,8 @@ mdkLogoPosition.Keyframes.Add(
         Frame = 20,
         Transition = Function.Cubic,
         Value = new Vec2D(
-            resolution.w / 4 - 225,
-            resolution.h / 2 - 225 - 100),
+            resolution.w / 4,
+            resolution.h / 2 - 50),
     });
 
 mdkLogoPosition.Keyframes.Add(
@@ -238,16 +239,16 @@ mdkLogoPosition.Keyframes.Add(
         Frame = 60,
         Transition = Function.Linear,
         Value = new Vec2D(
-            resolution.w / 4 - 225,
-            resolution.h / 2 - 225 - 50),
+            resolution.w / 4,
+            resolution.h / 2),
     });
 
 mdkLogo.Position = mdkLogoPosition;
 
 var fncLogo = new Image();
-
+fncLogo.HorizontalAlignment = HorizontalAlignment.Center;
+fncLogo.VerticalAlignment = VerticalAlignment.Center;
 fncLogo.ImagePath = @"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Team Logos\white\fnatic.png";
-
 var fncLogoAlpha = new InterpolatedAttribute<AByte>();
 
 fncLogoAlpha.Keyframes.Add(
@@ -276,8 +277,8 @@ fncLogoPosition.Keyframes.Add(
         Frame = 60,
         Transition = Function.Cubic,
         Value = new Vec2D(
-            resolution.w / 4 * 3 - 225,
-            resolution.h / 2 - 225 - 100 + 50),
+            resolution.w / 4 * 3,
+            resolution.h / 2 - 50),
     });
 
 fncLogoPosition.Keyframes.Add(
@@ -286,8 +287,8 @@ fncLogoPosition.Keyframes.Add(
         Frame = 100,
         Transition = Function.Linear,
         Value = new Vec2D(
-            resolution.w / 4 * 3 - 225,
-            resolution.h / 2 - 225 - 50 + 50),
+            resolution.w / 4 * 3,
+            resolution.h / 2),
     });
 
 fncLogo.Position = fncLogoPosition;
@@ -301,8 +302,8 @@ var map02 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\image
 var mapDotsMap = new ProcedualAttribute<AMap>();
 mapDotsMap.Generator = (x) => Perlin.CreateNoiseMap(1920, 1080, 256, (double)(x/200));
 mapDots.Map = mapDotsMap;
-
-mapDots.Color = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xFF, 0xFF, 0x40));
+mapDots.ColorMin = new RGBA(0xFF, 0x20, 0x20, 0x40);
+mapDots.ColorMax = new RGBA(0xFF, 0xC4, 0x74, 0xFF);
 
 mapDots.Resolution = new StaticAttribute<Vec2D>(new Vec2D(1920, 1080));
 
@@ -312,19 +313,20 @@ mapDots.Spaceing = new StaticAttribute<AInt>(new AInt(10));
 
 //seq.Elements.Add(imgMain);
 //seq.Elements.Add(ptnGrid);
+seq.Elements.Add(mapDots);
 seq.Elements.Add(txtTitle);
 seq.Elements.Add(txtVs);
 seq.Elements.Add(txtTeam01);
 seq.Elements.Add(txtTeam02);
 seq.Elements.Add(mdkLogo);
 seq.Elements.Add(fncLogo);
-//seq.Elements.Add(mapDots);
 
 var frames = 240;
 seq.Encoding = Encoding.Png;
 
 DateTime startTotal = DateTime.Now;
 seq.EndFrame = frames;
+
 seq.FrameRendered = (i, bytes) =>
 {
     DateTime start = DateTime.Now;
@@ -354,7 +356,7 @@ double[] frameTimes = new double[240];
 var outp = File.Open("out_file.ivf", FileMode.Create);
 
 Rav1e rav1e = new Rav1e(1920, 1080, 60);
-Image<RGB>? frame = null;
+Engine.Image<RGB>? frame = null;
 
 for (int i = 0; i < frames; i++)
 {
