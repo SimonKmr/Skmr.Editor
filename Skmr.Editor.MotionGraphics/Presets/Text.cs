@@ -43,7 +43,7 @@ namespace Skmr.Editor.MotionGraphics.Presets
                     var xPos = charPoints[i].X + pos.x;
                     var yPos = charPoints[i].Y + pos.y;
 
-                    switch (ctx.VerticalAlignment)
+                    switch (ctx.HorizontalAlignment)
                     {
                         case HorizontalAlignment.Center:
                             xPos -= (charPoints[n - 1].X + charWidth[n - 1]) / 2;
