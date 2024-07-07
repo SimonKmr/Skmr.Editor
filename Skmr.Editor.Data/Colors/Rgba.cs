@@ -27,7 +27,7 @@ namespace Skmr.Editor.Data.Colors
         public byte b;
         public byte a;
 
-        static Difference<RGBA> ISubtractionOperators<RGBA, RGBA, Difference<RGBA>>.operator -(RGBA left, RGBA right)
+        public static Difference<RGBA> operator -(RGBA left, RGBA right)
         {
             var res = new Difference<RGBA>(
                 new float[]

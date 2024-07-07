@@ -4,18 +4,14 @@ using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Structs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.MotionGraphics.Patterns
 {
     public class DotMap : IElement
     {
         public IAttribute<AMap> Map { get; set; }
-        public IAttribute<RGBA> Color { get; set; }
+        public RGBA ColorMin { get; set; }
+        public RGBA ColorMax { get; set; }
         public IAttribute<Vec2D> Resolution { get; set; }
         public IAttribute<Vec2D> MinMaxSize { get; set; }
         public IAttribute<AInt> Spaceing { get; set; }
@@ -23,7 +19,6 @@ namespace Skmr.Editor.MotionGraphics.Patterns
         public DotMap()
         {
             Map = new InterpolatedAttribute<AMap>();
-            Color = new InterpolatedAttribute<RGBA>();
             Resolution = new InterpolatedAttribute<Vec2D>();
             MinMaxSize = new InterpolatedAttribute<Vec2D>();
             Spaceing = new InterpolatedAttribute<AInt>();
@@ -40,18 +35,21 @@ namespace Skmr.Editor.MotionGraphics.Patterns
             float yOffset = (resolution.y % spaceing) / 2;
 
             var map = Map.GetFrame(frame).value;
-            var color = Color.GetFrame(frame);
+            ;
             var paint = new SKPaint();
 
-            paint.Color = new SKColor(
-                color.r,
-                color.g,
-                color.b,
-                color.a);
+
             
             for (int x = (int)xOffset; x < map.GetLength(0); x += spaceing)
                 for (int y = (int)yOffset; y < map.GetLength(1); y += spaceing)
                 {
+                    var color = ColorMin + (ColorMax - ColorMin) * (float)map[x, y];
+                    
+                    paint.Color = new SKColor(
+                        color.r,
+                        color.g,
+                        color.b,
+                        color.a);
                     var dotSizePercent = DotSizeFunction((float)map[x, y]);
                     var minmax = MinMaxSize.GetFrame(frame);
                     var min = minmax.x;
