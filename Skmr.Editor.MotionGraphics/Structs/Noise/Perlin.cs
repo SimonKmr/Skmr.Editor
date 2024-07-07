@@ -239,6 +239,9 @@ namespace Skmr.Editor.MotionGraphics.Structs.Noise
 
         public Perlin(Func<double, double> smoothingFunction) : base(gradients, Dot, smoothingFunction) { }
 
+        public static AMap CreateNoiseMap(int width, int height, double zoom, double frame, Func<AMap, AMap> operations)
+            => operations(CreateNoiseMap(width, height, zoom, frame));
+
         public static AMap CreateNoiseMap(int width, int height, double zoom, double frame)
         {
             var noise = new Perlin();
