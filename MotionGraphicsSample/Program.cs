@@ -316,7 +316,7 @@ mapDots.Spaceing = new StaticAttribute<AInt>(new AInt(10));
 var mapClr = new ColorMap();
 mapClr.Resolution = new Vec2D(resolution.w, resolution.h);
 var mapClrMap = new ProcedualAttribute<AMap>();
-mapClrMap.Generator = (x) => PerlinGPU.CreateNoiseMapGPU(1920, 1080, 256, (double)(x/200));
+mapClrMap.Generator = (x) => PerlinGPU.CreateNoiseMap(1920, 1080, (double)(x/200), 256);
 
 mapClr.Map = mapClrMap;
 mapClr.Color1 = new StaticAttribute<RGBA>(new RGBA(0xFF, 0x20, 0x20, 0x40));
@@ -335,22 +335,6 @@ seq.Elements.Add(fncLogo);
 
 var frames = 240;
 seq.Encoding = Encoding.Png;
-
-seq.FrameRendered = (i, bytes) =>
-{
-    DateTime s = DateTime.Now;
-    using (var outImg = File.Open(@$"result/{i:D5}.png", FileMode.Create))
-    {
-        outImg.Write(bytes);
-    }
-    var t = DateTime.Now - s;
-    var sec = t.TotalSeconds;
-    Console.WriteLine($"{i};StreamWriter;{sec}");
-};
-
-seq.RenderSingleFrame(100);
-
-return;
 
 DateTime startTotal = DateTime.Now;
 seq.EndFrame = frames;
