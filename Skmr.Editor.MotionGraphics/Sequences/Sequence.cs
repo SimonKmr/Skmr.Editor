@@ -1,10 +1,6 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Enums;
-using System;
-using System.Diagnostics;
-using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace Skmr.Editor.MotionGraphics.Sequences
 {
@@ -49,7 +45,11 @@ namespace Skmr.Editor.MotionGraphics.Sequences
             //Draws the elements on the canvas
             foreach (var element in Elements)
             {
+                DateTime s = DateTime.Now;
                 element.DrawOn(frame, canvas);
+                var t = DateTime.Now - s;
+                var sec = t.TotalSeconds;
+                Console.WriteLine($"{frame};{element.GetType().Name};{sec}");
             }
 
             using var image = surface.Snapshot();

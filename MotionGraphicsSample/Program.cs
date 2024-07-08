@@ -12,6 +12,8 @@ using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Enums;
 using Presets = Skmr.Editor.MotionGraphics.Presets;
 using Skmr.Editor.MotionGraphics.Sequences;
+using Skmr.Editor.Images.Patterns;
+using System.Xml.Linq;
 
 (int w, int h) resolution = (1920, 1080);
 
@@ -311,9 +313,19 @@ mapDots.MinMaxSize = new StaticAttribute<Vec2D>(new Vec2D(-7, 12));
 
 mapDots.Spaceing = new StaticAttribute<AInt>(new AInt(10));
 
+var mapClr = new ColorMap();
+mapClr.Resolution = new Vec2D(resolution.w, resolution.h);
+var mapClrMap = new ProcedualAttribute<AMap>();
+mapClrMap.Generator = (x) => PerlinGPU.CreateNoiseMapGPU(1920, 1080, 256, (double)(x/200));
+
+mapClr.Map = mapClrMap;
+mapClr.Color1 = new StaticAttribute<RGBA>(new RGBA(0xFF, 0x20, 0x20, 0x40));
+mapClr.Color2 = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xC4, 0x74, 0xFF));
+
 //seq.Elements.Add(imgMain);
 //seq.Elements.Add(ptnGrid);
-seq.Elements.Add(mapDots);
+seq.Elements.Add(mapClr);
+//seq.Elements.Add(mapDots);
 seq.Elements.Add(txtTitle);
 seq.Elements.Add(txtVs);
 seq.Elements.Add(txtTeam01);
@@ -323,6 +335,22 @@ seq.Elements.Add(fncLogo);
 
 var frames = 240;
 seq.Encoding = Encoding.Png;
+
+seq.FrameRendered = (i, bytes) =>
+{
+    DateTime s = DateTime.Now;
+    using (var outImg = File.Open(@$"result/{i:D5}.png", FileMode.Create))
+    {
+        outImg.Write(bytes);
+    }
+    var t = DateTime.Now - s;
+    var sec = t.TotalSeconds;
+    Console.WriteLine($"{i};StreamWriter;{sec}");
+};
+
+seq.RenderSingleFrame(100);
+
+return;
 
 DateTime startTotal = DateTime.Now;
 seq.EndFrame = frames;

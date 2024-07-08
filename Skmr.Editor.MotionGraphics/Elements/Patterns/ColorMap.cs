@@ -1,49 +1,76 @@
-﻿using SkiaSharp;
+﻿using ILGPU.Runtime;
+using SkiaSharp;
+using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Skmr.Editor.MotionGraphics.Elements;
+using Skmr.Editor.MotionGraphics.Structs;
+using System.Runtime.InteropServices;
+
+using ILGPU;
+using ILGPU.Runtime.CPU;
+using ILGPU.Runtime.Cuda;
 
 namespace Skmr.Editor.Images.Patterns
 {
-    public class ColorMap
+    public class ColorMap : IElement
     {
-        public double[,] map;
-        public ColorMap(double[,] map)
-        {
-            this.map = map;
-        }
-        public IAttribute<RGB> Color1 { get; set; }
-        public IAttribute<RGB> Color2 { get; set; }
-
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public IAttribute<AMap> Map { get; set; }
+        public IAttribute<RGBA> Color1 { get; set; }
+        public IAttribute<RGBA> Color2 { get; set; }
+        public Vec2D Resolution { get; set; }
 
         public void DrawOn(int frame, SKCanvas canvas)
         {
-            SKBitmap bitmap = new SKBitmap(Width, Height);
-            for (int x = 0; x < map.GetLength(0); x ++)
-                for (int y = 0; y < map.GetLength(1); y++)
-                {
-                    (int r, int g , int b) colorfactor =
-                        (
-                            (int)(Color1.GetFrame(frame).r * map[x, y] + Color2.GetFrame(frame).r * (1 - map[x, y])),
-                            (int)(Color1.GetFrame(frame).g * map[x, y] + Color2.GetFrame(frame).g * (1 - map[x, y])),
-                            (int)(Color1.GetFrame(frame).b * map[x, y] + Color2.GetFrame(frame).b * (1 - map[x, y]))
-                        );
+            var res = Resolution;
+            var map = Map.GetFrame(frame).value;
+            SKBitmap bitmap = new SKBitmap((int)res.x, (int)res.y);
+            
 
-                    var color = new SKColor
-                        (
-                        (byte) colorfactor.r,
-                        (byte) colorfactor.g,
-                        (byte) colorfactor.b
-                        );
-                    bitmap.SetPixel(x, y, color);
-                }
+            var c1 = Color1.GetFrame(frame);
+            var c2 = Color2.GetFrame(frame);
+
+
+            using Context context = Context.CreateDefault();
+            using Accelerator accelerator = context.CreateCudaAccelerator(0);
+
+            var n = bitmap.Pixels.Length;
+
+            using var bitmapBuffer = accelerator.Allocate1D<SKColor>(new Index1D(n));
+            using var mapBuffer = accelerator.Allocate2DDenseX<float>(new Index2D(map.GetLength(0), map.GetLength(1)));
+            
+            mapBuffer.CopyFromCPU(map);
+
+            var kernel = accelerator.LoadAutoGroupedStreamKernel<
+                Index1D, 
+                ArrayView<SKColor>, 
+                ArrayView2D<float, Stride2D.DenseX>, 
+                RGBA, RGBA, Vec2D>(
+                CreateColorMapKernel);
+
+            kernel(
+                bitmapBuffer.Extent.ToIntIndex(), 
+                bitmapBuffer.View, 
+                mapBuffer.View, 
+                c1,c2,Resolution);
+            
+            bitmap.Pixels = bitmapBuffer.GetAsArray1D();
+
             canvas.DrawBitmap(bitmap, 0, 0);
+        }
+
+        private static void CreateColorMapKernel(Index1D idx, ArrayView<SKColor> bitmap, ArrayView2D<float, Stride2D.DenseX> map, RGBA color1, RGBA color2, Vec2D resolution)
+        {
+            var i = idx.X;
+            var x = idx.X % (int)resolution.x;
+            var y = idx.X / (int)resolution.x;
+
+            bitmap[i] = new SKColor(
+                (byte)(color1.r * map[x, y] + color2.r * (1 - map[x, y])),
+                (byte)(color1.g * map[x, y] + color2.g * (1 - map[x, y])),
+                (byte)(color1.b * map[x, y] + color2.b * (1 - map[x, y])),
+                (byte)(color1.a * map[x, y] + color2.a * (1 - map[x, y])));
+
         }
     }
 }

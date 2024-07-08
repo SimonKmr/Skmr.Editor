@@ -191,21 +191,6 @@ namespace Skmr.Editor.MotionGraphics.Structs
             return new AMap(map);
         }
 
-        public AMap Interpolate(AMap other)
-        {
-            //Distribute points on the map (Poisson disk sampling)
-
-            //get values of the points on this map and other map
-
-            //select points that are high values from this and other map and pair them up
-
-            //draw a line between those points and points on the line
-
-            //on each point
-
-            throw new NotImplementedException();
-        }
-
         public AMap Average(AMap other)
         {
             return this * 0.5f + other * 0.5f;

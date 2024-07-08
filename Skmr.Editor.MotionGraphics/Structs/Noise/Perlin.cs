@@ -1,5 +1,8 @@
 using Skmr.Editor.Data;
-using System;
+using SkiaSharp;
+using Skmr.Editor.Data.Colors;
+using ILGPU.IR.Values;
+
 namespace Skmr.Editor.MotionGraphics.Structs.Noise
 {
     public abstract class Perlin<GradientType>
@@ -120,6 +123,7 @@ namespace Skmr.Editor.MotionGraphics.Structs.Noise
             return LinearlyInterpolate(ZZeroPlaneVal, ZOnePlaneVal, smoothedZ);
         }
 
+
         //Tile Perlin Noise function, the noise is tiled over a region of tileRegion^3
         public double NoiseTiled(double x, double y = 0.5d, double z = 0.5d, int tileRegion = 2)
         {
@@ -239,10 +243,10 @@ namespace Skmr.Editor.MotionGraphics.Structs.Noise
 
         public Perlin(Func<double, double> smoothingFunction) : base(gradients, Dot, smoothingFunction) { }
 
-        public static AMap CreateNoiseMap(int width, int height, double zoom, double frame, Func<AMap, AMap> operations)
-            => operations(CreateNoiseMap(width, height, zoom, frame));
+        public static AMap CreateNoiseMap(int width, int height, double zoom, double frame, Func<AMap, AMap> operations, double xOffset = 0, double yOffset = 0)
+            => operations(CreateNoiseMap(width, height, zoom, frame, xOffset, yOffset));
 
-        public static AMap CreateNoiseMap(int width, int height, double zoom, double frame)
+        public static AMap CreateNoiseMap(int width, int height, double zoom, double frame, double xOffset = 0, double yOffset = 0)
         {
             var noise = new Perlin();
             var map = new float[width, height];
@@ -250,7 +254,7 @@ namespace Skmr.Editor.MotionGraphics.Structs.Noise
             for(int x = 0; x < width;x++)
                 for(int y = 0; y < height; y++)
                 {
-                    var pixel = (float)(noise.Noise((double)x / zoom, (double)y / zoom, frame)+1)/2;
+                    var pixel = (float)(noise.Noise((double)(x + xOffset) / zoom, (double)(y + yOffset) / zoom, frame)+1)/2;
                     map[x,y] = pixel;
                 }
 
