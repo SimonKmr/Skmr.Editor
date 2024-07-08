@@ -11,6 +11,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
         public int StartFrame { get; set; }
         public int CurrentFrame { get; set; }
         public int EndFrame { get; set; }
+        public int MaxThreads { get; set; } = 4;
         public Encoding Encoding { get; set; }
 
         public Sequence(int width, int height)
@@ -28,7 +29,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
         /// <returns></returns>
         public void Render()
         {
-            Parallel.For(StartFrame, EndFrame, (i, state) =>
+            Parallel.For(StartFrame, EndFrame, new ParallelOptions() { MaxDegreeOfParallelism = MaxThreads}, (i, state) =>
             {
                 RenderSingleFrame(i);
             });
