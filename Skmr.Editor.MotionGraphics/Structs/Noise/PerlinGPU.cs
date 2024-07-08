@@ -9,22 +9,24 @@ namespace Skmr.Editor.MotionGraphics.Structs.Noise
 {
     public static class PerlinGPU
     {
-        public static AMap CreateNoiseMapGPU(int width, int height, double zoom, double frame, double xOffset = 0, double yOffset = 0)
+        //https://github.com/m4rs-mt/ILGPU/issues/728
+
+        public static AMap CreateNoiseMap(int width, int height, double frame, double zoom, double xOffset = 0, double yOffset = 0)
         {
             using Context context = Context.CreateDefault();
             using Accelerator accelerator = context.CreateCudaAccelerator(0);
 
             using var mapBuffer = accelerator.Allocate2DDenseX<float>(new Index2D(width, height));
 
-            var kernel = accelerator.LoadAutoGroupedStreamKernel<Index2D,double,ArrayView2D<float,Stride2D.DenseX>>(NoiseKernel);
+            var kernel = accelerator.LoadAutoGroupedStreamKernel<Index2D,double,double,ArrayView2D<float,Stride2D.DenseX>>(NoiseKernel);
 
-            kernel(mapBuffer.Extent.ToIntIndex(),frame,mapBuffer.View);
+            kernel(mapBuffer.Extent.ToIntIndex(),frame,zoom,mapBuffer.View);
 
             var result = mapBuffer.GetAsArray2D();
             return new AMap(result);
         }
 
-        public static void NoiseKernel(Index2D idx, double z, ArrayView2D<float, Stride2D.DenseX> result)
+        public static void NoiseKernel(Index2D idx, double z, double zoom, ArrayView2D<float, Stride2D.DenseX> result)
         {
             int[] dPT = {151,160,137,91,90,15,
    131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
@@ -60,7 +62,6 @@ namespace Skmr.Editor.MotionGraphics.Structs.Noise
             new Vec3D(0,-1,-1)};
 
             (double x, double y) offset = (0d, 0d);
-            double zoom = 256;
             double x = (idx.X + offset.x) / zoom;
             double y = (idx.Y + offset.y) / zoom;
 
