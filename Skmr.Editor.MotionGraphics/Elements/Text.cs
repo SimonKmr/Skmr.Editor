@@ -3,6 +3,7 @@ using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Enums;
+using Skmr.Editor.MotionGraphics.Structs;
 
 namespace Skmr.Editor.MotionGraphics.Elements
 {
@@ -15,6 +16,7 @@ namespace Skmr.Editor.MotionGraphics.Elements
         public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Center;
         public IAttribute<Vec2D> Position { get; set; }
         public IAttribute<RGBA> Color { get; set; }
+        public IAttribute<AInt> Rotation { get; set; }
         public LetterAnimation CustomAnimation { get; set; }
 
         public delegate void LetterAnimation(SKCanvas canvas, Text ctx, int frame);
@@ -78,11 +80,16 @@ namespace Skmr.Editor.MotionGraphics.Elements
                         break;
                 }
 
+                var rotation = Rotation.GetFrame(frame).value;
+
+                canvas.Save();
+                canvas.RotateDegrees(rotation, pos.x, pos.y);
                 canvas.DrawText(
                     SourceText,
                     pos.x,
                     pos.y,
                     paint);
+                canvas.Restore();
             }
 
         }
