@@ -3,11 +3,6 @@ using Skmr.Editor.Data;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Enums;
 using Skmr.Editor.MotionGraphics.Structs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.MotionGraphics.Elements
 {
@@ -42,8 +37,8 @@ namespace Skmr.Editor.MotionGraphics.Elements
                 case HorizontalAlignment.Left:
                     pos.x -= image.Width;
                     break;
-                case HorizontalAlignment.Center: 
-                    pos.x -= image.Width/2;
+                case HorizontalAlignment.Center:
+                    pos.x -= image.Width / 2;
                     break;
             }
 
@@ -59,7 +54,7 @@ namespace Skmr.Editor.MotionGraphics.Elements
 
             paint.IsStroke = true;
             if (alpha != 255) paint.Color = new SKColor(0xFF, 0xFF, 0xFF, alpha);
-            
+
             canvas.DrawBitmap(bm, pos.x, pos.y, paint);
         }
     }

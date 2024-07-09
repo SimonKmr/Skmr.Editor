@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
 namespace Skmr.Editor.Data.Colors
 {
@@ -18,7 +13,7 @@ namespace Skmr.Editor.Data.Colors
         public static Difference<T> operator *(Difference<T> left, float right)
         {
             float[] res = new float[left.Values.Length];
-            
+
             for (int i = 0; i < left.Values.Length; i++)
             {
                 res[i] = left.Values[i] * right;

@@ -3,12 +3,6 @@ using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Enums;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.MotionGraphics.Elements
 {
@@ -54,11 +48,11 @@ namespace Skmr.Editor.MotionGraphics.Elements
             {
                 //set default values of text
 
-                if(FontFile != String.Empty)
+                if (FontFile != String.Empty)
                 {
                     paint.Typeface = SKTypeface.FromFile(FontFile);
                 }
-                
+
                 paint.TextSize = TextSize;
                 paint.IsAntialias = true;
                 paint.IsStroke = false;

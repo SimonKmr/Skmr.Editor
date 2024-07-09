@@ -1,12 +1,7 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Data.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.MotionGraphics.Structs
 {
@@ -33,13 +28,13 @@ namespace Skmr.Editor.MotionGraphics.Structs
         {
             var width = left.value.GetLength(0);
             var height = left.value.GetLength(1);
-            float[,] result = new float[width, height ];
-            
+            float[,] result = new float[width, height];
+
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    result[x,y] = left.value[x, y] + right.Values[y * width + x];
+                    result[x, y] = left.value[x, y] + right.Values[y * width + x];
                 }
             }
 
@@ -54,15 +49,15 @@ namespace Skmr.Editor.MotionGraphics.Structs
             var width = left.value.GetLength(0);
             var height = left.value.GetLength(1);
             float[] result = new float[width * height];
-            
+
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    result[y * width + x] = left.value[x, y] - right.value[x,y];
+                    result[y * width + x] = left.value[x, y] - right.value[x, y];
                 }
             }
-            
+
             return new Difference<AMap>(result);
         }
 
@@ -70,7 +65,7 @@ namespace Skmr.Editor.MotionGraphics.Structs
         {
             var length = left.Values.Length;
             var result = new float[length];
-            
+
             for (int i = 0; i < length; i++)
             {
                 result[i] = left.Values[i] * right;
@@ -83,13 +78,13 @@ namespace Skmr.Editor.MotionGraphics.Structs
         {
             var width = left.value.GetLength(0);
             var height = left.value.GetLength(1);
-            float[,] result = new float[width,height];
+            float[,] result = new float[width, height];
 
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    result[x,y] = left.value[x, y] - right.value[x, y];
+                    result[x, y] = left.value[x, y] - right.value[x, y];
                 }
             }
 
@@ -100,7 +95,7 @@ namespace Skmr.Editor.MotionGraphics.Structs
         {
             var width = left.value.GetLength(0);
             var height = left.value.GetLength(1);
-            var result = new float[width,height];
+            var result = new float[width, height];
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
@@ -178,8 +173,8 @@ namespace Skmr.Editor.MotionGraphics.Structs
             var bm = SKBitmap.FromImage(image);
             var map = new float[image.Width, image.Height];
             var max = float.MinValue;
-            
-            for(int x = 0; x < image.Width; x++)
+
+            for (int x = 0; x < image.Width; x++)
             {
                 for (int y = 0; y < image.Height; y++)
                 {

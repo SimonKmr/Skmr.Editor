@@ -1,15 +1,9 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
-using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Structs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.Images.Patterns
 {
@@ -41,7 +35,7 @@ namespace Skmr.Editor.Images.Patterns
             var resX = Resolution.GetFrame(frame).x;
             var tileSize = TileSize.GetFrame(frame).value;
             var offsetX = Offset.GetFrame(frame).x;
-            
+
             var x = Position.GetFrame(frame).x;
             var y = Position.GetFrame(frame).y;
 
@@ -54,8 +48,8 @@ namespace Skmr.Editor.Images.Patterns
             //vertical
             for (int i = (int)xOffset; i < width; i += TileSize.GetFrame(frame).value)
                 canvas.DrawLine(
-                    new SKPoint(x + i,y),
-                    new SKPoint(x + i,y + height),
+                    new SKPoint(x + i, y),
+                    new SKPoint(x + i, y + height),
                     paint);
 
             for (int i = (int)yOffset; i < height; i += TileSize.GetFrame(frame).value)

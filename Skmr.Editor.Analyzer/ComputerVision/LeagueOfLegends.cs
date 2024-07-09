@@ -21,7 +21,7 @@ namespace Skmr.Editor.Analyzer.ComputerVision
 
                 //GetPosition of Red Segments
                 var imgRed = imgHSV.InRange(new Hsv(0, 170, 120), new Hsv(8, 255, 255));
-                Utility.AddPositionsToList(positions,imgRed);
+                Utility.AddPositionsToList(positions, imgRed);
 
                 var imgBlue = imgHSV.InRange(new Hsv(100, 160, 200), new Hsv(110, 230, 255));
                 Utility.AddPositionsToList(positions, imgBlue);
@@ -40,7 +40,7 @@ namespace Skmr.Editor.Analyzer.ComputerVision
             }
             return positions.ToArray();
 
-        } 
+        }
 
 
 

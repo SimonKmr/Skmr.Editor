@@ -23,7 +23,7 @@ namespace Skmr.Editor.Engine.Containers.Mp4
                 int end = index + BitConverter.ToInt32(Utility.ReverseRange(bytes[index..(index + 4)]));
                 dr.Add(new DataRef(bytes[index..end]));
                 index = end;
-            } 
+            }
             while (index < bytes.Length);
             DataReferences = dr.ToArray();
         }

@@ -1,7 +1,4 @@
-﻿using Skmr.Editor.Engine.Codecs.Apis.Rav1e;
-using Skmr.Editor.Engine.Y4M;
-
-namespace Skmr.Editor.Engine.Bitstreams.H264
+﻿namespace Skmr.Editor.Engine.Bitstreams.H264
 {
     public class Reader : IDisposable
     {
@@ -42,7 +39,7 @@ namespace Skmr.Editor.Engine.Bitstreams.H264
                 _buffer[2] = _buffer[3];
                 _buffer[3] = bbyte;
                 num = BitConverter.ToInt32(_buffer, 0);
-                
+
                 tmp.Add(bbyte);
             }
 

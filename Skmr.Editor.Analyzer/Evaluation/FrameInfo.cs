@@ -1,6 +1,6 @@
-﻿using Skmr.Editor.Engine;
-using Skmr.Editor.Analyzer.ComputerVision;
+﻿using Skmr.Editor.Analyzer.ComputerVision;
 using Skmr.Editor.Data.Colors;
+using Skmr.Editor.Engine;
 
 
 namespace Skmr.Editor.Director

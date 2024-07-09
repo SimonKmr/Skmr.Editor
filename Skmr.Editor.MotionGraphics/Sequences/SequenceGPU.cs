@@ -41,7 +41,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
 
         private void Window_Render(double deltaTime)
         {
-            
+
             //Clear a Canvas
             canvas.Clear(new SKColor(0, 0, 0));
 
@@ -55,7 +55,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
 
                 //Screenshots
                 using var image = surface.Snapshot();
-                
+
                 //returns the canvas as a bmp byte array
                 byte[] imgbyte;
                 switch (Encoding)
@@ -74,7 +74,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
 
                 FrameRendered(Index, imgbyte);
             }
-            
+
             //Draws controll elements on the canvas
             canvas.DrawText($"{deltaTime} sec", 20, 60, new SKPaint()
             {
@@ -88,7 +88,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
             {
                 Color = new SKColor(255, 255, 255)
             });
-            
+
             canvas.Flush();
 
             Index++;

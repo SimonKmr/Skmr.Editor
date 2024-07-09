@@ -1,7 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using Skmr.Editor;
 using System.Drawing;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
@@ -31,7 +30,7 @@ namespace Skmr.Editor.Analyzer.ComputerVision
             imgHSV.Dispose();
             imgRed.Dispose();
             imgMasked.Dispose();
-            
+
             return positions.ToArray();
         }
         public static VectorOfPoint GetLostArkMask()

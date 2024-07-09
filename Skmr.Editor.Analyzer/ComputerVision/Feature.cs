@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
 {
     public class Feature
     {
         public string Name { get; set; }
-        
+
         public Point Center { get; set; }
         public Point Top { get; set; }
         public Point Bottom { get; set; }
         public Point Left { get; set; }
         public Point Right { get; set; }
-        
+
         public int Length { get => Top.X - Bottom.X; }
-        public int Height { get => Right.Y - Left.Y;}
+        public int Height { get => Right.Y - Left.Y; }
 
         public static Feature Create(string name, Point[] contour)
         {

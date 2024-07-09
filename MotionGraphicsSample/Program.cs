@@ -1,19 +1,18 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
-using Skmr.Editor.MotionGraphics;
-using Skmr.Editor.MotionGraphics.Elements;
-using Skmr.Editor.MotionGraphics.Patterns;
-using Skmr.Editor.MotionGraphics.Structs;
-using Engine = Skmr.Editor.Engine;
 using Skmr.Editor.Engine.Codecs;
-using Skmr.Editor.MotionGraphics.Structs.Noise;
-using Skmr.Editor.MotionGraphics.Attributes;
-using Skmr.Editor.MotionGraphics.Enums;
-using Presets = Skmr.Editor.MotionGraphics.Presets;
-using Skmr.Editor.MotionGraphics.Sequences;
 using Skmr.Editor.Images.Patterns;
-using System.Xml.Linq;
+using Skmr.Editor.MotionGraphics;
+using Skmr.Editor.MotionGraphics.Attributes;
+using Skmr.Editor.MotionGraphics.Elements;
+using Skmr.Editor.MotionGraphics.Enums;
+using Skmr.Editor.MotionGraphics.Patterns;
+using Skmr.Editor.MotionGraphics.Sequences;
+using Skmr.Editor.MotionGraphics.Structs;
+using Skmr.Editor.MotionGraphics.Structs.Noise;
+using Engine = Skmr.Editor.Engine;
+using Presets = Skmr.Editor.MotionGraphics.Presets;
 
 (int w, int h) resolution = (1920, 1080);
 
@@ -24,7 +23,7 @@ var txtTitle = new Text();
 txtTitle.SourceText = "ESPORTS WORLD CUP";
 txtTitle.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Black.otf";
 txtTitle.TextSize = 120.0f;
-txtTitle.CustomAnimation = Presets.Text.LetterAnimation;
+//txtTitle.CustomAnimation = Presets.Text.LetterAnimation;
 
 var txtTitleColor = new InterpolatedAttribute<RGBA>();
 txtTitleColor.Keyframes.Add(
@@ -302,7 +301,7 @@ var map01 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\image
 var map02 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Assets\02.png");
 
 var mapDotsMap = new ProcedualAttribute<AMap>();
-mapDotsMap.Generator = (x) => Perlin.CreateNoiseMap(1920, 1080, 256, (double)(x/200));
+mapDotsMap.Generator = (x) => Perlin.CreateNoiseMap(1920, 1080, 256, (double)(x / 200));
 mapDots.Map = mapDotsMap;
 mapDots.ColorMin = new RGBA(0xFF, 0x20, 0x20, 0x40);
 mapDots.ColorMax = new RGBA(0xFF, 0xC4, 0x74, 0xFF);
@@ -313,10 +312,10 @@ mapDots.MinMaxSize = new StaticAttribute<Vec2D>(new Vec2D(-7, 12));
 
 mapDots.Spaceing = new StaticAttribute<AInt>(new AInt(10));
 
-var mapClr = new ColorMap();
+var mapClr = new ColorMapGPU();
 mapClr.Resolution = new Vec2D(resolution.w, resolution.h);
 var mapClrMap = new ProcedualAttribute<AMap>();
-mapClrMap.Generator = (x) => PerlinGPU.CreateNoiseMap(1920, 1080, (double)(x/200), 256);
+mapClrMap.Generator = (x) => PerlinGPU.CreateNoiseMap(1920, 1080, (double)(x / 200), 256);
 
 mapClr.Map = mapClrMap;
 mapClr.Color1 = new StaticAttribute<RGBA>(new RGBA(0xFF, 0x20, 0x20, 0x40));
@@ -324,7 +323,7 @@ mapClr.Color2 = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xC4, 0x74, 0xFF));
 
 //seq.Elements.Add(imgMain);
 //seq.Elements.Add(ptnGrid);
-seq.Elements.Add(mapClr);
+//seq.Elements.Add(mapClr);
 //seq.Elements.Add(mapDots);
 seq.Elements.Add(txtTitle);
 seq.Elements.Add(txtVs);

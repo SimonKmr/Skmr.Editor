@@ -1,14 +1,13 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
-using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Structs;
 
 namespace Skmr.Editor.Images.Patterns
 {
-    public class Cross: IElement
+    public class Cross : IElement
     {
         public IAttribute<RGBA> Color { get; set; }
         public IAttribute<Vec2D> Resolution { get; set; }

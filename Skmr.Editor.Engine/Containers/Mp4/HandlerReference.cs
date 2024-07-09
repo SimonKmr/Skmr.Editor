@@ -13,7 +13,7 @@ namespace Skmr.Editor.Engine.Containers.Mp4
         public UInt32 ComponentFlags { get; set; }
         public UInt32 ComponentFlagsMask { get; set; }
         public String ComponentName { get; set; }
-            
+
         public HandlerReference(byte[] bytes)
         {
             Version = bytes[0];
@@ -22,7 +22,7 @@ namespace Skmr.Editor.Engine.Containers.Mp4
             ComponentManufacturer = BitConverter.ToUInt32(Utility.ReverseRange(bytes[12..16]));
             ComponentFlags = BitConverter.ToUInt32(Utility.ReverseRange(bytes[16..20]));
             ComponentFlagsMask = BitConverter.ToUInt32(Utility.ReverseRange(bytes[20..24]));
-            ComponentName = Encoding.UTF8.GetString(bytes, 24, bytes.Length-24);
+            ComponentName = Encoding.UTF8.GetString(bytes, 24, bytes.Length - 24);
         }
     }
 }

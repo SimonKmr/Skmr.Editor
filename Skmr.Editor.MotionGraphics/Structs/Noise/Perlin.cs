@@ -1,7 +1,4 @@
 using Skmr.Editor.Data;
-using SkiaSharp;
-using Skmr.Editor.Data.Colors;
-using ILGPU.IR.Values;
 
 namespace Skmr.Editor.MotionGraphics.Structs.Noise
 {
@@ -250,12 +247,12 @@ namespace Skmr.Editor.MotionGraphics.Structs.Noise
         {
             var noise = new Perlin();
             var map = new float[width, height];
-            
-            for(int x = 0; x < width;x++)
-                for(int y = 0; y < height; y++)
+
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
                 {
-                    var pixel = (float)(noise.Noise((double)(x + xOffset) / zoom, (double)(y + yOffset) / zoom, frame)+1)/2;
-                    map[x,y] = pixel;
+                    var pixel = (float)(noise.Noise((double)(x + xOffset) / zoom, (double)(y + yOffset) / zoom, frame) + 1) / 2;
+                    map[x, y] = pixel;
                 }
 
             return new AMap(map);

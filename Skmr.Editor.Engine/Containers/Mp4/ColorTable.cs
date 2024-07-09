@@ -13,7 +13,7 @@
             ColorTableSeed = BitConverter.ToUInt32(Utility.ReverseRange(bytes[0..4]));
             ColorTableFlags = BitConverter.ToUInt16(Utility.ReverseRange(bytes[4..6]));
             ColorTableSize = BitConverter.ToUInt16(Utility.ReverseRange(bytes[6..8]));
-                
+
             ColorArray = new UInt16[4];
             ColorArray[0] = BitConverter.ToUInt16(Utility.ReverseRange(bytes[8..10]));
             ColorArray[1] = BitConverter.ToUInt16(Utility.ReverseRange(bytes[10..12]));

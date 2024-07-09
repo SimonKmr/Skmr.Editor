@@ -3,11 +3,6 @@ using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.MotionGraphics.Elements
 {
@@ -21,7 +16,7 @@ namespace Skmr.Editor.MotionGraphics.Elements
 
         public void DrawOn(int frame, SKCanvas canvas)
         {
-            using (var paint = new SKPaint()) 
+            using (var paint = new SKPaint())
             {
                 var pos = Position.GetFrame(frame);
                 var res = Resolution.GetFrame(frame);
@@ -53,7 +48,7 @@ namespace Skmr.Editor.MotionGraphics.Elements
                         break;
                 }
 
-                canvas.DrawRect(pos.x,pos.y,res.x,res.y,paint);
+                canvas.DrawRect(pos.x, pos.y, res.x, res.y, paint);
             }
         }
     }

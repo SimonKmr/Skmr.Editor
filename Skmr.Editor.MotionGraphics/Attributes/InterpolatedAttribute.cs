@@ -1,11 +1,6 @@
 ﻿using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Data.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.MotionGraphics.Attributes
 {
@@ -17,7 +12,7 @@ namespace Skmr.Editor.MotionGraphics.Attributes
     {
         public List<Keyframe<T>> Keyframes { get; set; } = new List<Keyframe<T>>();
         private CurrentFrameInfo info = new CurrentFrameInfo();
-        
+
         public T GetFrame(int frame)
         {
             var k = Keyframes;
@@ -32,7 +27,7 @@ namespace Skmr.Editor.MotionGraphics.Attributes
             //if there is only one keyframe or it's the last keyframe
             //skip the method and return the value
             //used for performance improvements
-            if (k.Count == 1 ) return Keyframes[0].Value;
+            if (k.Count == 1) return Keyframes[0].Value;
             if (k.Count - 1 == i) return Keyframes[k.Count - 1].Value;
 
             //if it's the same keyframe as previously, then skip the calculations

@@ -16,15 +16,15 @@
 
 
             List<TableContent> list = new List<TableContent>();
-            for(int i = 0; i < EntryCount; i++)
+            for (int i = 0; i < EntryCount; i++)
             {
-                list.Add(new TableContent(bytes[(i*12)..((i+1)*12)]));
+                list.Add(new TableContent(bytes[(i * 12)..((i + 1) * 12)]));
             }
 
             Table = list.ToArray();
         }
-            
-            
+
+
         public class TableContent
         {
             public UInt32 TrackDuration { get; set; }

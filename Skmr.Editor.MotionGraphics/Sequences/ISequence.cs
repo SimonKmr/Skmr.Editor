@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Skmr.Editor.MotionGraphics.Sequences
+﻿namespace Skmr.Editor.MotionGraphics.Sequences
 {
     public interface ISequence
     {
+        public Action<int, byte[]> FrameRendered { get; set; }
         public int StartFrame { get; set; }
         public int EndFrame { get; set; }
 

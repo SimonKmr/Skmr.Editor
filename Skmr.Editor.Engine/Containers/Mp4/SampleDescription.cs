@@ -18,7 +18,7 @@ namespace Skmr.Editor.Engine.Containers.Mp4
             int index = 8;
 
 
-            while(index < bytes.Length)
+            while (index < bytes.Length)
             {
                 int end = index + BitConverter.ToInt32(Utility.ReverseRange(bytes[(index + 0)..(index + 4)]));
                 entries.Add(new Entry(bytes[index..end]));

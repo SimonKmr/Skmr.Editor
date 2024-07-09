@@ -1,11 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
 {
@@ -39,7 +34,7 @@ namespace Skmr.Editor.Analyzer.ComputerVision
 
         public static byte[,,] ToBgrMap(this Engine.Image<Data.Colors.RGB> image1)
         {
-            
+
             throw new NotImplementedException();
         }
     }

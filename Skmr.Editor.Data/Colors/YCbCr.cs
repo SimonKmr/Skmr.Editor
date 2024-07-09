@@ -1,6 +1,4 @@
-﻿using Skmr.Editor.Data;
-using Skmr.Editor.Data.Colors;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace Skmr.Editor.Data.Colors
 {

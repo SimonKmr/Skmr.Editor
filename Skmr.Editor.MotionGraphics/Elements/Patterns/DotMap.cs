@@ -39,12 +39,12 @@ namespace Skmr.Editor.MotionGraphics.Patterns
             var paint = new SKPaint();
 
 
-            
+
             for (int x = (int)xOffset; x < map.GetLength(0); x += spaceing)
                 for (int y = (int)yOffset; y < map.GetLength(1); y += spaceing)
                 {
                     var color = ColorMin + (ColorMax - ColorMin) * (float)map[x, y];
-                    
+
                     paint.Color = new SKColor(
                         color.r,
                         color.g,
@@ -55,7 +55,7 @@ namespace Skmr.Editor.MotionGraphics.Patterns
                     var min = minmax.x;
                     var max = minmax.y;
                     var radius = dotSizePercent * max + min;
-                    
+
                     canvas.DrawCircle(
                         new SKPoint(x, y),
                         radius,

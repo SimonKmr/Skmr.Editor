@@ -6,10 +6,9 @@ namespace Skmr.Editor.MotionGraphics.Sequences
 {
     public class Sequence : ISequence
     {
-        private SKImageInfo info;
+        private readonly SKImageInfo info;
         public Action<int, byte[]> FrameRendered { get; set; } = delegate { };
         public int StartFrame { get; set; }
-        public int CurrentFrame { get; set; }
         public int EndFrame { get; set; }
         public int MaxThreads { get; set; } = 4;
         public Encoding Encoding { get; set; }
@@ -29,7 +28,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
         /// <returns></returns>
         public void Render()
         {
-            Parallel.For(StartFrame, EndFrame, new ParallelOptions() { MaxDegreeOfParallelism = MaxThreads}, (i, state) =>
+            Parallel.For(StartFrame, EndFrame, new ParallelOptions() { MaxDegreeOfParallelism = MaxThreads }, (i, state) =>
             {
                 RenderSingleFrame(i);
             });

@@ -1,11 +1,6 @@
 ﻿using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Data.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.Data
 {
@@ -26,14 +21,14 @@ namespace Skmr.Editor.Data
 
         public static Difference<Vec3D> operator -(Vec3D left, Vec3D right)
         {
-            return new Difference<Vec3D> 
+            return new Difference<Vec3D>
                 (new float[] { left.x - right.x, left.y - right.y });
         }
 
         static Difference<Vec3D> IMultiplyOperators<Difference<Vec3D>, float, Difference<Vec3D>>.operator *(Difference<Vec3D> left, float right)
         {
-            return new Difference<Vec3D> (new float[] { 
-                left.Values[0] * right, 
+            return new Difference<Vec3D>(new float[] {
+                left.Values[0] * right,
                 left.Values[1] * right,
                 left.Values[2] * right});
         }
@@ -41,7 +36,7 @@ namespace Skmr.Editor.Data
         public static Vec3D operator +(Vec3D left, Difference<Vec3D> right)
         {
             return new Vec3D(
-                left.x + right.Values[0], 
+                left.x + right.Values[0],
                 left.y + right.Values[1],
                 left.z + right.Values[2]);
         }

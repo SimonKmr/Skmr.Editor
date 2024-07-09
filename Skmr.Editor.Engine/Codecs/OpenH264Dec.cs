@@ -1,5 +1,5 @@
-﻿using Skmr.Editor.Data.Colors;
-using OpenH264Lib;
+﻿using OpenH264Lib;
+using Skmr.Editor.Data.Colors;
 
 namespace Skmr.Editor.Engine.Codecs
 {
@@ -36,7 +36,7 @@ namespace Skmr.Editor.Engine.Codecs
                 arr[p] = data[p];
             }
 
-            result = RGBArrayToImage(arr, Width,Height);
+            result = RGBArrayToImage(arr, Width, Height);
             return true;
         }
 

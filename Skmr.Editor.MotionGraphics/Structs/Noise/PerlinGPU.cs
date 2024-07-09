@@ -1,9 +1,7 @@
-﻿using Skmr.Editor.Data;
-using ILGPU;
-using ILGPU.Runtime.Cuda;
+﻿using ILGPU;
 using ILGPU.Runtime;
-using ILGPU.Runtime.CPU;
-using System.ComponentModel.DataAnnotations;
+using ILGPU.Runtime.Cuda;
+using Skmr.Editor.Data;
 
 namespace Skmr.Editor.MotionGraphics.Structs.Noise
 {
@@ -18,9 +16,9 @@ namespace Skmr.Editor.MotionGraphics.Structs.Noise
 
             using var mapBuffer = accelerator.Allocate2DDenseX<float>(new Index2D(width, height));
 
-            var kernel = accelerator.LoadAutoGroupedStreamKernel<Index2D,double,double,ArrayView2D<float,Stride2D.DenseX>>(NoiseKernel);
+            var kernel = accelerator.LoadAutoGroupedStreamKernel<Index2D, double, double, ArrayView2D<float, Stride2D.DenseX>>(NoiseKernel);
 
-            kernel(mapBuffer.Extent.ToIntIndex(),frame,zoom,mapBuffer.View);
+            kernel(mapBuffer.Extent.ToIntIndex(), frame, zoom, mapBuffer.View);
 
             var result = mapBuffer.GetAsArray2D();
             return new AMap(result);

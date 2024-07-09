@@ -1,19 +1,16 @@
-﻿using ILGPU.Runtime;
+﻿using ILGPU;
+using ILGPU.Runtime;
+using ILGPU.Runtime.Cuda;
 using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Structs;
-using System.Runtime.InteropServices;
-
-using ILGPU;
-using ILGPU.Runtime.CPU;
-using ILGPU.Runtime.Cuda;
 
 namespace Skmr.Editor.Images.Patterns
 {
-    public class ColorMap : IElement
+    public class ColorMapGPU : IElement
     {
         public IAttribute<AMap> Map { get; set; }
         public IAttribute<RGBA> Color1 { get; set; }
@@ -25,7 +22,7 @@ namespace Skmr.Editor.Images.Patterns
             var res = Resolution;
             var map = Map.GetFrame(frame).value;
             SKBitmap bitmap = new SKBitmap((int)res.x, (int)res.y);
-            
+
 
             var c1 = Color1.GetFrame(frame);
             var c2 = Color2.GetFrame(frame);
@@ -38,22 +35,22 @@ namespace Skmr.Editor.Images.Patterns
 
             using var bitmapBuffer = accelerator.Allocate1D<SKColor>(new Index1D(n));
             using var mapBuffer = accelerator.Allocate2DDenseX<float>(new Index2D(map.GetLength(0), map.GetLength(1)));
-            
+
             mapBuffer.CopyFromCPU(map);
 
             var kernel = accelerator.LoadAutoGroupedStreamKernel<
-                Index1D, 
-                ArrayView<SKColor>, 
-                ArrayView2D<float, Stride2D.DenseX>, 
+                Index1D,
+                ArrayView<SKColor>,
+                ArrayView2D<float, Stride2D.DenseX>,
                 RGBA, RGBA, Vec2D>(
                 CreateColorMapKernel);
 
             kernel(
-                bitmapBuffer.Extent.ToIntIndex(), 
-                bitmapBuffer.View, 
-                mapBuffer.View, 
-                c1,c2,Resolution);
-            
+                bitmapBuffer.Extent.ToIntIndex(),
+                bitmapBuffer.View,
+                mapBuffer.View,
+                c1, c2, Resolution);
+
             bitmap.Pixels = bitmapBuffer.GetAsArray1D();
 
             canvas.DrawBitmap(bitmap, 0, 0);
