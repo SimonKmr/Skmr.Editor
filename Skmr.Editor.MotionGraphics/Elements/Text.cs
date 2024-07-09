@@ -36,6 +36,7 @@ namespace Skmr.Editor.MotionGraphics.Elements
         {
             Color = new InterpolatedAttribute<RGBA>();
             Position = new InterpolatedAttribute<Vec2D>();
+            Rotation = new InterpolatedAttribute<AInt>();
         }
 
         public void DrawOn(int frame, SKCanvas canvas)
