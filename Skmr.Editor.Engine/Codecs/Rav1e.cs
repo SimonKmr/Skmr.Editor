@@ -1,9 +1,10 @@
-﻿using Skmr.Editor.Engine.Codecs.Apis.Rav1e;
+﻿using Skmr.Editor.Data.Colors;
+using Skmr.Editor.Engine.Codecs.Apis.Rav1e;
 using System.Runtime.InteropServices;
 
 namespace Skmr.Editor.Engine.Codecs
 {
-    public class Rav1e : IVideoEncoder
+    public class Rav1e : IVideoEncoder, IDisposable
     {
         private IntPtr context;
         private IntPtr config;
@@ -52,7 +53,7 @@ namespace Skmr.Editor.Engine.Codecs
 
         public EncoderStatus SendFrame(Y4M.Frame ycbcr)
         {
-            
+
             //Creates a frame
             var frame = Functions.rav1e_frame_new(context);
             var y = ycbcr.Get(Y4M.Channel.Y);
@@ -132,6 +133,6 @@ namespace Skmr.Editor.Engine.Codecs
                 default:
                     return EncoderState.Unknown;
             }
-        } 
+        }
     }
 }

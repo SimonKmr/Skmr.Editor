@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace OpenH264Sample
+﻿namespace OpenH264Sample
 {
     // https://msdn.microsoft.com/ja-jp/library/cc352264.aspx
     // RIFFファイルは、RIFFヘッダーとその後ろに続く0個以上のリストとチャンクで構成されている。

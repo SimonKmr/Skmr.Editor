@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-using System.Runtime.InteropServices; // for StructLayout
+﻿using System.Runtime.InteropServices; // for StructLayout
 
 namespace OpenH264Sample
 {
@@ -185,7 +180,7 @@ namespace OpenH264Sample
                 int length = item.Length;
 
                 chunk.Write(ToFourCC(item.ChunkId));
-                chunk.Write(item.KeyFrame? AVIIF_KEYFRAME: 0x00);
+                chunk.Write(item.KeyFrame ? AVIIF_KEYFRAME : 0x00);
                 chunk.Write(offset);
                 chunk.Write(length);
 
@@ -216,7 +211,7 @@ namespace OpenH264Sample
             System.Runtime.InteropServices.Marshal.FreeHGlobal(ptr);
             return data;
         }
-        
+
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private struct AVIMAINHEADER
         {

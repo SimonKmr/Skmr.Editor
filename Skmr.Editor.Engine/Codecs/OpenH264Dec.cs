@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OpenH264Lib;
+using Skmr.Editor.Data.Colors;
 
 namespace Skmr.Editor.Engine.Codecs
 {
@@ -13,7 +9,7 @@ namespace Skmr.Editor.Engine.Codecs
 
 
         public const string dllPath = "Dlls\\openh264-2.3.1-win64.dll";
-        private readonly OpenH264Lib.Decoder decoder;
+        private readonly Decoder decoder;
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -23,7 +19,7 @@ namespace Skmr.Editor.Engine.Codecs
             Width = width;
             Height = height;
 
-            decoder = new OpenH264Lib.Decoder(dllPath);
+            decoder = new Decoder(dllPath);
         }
 
         public unsafe bool TryDecode(byte[] frame, out Image<RGB>? result)
@@ -40,7 +36,7 @@ namespace Skmr.Editor.Engine.Codecs
                 arr[p] = data[p];
             }
 
-            result = RGBArrayToImage(arr, Width,Height);
+            result = RGBArrayToImage(arr, Width, Height);
             return true;
         }
 

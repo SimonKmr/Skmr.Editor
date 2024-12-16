@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Skmr.Editor.Engine.Containers.Mp4
+﻿namespace Skmr.Editor.Engine.Containers.Mp4
 {
     internal class Utility
     {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace OpenH264Sample
+﻿namespace OpenH264Sample
 {
     class H264Writer
     {

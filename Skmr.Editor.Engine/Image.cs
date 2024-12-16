@@ -1,6 +1,4 @@
-﻿using static Skmr.Editor.Engine.Utility;
-
-namespace Skmr.Editor.Engine
+﻿namespace Skmr.Editor.Engine
 {
     public class Image<T>
     {

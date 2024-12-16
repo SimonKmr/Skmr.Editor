@@ -22,7 +22,7 @@
             Width = width;
             Height = height;
 
-            if (data.Length != Size) 
+            if (data.Length != Size)
                 throw new Exception();
 
             this.data = data;
@@ -74,11 +74,11 @@
 
             switch (channel)
             {
-                case Channel.Y:  return baseOffset;
+                case Channel.Y: return baseOffset;
                 case Channel.Cb: return baseOffset + ySize;
                 case Channel.Cr: return baseOffset + ySize + cbSize;
             }
-                
+
             throw new Exception();
         }
         public byte[] GetData()

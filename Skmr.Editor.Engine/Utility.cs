@@ -1,5 +1,5 @@
-﻿using Skmr.Editor.Engine.Y4M;
-using System.Drawing;
+﻿using Skmr.Editor.Data.Colors;
+using Skmr.Editor.Engine.Y4M;
 
 namespace Skmr.Editor.Engine
 {
@@ -92,10 +92,10 @@ namespace Skmr.Editor.Engine
             {
                 for (int y = 0; y < height; y++)
                 {
-                    image.Set(x, y, 
+                    image.Set(x, y,
                         new YCbCr(
-                            yComponent[x + y * width], 
-                            cbMap[x / 4, y / 4], 
+                            yComponent[x + y * width],
+                            cbMap[x / 4, y / 4],
                             crMap[x / 4, y / 4]).ToRgb());
                 }
             }
@@ -114,9 +114,9 @@ namespace Skmr.Editor.Engine
             int b = (int)(Y + 1.77200 * (Cb - 0x80));
 
             return new RGB(
-                (byte) Math.Max(0, Math.Min(255, r)),
-                (byte) Math.Max(0, Math.Min(255, g)),
-                (byte) Math.Max(0, Math.Min(255, b))
+                (byte)Math.Max(0, Math.Min(255, r)),
+                (byte)Math.Max(0, Math.Min(255, g)),
+                (byte)Math.Max(0, Math.Min(255, b))
                 );
         }
         public static RGB ToRgb(this YUV color)
@@ -154,9 +154,9 @@ namespace Skmr.Editor.Engine
             double Cr = 0.500 * R - 0.419 * G - 0.081 * B;
 
             return new YCbCr(
-                    (byte) (Y * 255),
-                    (byte) ((Cb + 0.5) * 255),
-                    (byte) ((Cr + 0.5) * 255)
+                    (byte)(Y * 255),
+                    (byte)((Cb + 0.5) * 255),
+                    (byte)((Cr + 0.5) * 255)
                 );
         }
         public static YCbCr ToYCbCr(this YUV color)
@@ -231,6 +231,42 @@ namespace Skmr.Editor.Engine
 
                 return ptr;
             }
+        }
+        public static Image<RGBA> RawToImageRGBA(byte[] bytes, int width, int height)
+        {
+            int i = 0;
+            var result = new Image<RGBA>(width, height);
+
+            for (int x = 0; x < 1080; x++)
+                for (int y = 0; y < 1920; y++)
+                {
+                    var c = new RGBA(bytes[i + 0], bytes[i + 1], bytes[i + 2], bytes[i + 3]);
+                    result.Set(y, x, c);
+                    i += 4;
+                }
+
+            return result;
+        }
+
+        public static Image<RGB> RawToImageRGB(byte[] bytes, int width, int height)
+        {
+            int i = 0;
+            var result = new Image<RGB>(width, height);
+
+            for (int x = 0; x < 1080; x++)
+                for (int y = 0; y < 1920; y++)
+                {
+                    var r = bytes[i + 0];
+                    var g = bytes[i + 1];
+                    var b = bytes[i + 2];
+
+                    var c = new RGB(r, g, b);
+                    result.Set(y, x, c);
+
+                    i += 4;
+                }
+
+            return result;
         }
     }
 }
