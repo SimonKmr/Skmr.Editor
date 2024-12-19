@@ -23,28 +23,10 @@
         public bool Read(out byte[]? frame)
         {
             frame = null;
-            List<byte> tmp = new List<byte>();
-            int num = -1;
-
-            while (num != 16777216)
-            {
-                var b = _stream.ReadByte();
-                if (b == -1)
-                    return false;
-
-                var bbyte = (byte)b;
-
-                _buffer[0] = _buffer[1];
-                _buffer[1] = _buffer[2];
-                _buffer[2] = _buffer[3];
-                _buffer[3] = bbyte;
-                num = BitConverter.ToInt32(_buffer, 0);
-
-                tmp.Add(bbyte);
-            }
-
-            var raw = tmp.ToArray()[0..(tmp.Count - 4)];
-            var result = new byte[tmp.Count + 4];
+            
+            byte[] raw;
+            if (!ByLength(out raw)) return false;
+            var result = new byte[raw.Length + 4];
 
             result[0] = 0;
             result[1] = 0;
@@ -87,17 +69,10 @@
 
         public bool ByLength(out byte[]? frame)
         {
-            frame = null;
-
-            var b = _stream.ReadByte();
-            if (b == -1)
-                return false;
-
-            _stream.Position--;
-
             var frameLengthBuffer = new byte[4];
             _stream.Read(frameLengthBuffer, 0, 4);
-            var frameLength = BitConverter.ToInt32(frameLengthBuffer);
+            frameLengthBuffer = frameLengthBuffer.Reverse().ToArray();
+            var frameLength = BitConverter.ToUInt32(frameLengthBuffer);
 
             frame = new byte[frameLength];
             _stream.Read(frame);

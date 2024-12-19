@@ -27,7 +27,7 @@ namespace Skmr.Editor.Tests
             //packets go missing
             //because OpenH264Dec fails to decode some packages
 
-            Image<RGB>? frame = null;
+            
 
             string input = "resources\\input.h264";
             string output = "results\\test1.ivf";
@@ -50,6 +50,7 @@ namespace Skmr.Editor.Tests
             //Read Frames
             while(reader.Read(out frameData))
             {
+                Image<RGB>? frame = null;
                 framesRead++;
 
                 //Decode Frames
@@ -78,7 +79,6 @@ namespace Skmr.Editor.Tests
             //Get Remaining Frames
             while (true)
             {
-                
                 var status = rav1e.ReceiveFrame(out byte[]? data);
 
                 if (status == EncoderState.Ended) break;
