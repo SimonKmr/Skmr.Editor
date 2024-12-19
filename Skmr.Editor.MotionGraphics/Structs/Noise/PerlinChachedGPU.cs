@@ -1,34 +1,46 @@
-﻿using ILGPU;
-using ILGPU.Runtime;
-using ILGPU.Runtime.Cuda;
-using Silk.NET.Vulkan;
+﻿using ILGPU.Runtime;
+using ILGPU;
 using Skmr.Editor.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SkiaSharp;
 
 namespace Skmr.Editor.MotionGraphics.Structs.Noise
 {
     /// <summary>
-    /// Uses the GPU to create Perlin Noise
+    /// Uses the GPU to generate PerlinNoise and chaches the result to reuse it in later Operations.
+    /// This is should be faster but, comes with higher ram usage.
     /// </summary>
-    public static class PerlinGPU
+    /// 
+
+    //Maybe instead of chaching i can compute it with width/zoom, height/zoom and  
+    public class PerlinChachedGPU
     {
-        //https://github.com/m4rs-mt/ILGPU/issues/728
-
-        public static AMap CreateNoiseMap(int width, int height, double frame, double zoom, double xOffset = 0, double yOffset = 0)
+        private readonly int width;
+        private readonly int height;
+        private double zoom;
+        private double offsetX;
+        private double offsetY;
+        private double z;
+        public PerlinChachedGPU(int width, int height, double offsetX = 0,double offsetY = 0, double zoom = 256)
         {
-            using Context context = Context.CreateDefault();
-            using Accelerator accelerator = context.CreateCudaAccelerator(0);
-
-            using var mapBuffer = accelerator.Allocate2DDenseX<float>(new Index2D(width, height));
-
-            var kernel = accelerator.LoadAutoGroupedStreamKernel<Index2D, double, double, ArrayView2D<float, Stride2D.DenseX>>(NoiseKernel);
-
-            kernel(mapBuffer.Extent.ToIntIndex(), frame, zoom, mapBuffer.View);
-
-            var result = mapBuffer.GetAsArray2D();
-            return new AMap(result);
+            this.width = width;
+            this.height = height;
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
+            this.zoom = zoom;
         }
 
-        private static void NoiseKernel(Index2D idx, double z, double zoom, ArrayView2D<float, Stride2D.DenseX> result)
+        public static AMap CreateNoiseMapChached()
+        {
+            //if offset, z or zoom changed recalculate chache
+            throw new NotImplementedException();
+        }
+
+        private static void NoiseKernel2(Index2D idx, double z, double zoom, ArrayView2D<float, Stride2D.DenseX> result)
         {
             int[] dPT = {151,160,137,91,90,15,
    131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
@@ -90,14 +102,14 @@ namespace Skmr.Editor.MotionGraphics.Structs.Noise
             z -= Math.Floor(z);
 
             //calculate dot products
-            double V000Dot = Common.Dot(V000, x, y, z);
-            double V001Dot = Common.Dot(V001, x, y, z - 1);
-            double V010Dot = Common.Dot(V010, x, y - 1, z);
-            double V011Dot = Common.Dot(V011, x, y - 1, z - 1);
-            double V100Dot = Common.Dot(V100, x - 1, y, z);
-            double V101Dot = Common.Dot(V101, x - 1, y, z - 1);
-            double V110Dot = Common.Dot(V110, x - 1, y - 1, z);
-            double V111Dot = Common.Dot(V111, x - 1, y - 1, z - 1);
+            double V000Dot = V000.x * x + V000.y * y + V000.z * z;
+            double V001Dot = V001.x * x + V001.y * y + V001.z * (z - 1);
+            double V010Dot = V010.x * x + V010.y * (y - 1) + V010.z * z;
+            double V011Dot = V011.x * x + V011.y * (y - 1) + V011.z * (z - 1);
+            double V100Dot = V100.x * (x - 1) + V100.y * y + V100.z * z;
+            double V101Dot = V101.x * (x - 1) + V101.y * y + V101.z * (z - 1);
+            double V110Dot = V110.x * (x - 1) + V110.y * (y - 1) + V110.z * z;
+            double V111Dot = V111.x * (x - 1) + V111.y * (y - 1) + V111.z * (z - 1);
 
             //calculate smoothed x, y and z values. These are used to get
             //a smoother interpolation between the dot products of the 
@@ -117,9 +129,5 @@ namespace Skmr.Editor.MotionGraphics.Structs.Noise
 
             result[idx.X, idx.Y] = (float)Common.LinearlyInterpolate(ZZeroPlaneVal, ZOnePlaneVal, smoothedZ);
         }
-
-
-
-
     }
 }

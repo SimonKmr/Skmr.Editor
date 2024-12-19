@@ -12,6 +12,7 @@ namespace Skmr.Editor.MotionGraphics.Elements
         public string SourceText { get; set; } = String.Empty;
         public string FontFile { get; set; } = String.Empty;
         public float TextSize { get; set; } = 64.0f;
+        public bool IsStroke { get; set; } = false;
         public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Center;
         public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Center;
         public IAttribute<Vec2D> Position { get; set; }
@@ -58,7 +59,7 @@ namespace Skmr.Editor.MotionGraphics.Elements
 
                 paint.TextSize = TextSize;
                 paint.IsAntialias = true;
-                paint.IsStroke = false;
+                paint.IsStroke = IsStroke;
                 paint.TextAlign = ToSKTextAlign(HorizontalAlignment);
 
                 var color = Color.GetFrame(frame);
