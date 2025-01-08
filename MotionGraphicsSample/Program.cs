@@ -321,6 +321,48 @@ mapClr.Map = mapClrMap;
 mapClr.Color1 = new StaticAttribute<RGBA>(new RGBA(0xFF, 0x20, 0x20, 0x40));
 mapClr.Color2 = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xC4, 0x74, 0xFF));
 
+var line = new Line();
+line.Points = [
+    new StaticAttribute<Vec2D>(new Vec2D(0,0)),
+    new StaticAttribute<Vec2D>(new Vec2D(1920, 0)),
+    new StaticAttribute<Vec2D>(new Vec2D(1920, 1080)),
+    new StaticAttribute<Vec2D>(new Vec2D(0, 1080)),
+    new StaticAttribute<Vec2D>(new Vec2D(0, 100))
+];
+line.Color = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xFF, 0xFF, 0xFF));
+line.Width = new StaticAttribute<AFloat>(new AFloat(20));
+var end = new InterpolatedAttribute<AFloat>();
+
+end.Keyframes.Add(new Keyframe<AFloat>()
+{
+    Frame = 1,
+    Transition = Function.Linear,
+    Value = new AFloat(0)
+});
+end.Keyframes.Add(new Keyframe<AFloat>()
+{
+    Frame = 100,
+    Transition = Function.Linear,
+    Value = new AFloat(1)
+});
+line.End = end;
+
+var start = new InterpolatedAttribute<AFloat>();
+
+start.Keyframes.Add(new Keyframe<AFloat>()
+{
+    Frame = 20,
+    Transition = Function.Linear,
+    Value = new AFloat(0)
+});
+start.Keyframes.Add(new Keyframe<AFloat>()
+{
+    Frame = 120,
+    Transition = Function.Linear,
+    Value = new AFloat(1)
+});
+line.Start = start;
+
 //seq.Elements.Add(imgMain);
 //seq.Elements.Add(ptnGrid);
 //seq.Elements.Add(mapClr);
@@ -331,6 +373,7 @@ seq.Elements.Add(txtTeam01);
 seq.Elements.Add(txtTeam02);
 seq.Elements.Add(mdkLogo);
 seq.Elements.Add(fncLogo);
+seq.Elements.Add(line);
 
 var frames = 240;
 seq.Encoding = Encoding.Png;
@@ -371,7 +414,7 @@ Engine.Image<RGB>? frame = null;
 
 for (int i = 0; i < frames; i++)
 {
-    DateTime start = DateTime.Now;
+    //DateTime start = DateTime.Now;
     //Create Frame
     //var bytes = seq.Render(i);
     //frame = Utility.RawToImageRGB(bytes, 1920, 1080);
