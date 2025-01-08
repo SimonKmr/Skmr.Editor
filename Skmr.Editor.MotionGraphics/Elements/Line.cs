@@ -84,12 +84,6 @@ namespace Skmr.Editor.MotionGraphics.Elements
                     p2y = (float)(p1.y + (p2.y - p1.y) * d);
                 }
 
-                if (p2Length < start)
-                {
-                    p1Length = p2Length;
-                    continue;
-                }
-
                 if (p1Length < start)
                 {
                     var d = (p2Length - start) / currentLength;
