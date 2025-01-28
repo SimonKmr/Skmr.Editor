@@ -2,7 +2,6 @@
 {
     public class TrackHeader : Atom
     {
-        public const string Type = "tkhd";
         //tkhd
         //https://developer.apple.com/library/archive/documentation/QuickTime/QTFF/QTFFChap2/qtff2.html#//apple_ref/doc/uid/TP40000939-CH204-BBCEIDFA
         public Byte Version { get; set; }
@@ -16,8 +15,9 @@
         public UInt32 TrackWidth { get; set; }
         public UInt32 TrackHeight { get; set; }
 
-        public TrackHeader(byte[] bytes)
+        public TrackHeader(byte[] bytes) : base(bytes)
         {
+            Type = "tkhd";
             Version = bytes[0];
             CreationTime = BitConverter.ToUInt32(Utility.ReverseRange(bytes[4..8]));
             ModificationTime = BitConverter.ToUInt32(Utility.ReverseRange(bytes[8..12]));

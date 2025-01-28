@@ -10,15 +10,15 @@
         public UInt16 PacketSize { get; set; }
         public UInt32 SampleRate { get; set; }
 
-        public SoundMedia(byte[] bytes)
+        public SoundMedia(byte[] bytes) : base(bytes)
         {
-            Version = BitConverter.ToUInt16(Utility.ReverseRange(bytes[0..2]));
-            Vendor = BitConverter.ToUInt16(Utility.ReverseRange(bytes[4..8]));
-            NumberOfChannels = BitConverter.ToUInt16(Utility.ReverseRange(bytes[8..10]));
-            SampleSize = BitConverter.ToUInt16(Utility.ReverseRange(bytes[10..12]));
-            CompressionId = BitConverter.ToUInt16(Utility.ReverseRange(bytes[12..14]));
-            PacketSize = BitConverter.ToUInt16(Utility.ReverseRange(bytes[14..16]));
-            SampleRate = BitConverter.ToUInt32(Utility.ReverseRange(bytes[16..20]));
+            Version = bytes.ToUInt16(0);
+            Vendor = bytes.ToUInt16(2);
+            NumberOfChannels = bytes.ToUInt16(4);
+            SampleSize = bytes.ToUInt16(6);
+            CompressionId = bytes.ToUInt16(8);
+            PacketSize = bytes.ToUInt16(10);
+            SampleRate = bytes.ToUInt32(12);
         }
     }
 }

@@ -6,15 +6,13 @@
         public UInt32 Entries { get; set; }
         public UInt32[] SyncSampleTable { get; set; }
 
-        public SyncSample(byte[] bytes)
+        public SyncSample(byte[] bytes) : base(bytes)
         {
             Version = bytes[0];
-            Entries = BitConverter.ToUInt32(Utility.ReverseRange(bytes[4..8]));
+            Entries = bytes.ToUInt32(0);
 
             SyncSampleTable = new UInt32[Entries];
-            for (int i = 0; i < Entries; i++) SyncSampleTable[i] =
-                BitConverter.ToUInt32(
-                    Utility.ReverseRange(bytes[(8 + 4 * i)..(8 + 4 * (i + 1))]));
+            for (int i = 0; i < Entries; i++) SyncSampleTable[i] = bytes.ToUInt32(4 + 4 * i);
         }
     }
 }

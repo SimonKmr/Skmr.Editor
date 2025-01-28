@@ -10,11 +10,11 @@
         public UInt32 Width { get; set; }
         public UInt32 Height { get; set; }
 
-        public TrackDimensions(byte[] bytes)
+        public TrackDimensions(byte[] bytes) : base(bytes)
         {
             Version = bytes[0];
-            Width = BitConverter.ToUInt32(Utility.ReverseRange(bytes[4..8]));
-            Height = BitConverter.ToUInt32(Utility.ReverseRange(bytes[8..12]));
+            Width = bytes.ToUInt32(0);
+            Height = bytes.ToUInt32(4);
         }
     }
 }

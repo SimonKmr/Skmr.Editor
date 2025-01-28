@@ -6,14 +6,14 @@
         public UInt16 GraphicsMode { get; set; }
         public UInt16[] Opcolor { get; set; }
 
-        public VideoMediaInformationHeader(byte[] bytes)
+        public VideoMediaInformationHeader(byte[] bytes) : base(bytes)
         {
-            GraphicsMode = BitConverter.ToUInt16(Utility.ReverseRange(bytes[4..6]));
+            GraphicsMode = bytes.ToUInt16(0);
 
             Opcolor = new UInt16[3];
-            Opcolor[0] = BitConverter.ToUInt16(Utility.ReverseRange(bytes[6..8]));
-            Opcolor[1] = BitConverter.ToUInt16(Utility.ReverseRange(bytes[8..10]));
-            Opcolor[2] = BitConverter.ToUInt16(Utility.ReverseRange(bytes[10..12]));
+            Opcolor[0] = bytes.ToUInt16(2);
+            Opcolor[1] = bytes.ToUInt16(4);
+            Opcolor[2] = bytes.ToUInt16(6);
         }
     }
 }

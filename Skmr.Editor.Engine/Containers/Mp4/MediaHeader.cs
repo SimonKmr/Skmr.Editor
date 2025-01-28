@@ -2,7 +2,6 @@
 {
     public class MediaHeader : Atom
     {
-        public const string Type = "mdhd";
         //mdhd
         public Byte Version { get; set; }
         public UInt32 CreationTime { get; set; }
@@ -12,15 +11,16 @@
         public UInt16 Language { get; set; }
         public UInt16 Quality { get; set; }
 
-        public MediaHeader(byte[] bytes)
+        public MediaHeader(byte[] bytes) : base(bytes)
         {
+            Type = "mdhd";
             Version = bytes[0];
-            CreationTime = BitConverter.ToUInt32(Utility.ReverseRange(bytes[4..8]));
-            ModificationTime = BitConverter.ToUInt32(Utility.ReverseRange(bytes[8..12]));
-            TimeScale = BitConverter.ToUInt32(Utility.ReverseRange(bytes[12..16]));
-            Duration = BitConverter.ToUInt32(Utility.ReverseRange(bytes[16..20]));
-            Language = BitConverter.ToUInt16(Utility.ReverseRange(bytes[20..22]));
-            Quality = BitConverter.ToUInt16(Utility.ReverseRange(bytes[22..24]));
+            CreationTime = bytes.ToUInt32(0);
+            ModificationTime = bytes.ToUInt32(4);
+            TimeScale = bytes.ToUInt32(8);
+            Duration = bytes.ToUInt32(12);
+            Language = bytes.ToUInt16(16);
+            Quality = bytes.ToUInt16(18);
         }
     }
 }

@@ -7,10 +7,10 @@
         public Entry[] TimeToSampleTable { get; set; }
 
 
-        public TimeToSample(byte[] bytes)
+        public TimeToSample(byte[] bytes) : base(bytes)
         {
             Version = bytes[0];
-            Entries = BitConverter.ToUInt32(Utility.ReverseRange(bytes[4..8]));
+            Entries = bytes.ToUInt32(0);
 
             TimeToSampleTable = new Entry[Entries];
             for (int i = 0; i < Entries; i++)

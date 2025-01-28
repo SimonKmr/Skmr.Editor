@@ -9,16 +9,17 @@
         public TableContent[] Table { get; set; }
 
 
-        public EditList(byte[] bytes)
+        public EditList(byte[] bytes) : base(bytes)
         {
+            base.Type = Type;
             Version = bytes[0];
-            EntryCount = BitConverter.ToInt32(Utility.ReverseRange(bytes[4..8]));
+            EntryCount = bytes.ToInt32(0);
 
 
             List<TableContent> list = new List<TableContent>();
             for (int i = 0; i < EntryCount; i++)
             {
-                list.Add(new TableContent(bytes[(i * 12)..((i + 1) * 12)]));
+                list.Add(new TableContent(bytes[(i * 12 + 16)..((i + 1) * 12 + 16)]));
             }
 
             Table = list.ToArray();
@@ -34,9 +35,9 @@
 
             public TableContent(byte[] bytes)
             {
-                TrackDuration = BitConverter.ToUInt32(Utility.ReverseRange(bytes[0..4]));
-                MediaTime = BitConverter.ToInt32(Utility.ReverseRange(bytes[4..8]));
-                MediaRate = BitConverter.ToUInt32(Utility.ReverseRange(bytes[8..12]));
+                TrackDuration = bytes.ToUInt32(0, 0);
+                MediaTime = bytes.ToInt32(4, 0);
+                MediaRate = bytes.ToUInt32(8, 0);
             }
         }
     }

@@ -9,9 +9,9 @@ int height = 1080;
 string output = "test1.ivf";
 var outp = File.Open(output, FileMode.Create);
 
-var file = new Mp4File("C:\\Users\\Simon\\Desktop\\test.mp4");
+var file = new Mp4Reader("C:\\Users\\Simon\\Desktop\\test.mp4");
 var atoms = file.Read();
-var leafs = Mp4File.GetLeafAtoms(atoms);
+var leafs = Mp4Reader.GetLeafAtoms(atoms);
 
 IVideoDecoder decoder = new OpenH264Dec(width, height);
 IVideoEncoder rav1e = new Rav1e(width, height);

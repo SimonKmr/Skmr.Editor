@@ -9,13 +9,13 @@ namespace Skmr.Editor.Engine.Containers.Mp4
         public Entry[] SampleDescriptionTable { get; set; }
 
 
-        public SampleDescription(byte[] bytes)
+        public SampleDescription(byte[] bytes) : base(bytes)
         {
             Version = bytes[0];
-            Entries = BitConverter.ToUInt32(Utility.ReverseRange(bytes[4..8]));
+            Entries = bytes.ToUInt32(0);
 
             List<Entry> entries = new List<Entry>();
-            int index = 8;
+            int index = 16;
 
 
             while (index < bytes.Length)
@@ -36,7 +36,7 @@ namespace Skmr.Editor.Engine.Containers.Mp4
 
             public Entry(byte[] bytes)
             {
-                Size = BitConverter.ToUInt32(Utility.ReverseRange(bytes[0..4]));
+                Size = bytes.ToUInt32(0);
                 DataFormat = Encoding.UTF8.GetString(bytes, 4, 4);
                 DataReferenceIndex = BitConverter.ToUInt16(Utility.ReverseRange(bytes[14..16]));
                 MediaData = AssignMediaData(DataFormat, bytes[16..bytes.Length]);

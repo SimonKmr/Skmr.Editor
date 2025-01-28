@@ -4,18 +4,18 @@ namespace Skmr.Editor.Engine.Containers.Mp4
 {
     public class DataReference : Atom
     {
-        public const string Type = "dref";
         public Byte Version { get; set; }
         public UInt32 Entries { get; set; }
         public DataRef[] DataReferences { get; set; }
 
 
-        public DataReference(byte[] bytes)
+        public DataReference(byte[] bytes) : base(bytes)
         {
+            Type = "dref";
             Version = bytes[0];
-            Entries = BitConverter.ToUInt32(Utility.ReverseRange(bytes[4..8]));
+            Entries = bytes.ToUInt32(4);
 
-            int index = 8;
+            int index = 16;
             List<DataRef> dr = new List<DataRef>();
             do
             {
@@ -37,7 +37,7 @@ namespace Skmr.Editor.Engine.Containers.Mp4
 
             public DataRef(byte[] bytes)
             {
-                Size = BitConverter.ToUInt32(Utility.ReverseRange(bytes[0..4]));
+                Size = bytes.ToUInt32(0,0);
                 Type = Encoding.UTF8.GetString(bytes, 4, 4);
                 Version = bytes[8];
 

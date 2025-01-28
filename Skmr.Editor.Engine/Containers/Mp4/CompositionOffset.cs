@@ -7,16 +7,16 @@
         public Entry[] TimeToSampleTable { get; set; }
 
 
-        public CompositionOffset(byte[] bytes)
+        public CompositionOffset(byte[] bytes) : base(bytes)
         {
             Version = bytes[0];
-            Entries = BitConverter.ToUInt32(Utility.ReverseRange(bytes[4..8]));
+            Entries = BitConverter.ToUInt32(Utility.ReverseRange(bytes[(base_offset + 4)..(base_offset + 8)]));
 
             TimeToSampleTable = new Entry[Entries];
             for (int i = 0; i < Entries; i++)
             {
-                int start = 8 + 8 * i;
-                int end = 8 + 8 * (i + 1);
+                int start = base_offset + 8 + 8 * i;
+                int end = base_offset + 8 + 16 + 8 * (i + 1);
                 TimeToSampleTable[i] = new Entry(bytes[start..end]);
             }
         }
@@ -28,8 +28,8 @@
 
             public Entry(byte[] bytes)
             {
-                SampleCount = BitConverter.ToUInt32(Utility.ReverseRange(bytes[0..4]));
-                CompositionOffset = BitConverter.ToUInt32(Utility.ReverseRange(bytes[4..8]));
+                SampleCount = bytes.ToUInt32(0,0);
+                CompositionOffset = bytes.ToUInt32(4,0);
             }
         }
     }

@@ -2,7 +2,6 @@
 {
     public class MovieHeader : Atom
     {
-        public const string Type = "mvhd";
         //mvhd
         public Byte Version { get; set; }
         public UInt32 CreationTime { get; set; }
@@ -19,22 +18,24 @@
         public UInt32 CurrentTime { get; set; }
         public UInt32 NextTrackID { get; set; }
 
-        public MovieHeader(byte[] bytes)
+        public MovieHeader(byte[] bytes) : base(bytes)
         {
+            Type = "mvhd";
             Version = bytes[0];
-            CreationTime = BitConverter.ToUInt32(Utility.ReverseRange(bytes[4..8]));
-            ModificationTime = BitConverter.ToUInt32(Utility.ReverseRange(bytes[8..12]));
-            TimeScale = BitConverter.ToUInt32(Utility.ReverseRange(bytes[12..16]));
-            Duration = BitConverter.ToUInt32(Utility.ReverseRange(bytes[16..20]));
-            PreferedRate = BitConverter.ToUInt32(Utility.ReverseRange(bytes[20..24]));
-            PreferedVolume = BitConverter.ToUInt16(Utility.ReverseRange(bytes[24..26]));
-            PreviewTime = BitConverter.ToUInt32(Utility.ReverseRange(bytes[72..76]));
-            PreviewDuration = BitConverter.ToUInt32(Utility.ReverseRange(bytes[76..80]));
-            PosterTime = BitConverter.ToUInt32(Utility.ReverseRange(bytes[80..84]));
-            SelectionTime = BitConverter.ToUInt32(Utility.ReverseRange(bytes[84..88]));
-            SelectionDuration = BitConverter.ToUInt32(Utility.ReverseRange(bytes[88..92]));
-            CurrentTime = BitConverter.ToUInt32(Utility.ReverseRange(bytes[92..96]));
-            NextTrackID = BitConverter.ToUInt32(Utility.ReverseRange(bytes[96..100]));
+            CreationTime = bytes.ToUInt32(0);
+            ModificationTime = bytes.ToUInt32(4);
+            TimeScale = bytes.ToUInt32(8);
+            Duration = bytes.ToUInt32(12);
+            PreferedRate = bytes.ToUInt32(16);
+            PreferedVolume = bytes.ToUInt16(20);
+            //Ten bytes reserved for use by Apple.
+            PreviewTime = bytes.ToUInt32(32);
+            PreviewDuration = bytes.ToUInt32(36);
+            PosterTime = bytes.ToUInt32(40);
+            SelectionTime = bytes.ToUInt32(44);
+            SelectionDuration = bytes.ToUInt32(48);
+            CurrentTime = bytes.ToUInt32(52);
+            NextTrackID = bytes.ToUInt32(56);
         }
     }
 }

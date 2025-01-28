@@ -4,7 +4,6 @@ namespace Skmr.Editor.Engine.Containers.Mp4
 {
     public class HandlerReference : Atom
     {
-        public const string Type = "hdlr";
         //hdlr
         public Byte Version { get; set; }
         public UInt32 ComponentType { get; set; }
@@ -14,15 +13,16 @@ namespace Skmr.Editor.Engine.Containers.Mp4
         public UInt32 ComponentFlagsMask { get; set; }
         public String ComponentName { get; set; }
 
-        public HandlerReference(byte[] bytes)
+        public HandlerReference(byte[] bytes) : base(bytes)
         {
+            base.Type = "hdlr";
             Version = bytes[0];
-            ComponentType = BitConverter.ToUInt32(Utility.ReverseRange(bytes[4..8]));
-            ComponentSubtype = BitConverter.ToUInt32(Utility.ReverseRange(bytes[8..12]));
-            ComponentManufacturer = BitConverter.ToUInt32(Utility.ReverseRange(bytes[12..16]));
-            ComponentFlags = BitConverter.ToUInt32(Utility.ReverseRange(bytes[16..20]));
-            ComponentFlagsMask = BitConverter.ToUInt32(Utility.ReverseRange(bytes[20..24]));
-            ComponentName = Encoding.UTF8.GetString(bytes, 24, bytes.Length - 24);
+            ComponentType = bytes.ToUInt32(0);
+            ComponentSubtype = bytes.ToUInt32(4);
+            ComponentManufacturer = bytes.ToUInt32(8);
+            ComponentFlags = bytes.ToUInt32(12);
+            ComponentFlagsMask = bytes.ToUInt32(16);
+            ComponentName = Encoding.UTF8.GetString(bytes, 20, bytes.Length - 20);
         }
     }
 }

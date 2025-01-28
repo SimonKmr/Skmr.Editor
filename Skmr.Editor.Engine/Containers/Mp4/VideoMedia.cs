@@ -18,21 +18,21 @@ namespace Skmr.Editor.Engine.Containers.Mp4
         public UInt16 Depth { get; set; }
         public UInt16 ColorTableId { get; set; }
 
-        public VideoMedia(byte[] bytes)
+        public VideoMedia(byte[] bytes) : base(bytes)
         {
-            Version = BitConverter.ToUInt16(Utility.ReverseRange(bytes[0..2]));
-            Vendor = BitConverter.ToUInt16(Utility.ReverseRange(bytes[4..8]));
-            TemporalQuality = BitConverter.ToUInt32(Utility.ReverseRange(bytes[8..12]));
-            SpatialQuality = BitConverter.ToUInt32(Utility.ReverseRange(bytes[12..16]));
-            Width = BitConverter.ToUInt16(Utility.ReverseRange(bytes[16..18]));
-            Height = BitConverter.ToUInt16(Utility.ReverseRange(bytes[18..20]));
-            HorizontalResolution = BitConverter.ToUInt32(Utility.ReverseRange(bytes[20..24]));
-            VerticalResolution = BitConverter.ToUInt32(Utility.ReverseRange(bytes[24..28]));
-            DataSize = BitConverter.ToUInt32(Utility.ReverseRange(bytes[28..32]));
-            FrameCount = BitConverter.ToUInt16(Utility.ReverseRange(bytes[32..34]));
-            CompressorName = Encoding.UTF8.GetString(bytes, 34, 4);
-            Depth = BitConverter.ToUInt16(Utility.ReverseRange(bytes[38..40]));
-            ColorTableId = BitConverter.ToUInt16(Utility.ReverseRange(bytes[40..42]));
+            Version = bytes.ToUInt16(0);
+            Vendor = bytes.ToUInt32(2);
+            TemporalQuality = bytes.ToUInt32(6);
+            SpatialQuality = bytes.ToUInt32(10);
+            Width = bytes.ToUInt16(14);
+            Height = bytes.ToUInt16(16);
+            HorizontalResolution = bytes.ToUInt32(18);
+            VerticalResolution = bytes.ToUInt32(22);
+            DataSize = bytes.ToUInt32(26);
+            FrameCount = bytes.ToUInt16(30);
+            CompressorName = Encoding.UTF8.GetString(bytes, 32 + 12, 4);
+            Depth = bytes.ToUInt16(36);
+            ColorTableId = bytes.ToUInt16(40);
         }
     }
 }

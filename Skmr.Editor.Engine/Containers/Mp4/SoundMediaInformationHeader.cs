@@ -7,10 +7,10 @@
         public Byte Version { get; set; }
         public UInt16 Balance { get; set; }
 
-        public SoundMediaInformationHeader(byte[] bytes)
+        public SoundMediaInformationHeader(byte[] bytes) : base(bytes)
         {
             Version = bytes[0];
-            Balance = BitConverter.ToUInt16(Utility.ReverseRange(bytes[4..6]));
+            Balance = bytes.ToUInt16(0);
         }
     }
 }
