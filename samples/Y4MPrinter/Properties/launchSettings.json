@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Y4MPrinter": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
