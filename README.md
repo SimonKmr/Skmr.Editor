@@ -6,6 +6,7 @@ The engine is the part that manages file input and output. It contains datastruc
 
 This will also be extendet for simple tasks to adjust the images like intrapolation for scaling images more effective.
 
+## Data
 
 ## Analyzer
 
@@ -15,9 +16,7 @@ The second part of the analyzer is machine learning. We inted to use Keras to cr
 
 The goal is to automate decisionmaking for cutting videos.
 
-## Director
-
-The director Project is the link between engine and analyzer. This should simplify the process of getting image data to directions, like where a cut should be done inside a video.
+## MotionGraphics
 
 ## Images
 
