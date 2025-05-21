@@ -30,11 +30,11 @@ namespace Skmr.Editor.MotionGraphics.Sequences
         {
             Parallel.For(StartFrame, EndFrame, new ParallelOptions() { MaxDegreeOfParallelism = MaxThreads }, (i, state) =>
             {
-                RenderSingleFrame(i);
+                RenderFrame(i);
             });
         }
 
-        public void RenderSingleFrame(int frame)
+        public byte[] RenderFrame(int frame)
         {
             using var surface = SKSurface.Create(info);
             using var canvas = surface.Canvas;
@@ -49,7 +49,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
                 element.DrawOn(frame, canvas);
                 var t = DateTime.Now - s;
                 var sec = t.TotalSeconds;
-                Console.WriteLine($"{frame};{element.GetType().Name};{sec}");
+                //Console.WriteLine($"{frame};{element.GetType().Name};{sec}");
             }
 
             using var image = surface.Snapshot();
@@ -71,6 +71,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
             }
 
             FrameRendered(frame, result);
+            return result;
         }
     }
 }
