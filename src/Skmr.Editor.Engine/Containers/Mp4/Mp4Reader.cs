@@ -47,8 +47,12 @@ namespace Skmr.Editor.Engine.Containers.Mp4
             throw new NotImplementedException();
         }
 
+        public Atom[] GetLeafAtoms()
+        {
+            return GetLeafAtoms(Atoms);
+        }
 
-        public static Atom[] GetLeafAtoms(Atom[] atoms)
+        private static Atom[] GetLeafAtoms(Atom[] atoms)
         {
             List<Atom> result = new List<Atom>();
             for (int i = 0; i < atoms.Length; i++)

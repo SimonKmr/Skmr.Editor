@@ -2,6 +2,7 @@
 using Skmr.Editor.Engine.Bitstreams.H264;
 using Skmr.Editor.Engine.Codecs;
 using Skmr.Editor.Engine;
+using Skmr.Editor.Data.Colors;
 
 int width = 1920;
 int height = 1080;
@@ -10,8 +11,7 @@ string output = "test1.ivf";
 var outp = File.Open(output, FileMode.Create);
 
 var file = new Mp4Reader("C:\\Users\\Simon\\Desktop\\test.mp4");
-var atoms = file.Read();
-var leafs = Mp4Reader.GetLeafAtoms(atoms);
+var leafs = file.GetLeafAtoms();
 
 IVideoDecoder decoder = new OpenH264Dec(width, height);
 IVideoEncoder rav1e = new Rav1e(width, height);
