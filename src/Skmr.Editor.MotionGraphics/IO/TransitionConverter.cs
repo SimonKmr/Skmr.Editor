@@ -16,7 +16,15 @@ namespace Skmr.Editor.MotionGraphics.IO
 
         public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            switch (reader.Value as String)
+            {
+                case "Cubic":
+                    return Function.Cubic;
+                case "Linear":
+                    return Function.Linear;
+                default:
+                    throw new Exception();
+            }
         }
 
         public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)

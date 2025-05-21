@@ -8,20 +8,26 @@ namespace Skmr.Editor.MotionGraphics.Sequences
     [JsonObject(MemberSerialization.OptIn)]
     public class Sequence : ISequence
     {
-        private readonly SKImageInfo info;
+        private SKImageInfo info;
+        private bool isLoaded = false;
         public Action<int, byte[]> FrameRendered { get; set; } = delegate { };
         public int StartFrame { get; set; }
         public int EndFrame { get; set; }
         public int MaxThreads { get; set; } = 4;
         public Encoding Encoding { get; set; }
 
+        [JsonConstructor]
+        private Sequence()
+        {
+            isLoaded = true;
+        }
         public Sequence(int width, int height)
         {
             Resolution = (width, height);
             info = new SKImageInfo(Resolution.width, Resolution.height);
         }
 
-        public (int width, int height) Resolution { get; set; }
+        [JsonProperty] public (int width, int height) Resolution { get; set; }
         [JsonProperty] public List<IElement> Elements { get; } = new List<IElement>();
 
         /// <summary>
@@ -38,6 +44,10 @@ namespace Skmr.Editor.MotionGraphics.Sequences
 
         public byte[] RenderFrame(int frame)
         {
+            if (isLoaded)
+            {
+                info = new SKImageInfo(Resolution.width, Resolution.height);
+            }
             using var surface = SKSurface.Create(info);
             using var canvas = surface.Canvas;
 

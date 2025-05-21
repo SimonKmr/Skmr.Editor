@@ -7,6 +7,7 @@ using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Enums;
+using Skmr.Editor.MotionGraphics.IO;
 using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics.Sequences;
 using Skmr.Editor.MotionGraphics.Structs;
@@ -392,29 +393,22 @@ solid.Color = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xFF, 0xFF, 0xFF));
 seq.Elements.Add(gradient);
 seq.Elements.Add(txtTitle);
 seq.Elements.Add(txtVs);
-seq.Elements.Add(txtTeam01);
-seq.Elements.Add(txtTeam02);
+//seq.Elements.Add(txtTeam01);
+//seq.Elements.Add(txtTeam02);
 //seq.Elements.Add(mdkLogo);
 //seq.Elements.Add(fncLogo);
 //seq.Elements.Add(line);
 
-var json = JsonConvert.SerializeObject(seq, Formatting.Indented, new JsonSerializerSettings
-{
-    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-});
-
-using (FileStream fs = System.IO.File.Open(@$"result/test.json", FileMode.Create))
-using (var sw = new StreamWriter(fs))
-{
-    sw.Write(json);
-}
+var json = seq.ToJson();
+var obj = Manager.FromJson(json);
 
 var frames = 240;
-seq.Encoding = Encoding.Png;
+
+obj.Encoding = Encoding.Png;
 
 DateTime startTotal = DateTime.Now;
 seq.EndFrame = frames;
-var test = seq.RenderFrame(100);
+var test = obj.RenderFrame(10);
 
 using (var outImg = System.IO.File.Open(@$"result/test.png", FileMode.Create))
 {
