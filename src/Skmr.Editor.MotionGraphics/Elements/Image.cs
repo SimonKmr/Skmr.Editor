@@ -12,8 +12,8 @@ namespace Skmr.Editor.MotionGraphics.Elements
         public IAttribute<AByte> Alpha { get; set; }
         public IAttribute<Vec2D> Position { get; set; }
 
-        public HorizontalAlignment HorizontalAlignment { get; set; }
-        public VerticalAlignment VerticalAlignment { get; set; }
+        public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Right;
+        public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Bottom;
 
         public Image()
         {

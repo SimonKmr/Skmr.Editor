@@ -61,14 +61,7 @@ namespace Skmr.Editor.MotionGraphics.Elements
                 paint.IsAntialias = true;
                 paint.IsStroke = IsStroke;
                 paint.TextAlign = ToSKTextAlign(HorizontalAlignment);
-
-                var color = Color.GetFrame(frame);
-
-                paint.Color = new SKColor(
-                    color.r,
-                    color.g,
-                    color.b,
-                    color.a);
+                paint.Color = Color.GetFrame(frame).ToSkColor();
 
                 var pos = Position.GetFrame(frame);
 
