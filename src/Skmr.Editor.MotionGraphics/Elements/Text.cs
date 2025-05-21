@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using Newtonsoft.Json;
+using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
@@ -7,17 +8,18 @@ using Skmr.Editor.MotionGraphics.Structs;
 
 namespace Skmr.Editor.MotionGraphics.Elements
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Text : IElement
     {
-        public string SourceText { get; set; } = String.Empty;
-        public string FontFile { get; set; } = String.Empty;
-        public float TextSize { get; set; } = 64.0f;
-        public bool IsStroke { get; set; } = false;
-        public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Center;
-        public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Center;
-        public IAttribute<Vec2D> Position { get; set; }
-        public IAttribute<RGBA> Color { get; set; }
-        public IAttribute<AInt> Rotation { get; set; }
+        [JsonProperty] public string SourceText { get; set; } = String.Empty;
+        [JsonProperty] public string FontFile { get; set; } = String.Empty;
+        [JsonProperty] public float TextSize { get; set; } = 64.0f;
+        [JsonProperty] public bool IsStroke { get; set; } = false;
+        [JsonProperty] public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Center;
+        [JsonProperty] public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Center;
+        [JsonProperty] public IAttribute<Vec2D> Position { get; set; }
+        [JsonProperty] public IAttribute<RGBA> Color { get; set; }
+        [JsonProperty] public IAttribute<AInt> Rotation { get; set; }
         public LetterAnimation CustomAnimation { get; set; }
 
         public delegate void LetterAnimation(SKCanvas canvas, Text ctx, int frame);

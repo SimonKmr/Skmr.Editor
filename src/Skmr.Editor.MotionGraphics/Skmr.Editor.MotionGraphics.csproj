@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="ILGPU" Version="1.5.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Silk.NET" Version="2.21.0" />
     <PackageReference Include="SkiaSharp" Version="2.88.8" />
     <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="2.88.8" />

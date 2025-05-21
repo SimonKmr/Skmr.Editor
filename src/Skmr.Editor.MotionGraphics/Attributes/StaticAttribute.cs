@@ -1,9 +1,12 @@
-﻿using Skmr.Editor.Data.Interfaces;
+﻿using Newtonsoft.Json;
+using Skmr.Editor.Data.Interfaces;
 
 namespace Skmr.Editor.MotionGraphics.Attributes
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class StaticAttribute<T> : IAttribute<T> where T : IDefault<T>
     {
+        [JsonProperty]
         public T Value { get; set; }
         public StaticAttribute(T value)
         {

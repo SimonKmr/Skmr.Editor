@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using Newtonsoft.Json;
+using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Enums;
@@ -6,14 +7,15 @@ using Skmr.Editor.MotionGraphics.Structs;
 
 namespace Skmr.Editor.MotionGraphics.Elements
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Image : IElement
     {
-        public string ImagePath { get; set; } = String.Empty;
-        public IAttribute<AByte> Alpha { get; set; }
-        public IAttribute<Vec2D> Position { get; set; }
+        [JsonProperty] public string ImagePath { get; set; } = String.Empty;
+        [JsonProperty] public IAttribute<AByte> Alpha { get; set; }
+        [JsonProperty] public IAttribute<Vec2D> Position { get; set; }
 
-        public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Right;
-        public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Bottom;
+        [JsonProperty] public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Right;
+        [JsonProperty] public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Bottom;
 
         public Image()
         {

@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\OpenH264Lib\OpenH264Lib.vcxproj" />
     <ProjectReference Include="..\..\src\Skmr.Editor.Data\Skmr.Editor.Data.csproj" />
     <ProjectReference Include="..\..\src\Skmr.Editor.Engine\Skmr.Editor.Engine.csproj" />

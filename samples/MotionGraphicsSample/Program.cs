@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Newtonsoft.Json;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Images.Patterns;
@@ -14,14 +15,18 @@ using Skmr.Editor.MotionGraphics.Structs.Noise;
 using Presets = Skmr.Editor.MotionGraphics.Presets;
 
 (int w, int h) resolution = (1920, 1080);
+var fontFolder = @"C:\Users\Simon\AppData\Local\Microsoft\Windows\Fonts\";
+
 
 Sequence seq = new Sequence(resolution.w, resolution.h);
 
 var txtTitle = new Text();
 
-txtTitle.SourceText = "ESPORTS WORLD CUP";
-txtTitle.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Black.otf";
-txtTitle.TextSize = 120.0f;
+txtTitle.SourceText = "LCK 2025";
+txtTitle.FontFile = fontFolder+@"Fontfabric - Nexa Black.otf";
+txtTitle.TextSize = 80.0f;
+txtTitle.HorizontalAlignment = HorizontalAlignment.Left;
+txtTitle.VerticalAlignment = VerticalAlignment.Top;
 //txtTitle.CustomAnimation = Presets.Text.LetterAnimation;
 
 var txtTitleColor = new InterpolatedAttribute<RGBA>();
@@ -36,7 +41,7 @@ txtTitleColor.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 40,
-        Transition = ((x) => x),
+        Transition = Function.Linear,
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0xFF)
     });
 
@@ -48,15 +53,15 @@ txtTitlePosition.Keyframes.Add(
     {
         Frame = 1,
         Transition = (Function.Cubic),
-        Value = new Vec2D(resolution.w / 2, resolution.h / 4 - 130),
+        Value = new Vec2D(100, 220),
     });
 
 txtTitlePosition.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 40,
-        Transition = ((x) => x),
-        Value = new Vec2D(resolution.w / 2, resolution.h / 4 + 5),
+        Transition = Function.Linear,
+        Value = new Vec2D(50, 220),
     });
 
 txtTitle.Position = txtTitlePosition;
@@ -64,15 +69,15 @@ txtTitle.Position = txtTitlePosition;
 var txtVs = new Text();
 
 txtVs.SourceText = "vs";
-txtVs.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Extra Light Italic.otf";
-
+txtVs.FontFile = fontFolder + @"Fontfabric - Nexa Extra Light Italic.otf";
+txtVs.TextSize = 20;
 var txtVsColor = new InterpolatedAttribute<RGBA>();
 
 txtVsColor.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 40,
-        Transition = (Function.Cubic),
+        Transition = Function.Cubic,
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0x00)
     });
 
@@ -80,7 +85,7 @@ txtVsColor.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 80,
-        Transition = ((x) => x),
+        Transition = Function.Linear,
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0xFF)
     });
 
@@ -92,24 +97,25 @@ txtVsPosition.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 40,
-        Transition = (Function.Cubic),
-        Value = new Vec2D(resolution.w / 2, resolution.h / 2),
+        Transition = Function.Cubic,
+        Value = new Vec2D(500 / 2, 300 + 20),
     });
 
 txtVsPosition.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 80,
-        Transition = ((x) => x),
-        Value = new Vec2D(resolution.w / 2, resolution.h / 2 + 20),
+        Transition = Function.Linear,
+        Value = new Vec2D(500 / 2,  300 ),
     });
 
 txtVs.Position = txtVsPosition;
 
 var txtTeam01 = new Text();
-
-txtTeam01.SourceText = "Mad Lions Koi";
-txtTeam01.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Bold.otf";
+txtTeam01.TextSize = 40;
+txtTeam01.SourceText = "T1";
+txtTeam01.FontFile = fontFolder + @"Fontfabric - Nexa Bold.otf";
+txtTeam01.HorizontalAlignment = HorizontalAlignment.Left;
 
 var txtTeam01Color = new InterpolatedAttribute<RGBA>();
 
@@ -117,7 +123,7 @@ txtTeam01Color.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 50,
-        Transition = (Function.Cubic),
+        Transition = Function.Cubic,
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0x00)
     });
 
@@ -125,7 +131,7 @@ txtTeam01Color.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 90,
-        Transition = ((x) => x),
+        Transition = Function.Linear,
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0xFF)
     });
 
@@ -137,24 +143,25 @@ txtTeam01Position.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 50,
-        Transition = (Function.Cubic),
-        Value = new Vec2D(resolution.w / 4 - 50, resolution.h / 3 * 2 + 175),
+        Transition = Function.Cubic,
+        Value = new Vec2D(25, resolution.h / 3 * 2 + 175),
     });
 
 txtTeam01Position.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 90,
-        Transition = ((x) => x),
-        Value = new Vec2D(resolution.w / 4, resolution.h / 3 * 2 + 175),
+        Transition = Function.Linear,
+        Value = new Vec2D(25, resolution.h / 3 * 2 + 175),
     });
 
 txtTeam01.Position = txtTeam01Position;
 
 var txtTeam02 = new Text();
-
-txtTeam02.SourceText = "Fnatic";
-txtTeam02.FontFile = @"C:\Windows\Fonts\Fontfabric - Nexa Bold.otf";
+txtTeam02.TextSize = 40;
+txtTeam02.SourceText = "Gen.G";
+txtTeam02.FontFile = fontFolder + @"Fontfabric - Nexa Bold.otf";
+txtTeam02.HorizontalAlignment = HorizontalAlignment.Left;
 
 var txtTeam02Color = new InterpolatedAttribute<RGBA>();
 
@@ -170,7 +177,7 @@ txtTeam02Color.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 90,
-        Transition = ((x) => x),
+        Transition =    Function.Linear,
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0xFF)
     });
 
@@ -182,16 +189,16 @@ txtTeam02Position.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 50,
-        Transition = (Function.Cubic),
-        Value = new Vec2D(resolution.w / 4 * 3 + 50, resolution.h / 3 * 2 + 175),
+        Transition = Function.Cubic,
+        Value = new Vec2D(175, resolution.h / 3 * 2 + 175),
     });
 
 txtTeam02Position.Keyframes.Add(
     new Keyframe<Vec2D>
     {
         Frame = 90,
-        Transition = ((x) => x),
-        Value = new Vec2D(resolution.w / 4 * 3, resolution.h / 3 * 2 + 175),
+        Transition = Function.Linear,
+        Value = new Vec2D(175, resolution.h / 3 * 2 + 175),
     });
 
 txtTeam02.Position = txtTeam02Position;
@@ -277,7 +284,7 @@ fncLogoPosition.Keyframes.Add(
         Frame = 60,
         Transition = Function.Cubic,
         Value = new Vec2D(
-            resolution.w / 4 * 3,
+            175,
             resolution.h / 2 - 50),
     });
 
@@ -287,7 +294,7 @@ fncLogoPosition.Keyframes.Add(
         Frame = 100,
         Transition = Function.Linear,
         Value = new Vec2D(
-            resolution.w / 4 * 3,
+            175,
             resolution.h / 2),
     });
 
@@ -362,28 +369,65 @@ start.Keyframes.Add(new Keyframe<AFloat>()
 });
 line.Start = start;
 
+var gradient = new Gradient();
+gradient.Position = new StaticAttribute<Vec2D>(new Vec2D(0, 0));
+gradient.Resolution = new StaticAttribute<Vec2D>(new Vec2D(500, 1080));
+gradient.GradientP1 = new StaticAttribute<Vec2D>(new Vec2D(0, 0));
+gradient.GradientP2 = new StaticAttribute<Vec2D>(new Vec2D(500, 1080));
+gradient.Colors = new IAttribute<RGBA>[]
+{
+    new StaticAttribute<RGBA>(new RGBA(0x00, 0x6A, 0xFE, 0xFF)),
+    new StaticAttribute<RGBA>(new RGBA(0x00, 0x1F, 0x47, 0xFF))
+};
+
+var solid = new Solid();
+solid.Position = new StaticAttribute<Vec2D>(new Vec2D(0, 0));
+solid.Resolution = new StaticAttribute<Vec2D>(new Vec2D(1920, 1080));
+solid.Color = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xFF, 0xFF, 0xFF));
+
 //seq.Elements.Add(imgMain);
 //seq.Elements.Add(ptnGrid);
 //seq.Elements.Add(mapClr);
 //seq.Elements.Add(mapDots);
+seq.Elements.Add(gradient);
 seq.Elements.Add(txtTitle);
 seq.Elements.Add(txtVs);
 seq.Elements.Add(txtTeam01);
 seq.Elements.Add(txtTeam02);
-seq.Elements.Add(mdkLogo);
-seq.Elements.Add(fncLogo);
-seq.Elements.Add(line);
+//seq.Elements.Add(mdkLogo);
+//seq.Elements.Add(fncLogo);
+//seq.Elements.Add(line);
+
+var json = JsonConvert.SerializeObject(seq, Formatting.Indented, new JsonSerializerSettings
+{
+    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+});
+
+using (FileStream fs = System.IO.File.Open(@$"result/test.json", FileMode.Create))
+using (var sw = new StreamWriter(fs))
+{
+    sw.Write(json);
+}
 
 var frames = 240;
-seq.Encoding = Encoding.Raw;
+seq.Encoding = Encoding.Png;
 
 DateTime startTotal = DateTime.Now;
 seq.EndFrame = frames;
 var test = seq.RenderFrame(100);
+
+using (var outImg = System.IO.File.Open(@$"result/test.png", FileMode.Create))
+{
+    outImg.Write(test);
+}
+
+
+
+return;
 seq.FrameRendered = (i, bytes) =>
 {
     DateTime start = DateTime.Now;
-    using (var outImg = File.Open(@$"result/{i:D5}.png", FileMode.Create))
+    using (var outImg = System.IO.File.Open(@$"result/{i:D5}.png", FileMode.Create))
     {
         outImg.Write(bytes);
     }

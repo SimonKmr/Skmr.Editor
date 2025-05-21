@@ -1,4 +1,5 @@
-﻿using Silk.NET.SDL;
+﻿using Newtonsoft.Json;
+using Silk.NET.SDL;
 using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
@@ -13,13 +14,14 @@ using System.Threading.Tasks;
 
 namespace Skmr.Editor.MotionGraphics.Elements
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Line : IElement
     {
-        public IAttribute<Vec2D>[] Points { get; set; }
-        public IAttribute<AFloat> Start { get; set; } 
-        public IAttribute<AFloat> End { get; set; }
-        public IAttribute<AFloat> Width { get; set; }
-        public IAttribute<RGBA> Color { get; set; }
+        [JsonProperty] public IAttribute<Vec2D>[] Points { get; set; }
+        [JsonProperty] public IAttribute<AFloat> Start { get; set; }
+        [JsonProperty] public IAttribute<AFloat> End { get; set; }
+        [JsonProperty] public IAttribute<AFloat> Width { get; set; }
+        [JsonProperty] public IAttribute<RGBA> Color { get; set; }
 
         public Line()
         {

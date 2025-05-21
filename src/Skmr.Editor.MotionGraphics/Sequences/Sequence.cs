@@ -1,9 +1,11 @@
-﻿using SkiaSharp;
+﻿using Newtonsoft.Json;
+using SkiaSharp;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Enums;
 
 namespace Skmr.Editor.MotionGraphics.Sequences
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Sequence : ISequence
     {
         private readonly SKImageInfo info;
@@ -20,7 +22,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
         }
 
         public (int width, int height) Resolution { get; set; }
-        public List<IElement> Elements { get; private set; } = new List<IElement>();
+        [JsonProperty] public List<IElement> Elements { get; } = new List<IElement>();
 
         /// <summary>
         /// Returns the next Frame as a bitmap byte array

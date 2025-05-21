@@ -1,26 +1,23 @@
 ﻿using SkiaSharp;
-using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Data;
+using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Skmr.Editor.MotionGraphics.Structs;
+using Newtonsoft.Json;
 
 namespace Skmr.Editor.MotionGraphics.Elements
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Gradient : IElement
     {
-        public IAttribute<Vec2D> Position { get; set; }
-        public IAttribute<Vec2D> Resolution { get; set; }
-        public IAttribute<RGBA>[] Colors { get; set; }
-        public IAttribute<Vec2D> GradientP1 { get; set; }
-        public IAttribute<Vec2D> GradientP2 { get; set; }
-        public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Right;
-        public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Bottom;
+        [JsonProperty] public IAttribute<Vec2D> Position { get; set; }
+        [JsonProperty] public IAttribute<Vec2D> Resolution { get; set; }
+        [JsonProperty] public IAttribute<RGBA>[] Colors { get; set; }
+        [JsonProperty] public IAttribute<Vec2D> GradientP1 { get; set; }
+        [JsonProperty] public IAttribute<Vec2D> GradientP2 { get; set; }
+        [JsonProperty] public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Right;
+        [JsonProperty] public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Bottom;
 
         public Gradient()
         {

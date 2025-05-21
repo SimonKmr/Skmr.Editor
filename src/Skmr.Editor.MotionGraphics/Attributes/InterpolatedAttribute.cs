@@ -1,16 +1,18 @@
-﻿using Skmr.Editor.Data.Colors;
+﻿using Newtonsoft.Json;
+using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Data.Interfaces;
 using System.Numerics;
 
 namespace Skmr.Editor.MotionGraphics.Attributes
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class InterpolatedAttribute<T> : IAttribute<T> where T :
         ISubtractionOperators<T, T, Difference<T>>,
         IMultiplyOperators<Difference<T>, float, Difference<T>>,
         IAdditionOperators<T, Difference<T>, T>,
         IDefault<T>
     {
-        public List<Keyframe<T>> Keyframes { get; set; } = new List<Keyframe<T>>();
+        [JsonProperty] public List<Keyframe<T>> Keyframes { get; set; } = new List<Keyframe<T>>();
         private CurrentFrameInfo info = new CurrentFrameInfo();
 
         public T GetFrame(int frame)

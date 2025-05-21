@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using Newtonsoft.Json;
+using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
@@ -7,13 +8,14 @@ using Skmr.Editor.MotionGraphics.Structs;
 
 namespace Skmr.Editor.MotionGraphics.Elements
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Solid : IElement
     {
-        public IAttribute<Vec2D> Position { get; set; }
-        public IAttribute<Vec2D> Resolution { get; set; }
-        public IAttribute<RGBA> Color { get; set; }
-        public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Right;
-        public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Bottom;
+        [JsonProperty] public IAttribute<Vec2D> Position { get; set; }
+        [JsonProperty] public IAttribute<Vec2D> Resolution { get; set; }
+        [JsonProperty] public IAttribute<RGBA> Color { get; set; }
+        [JsonProperty] public HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Right;
+        [JsonProperty] public VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Bottom;
 
         public void DrawOn(int frame, SKCanvas canvas)
         {
