@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Skmr.Editor.Engine\Skmr.Editor.Engine.csproj" />
+    <ProjectReference Include="..\..\src\Skmr.Editor.Engine\Skmr.Editor.Engine.csproj" />
   </ItemGroup>
 
 </Project>

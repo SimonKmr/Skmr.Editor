@@ -8,8 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Skmr.Editor.Engine\Skmr.Editor.Engine.csproj" />
-    <ProjectReference Include="..\Skmr.Editor.MotionGraphics\Skmr.Editor.MotionGraphics.csproj" />
+    <ProjectReference Include="..\..\OpenH264Lib\OpenH264Lib.vcxproj" />
+    <ProjectReference Include="..\..\src\Skmr.Editor.Data\Skmr.Editor.Data.csproj" />
+    <ProjectReference Include="..\..\src\Skmr.Editor.Engine\Skmr.Editor.Engine.csproj" />
+    <ProjectReference Include="..\..\src\Skmr.Editor.MotionGraphics\Skmr.Editor.MotionGraphics.csproj" />
   </ItemGroup>
 
 </Project>
