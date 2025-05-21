@@ -8,7 +8,7 @@ namespace Skmr.Editor.Analyzer.ComputerVision
 {
     public class LeagueOfLegends : IVision
     {
-        public static Feature[] GetHealthbars(skmr.Image image)
+        public static Feature[] GetHealthbars(Bitmap image)
         {
             List<Feature> positions = new List<Feature>();
             using (Bitmap bitmap = image)
@@ -58,9 +58,9 @@ namespace Skmr.Editor.Analyzer.ComputerVision
             throw new NotImplementedException();
         }
 
-        public Feature[] Detect(skmr.Image image)
+        public Feature[] Detect(Engine.Image<Data.Colors.RGB> image)
         {
-            return GetHealthbars(image);
+            throw new NotImplementedException();
         }
     }
 }

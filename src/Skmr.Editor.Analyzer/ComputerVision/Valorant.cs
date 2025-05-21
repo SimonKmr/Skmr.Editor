@@ -61,7 +61,7 @@ namespace Skmr.Editor.Analyzer.ComputerVision
             throw new NotImplementedException();
         }
 
-        public Feature[] Detect(Engine.Image image)
+        public Feature[] Detect(Engine.Image<Data.Colors.RGB> image)
         {
             throw new NotImplementedException();
         }

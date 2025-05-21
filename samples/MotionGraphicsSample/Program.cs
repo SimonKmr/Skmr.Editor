@@ -1,7 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
-using Skmr.Editor.Engine.Codecs;
 using Skmr.Editor.Images.Patterns;
 using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Attributes;
@@ -11,7 +10,7 @@ using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics.Sequences;
 using Skmr.Editor.MotionGraphics.Structs;
 using Skmr.Editor.MotionGraphics.Structs.Noise;
-using Engine = Skmr.Editor.Engine;
+
 using Presets = Skmr.Editor.MotionGraphics.Presets;
 
 (int w, int h) resolution = (1920, 1080);
@@ -200,7 +199,7 @@ txtTeam02.Position = txtTeam02Position;
 var mdkLogo = new Image();
 mdkLogo.HorizontalAlignment = HorizontalAlignment.Center;
 mdkLogo.VerticalAlignment = VerticalAlignment.Center;
-mdkLogo.ImagePath = @"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Team Logos\white\mdk.png";
+mdkLogo.ImagePath = @"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Team Logos\white\mdk.png";
 
 
 var mdkLogoAlpha = new InterpolatedAttribute<AByte>();
@@ -249,7 +248,7 @@ mdkLogo.Position = mdkLogoPosition;
 var fncLogo = new Image();
 fncLogo.HorizontalAlignment = HorizontalAlignment.Center;
 fncLogo.VerticalAlignment = VerticalAlignment.Center;
-fncLogo.ImagePath = @"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Team Logos\white\fnatic.png";
+fncLogo.ImagePath = @"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Team Logos\white\fnatic.png";
 var fncLogoAlpha = new InterpolatedAttribute<AByte>();
 
 fncLogoAlpha.Keyframes.Add(
@@ -296,9 +295,9 @@ fncLogo.Position = fncLogoPosition;
 
 var mapDots = new DotMap();
 
-var map00 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Assets\00.png");
-var map01 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Assets\01.png");
-var map02 = AMap.FromFile(@"C:\Users\darkf\OneDrive\Videos\MDK Documentary\images\Assets\02.png");
+var map00 = AMap.FromFile(@"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Assets\00.png");
+var map01 = AMap.FromFile(@"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Assets\01.png");
+var map02 = AMap.FromFile(@"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Assets\02.png");
 
 var mapDotsMap = new ProcedualAttribute<AMap>();
 mapDotsMap.Generator = (x) => Perlin.CreateNoiseMap(1920, 1080, 256, (double)(x / 200));
@@ -376,11 +375,11 @@ seq.Elements.Add(fncLogo);
 seq.Elements.Add(line);
 
 var frames = 240;
-seq.Encoding = Encoding.Png;
+seq.Encoding = Encoding.Raw;
 
 DateTime startTotal = DateTime.Now;
 seq.EndFrame = frames;
-
+var test = seq.RenderFrame(100);
 seq.FrameRendered = (i, bytes) =>
 {
     DateTime start = DateTime.Now;
@@ -400,52 +399,4 @@ Console.WriteLine(
     $"total time: {totalTime.ToString("mm':'ss")} ");
 
 return;
-
-//Benchmark array
-seq.Encoding = Encoding.Raw;
-double[] frameTimes = new double[240];
-
-
-//encodeing with Rav1e
-var outp = File.Open("out_file.ivf", FileMode.Create);
-
-Rav1e rav1e = new Rav1e(1920, 1080, 60);
-Engine.Image<RGB>? frame = null;
-
-for (int i = 0; i < frames; i++)
-{
-    //DateTime start = DateTime.Now;
-    //Create Frame
-    //var bytes = seq.Render(i);
-    //frame = Utility.RawToImageRGB(bytes, 1920, 1080);
-
-    //Encode Frames
-    rav1e.SendFrame(frame);
-
-    //Get Finished Frames
-    var status = rav1e.ReceiveFrame(out byte[]? data);
-
-    // if a frame is ready, write it to the file
-    if (status == EncoderState.Success && data != null)
-    {
-        outp.Write(data, 0, data.Length);
-    }
-}
-
-//No more new Frames
-rav1e.Flush();
-
-//Get Remaining Frames
-while (true)
-{
-    var status = rav1e.ReceiveFrame(out byte[]? encData);
-
-    if (status == EncoderState.Ended) break;
-    if (status == EncoderState.Success && encData != null)
-    {
-        outp.Write(encData, 0, encData.Length);
-    }
-}
-
-outp.Close();
 
