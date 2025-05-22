@@ -47,6 +47,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
             if (isLoaded)
             {
                 info = new SKImageInfo(Resolution.width, Resolution.height);
+                isLoaded = false;
             }
             using var surface = SKSurface.Create(info);
             using var canvas = surface.Canvas;
