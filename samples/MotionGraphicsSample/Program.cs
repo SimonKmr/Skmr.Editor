@@ -2,13 +2,12 @@
 using Newtonsoft.Json;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
-using Skmr.Editor.Images.Patterns;
+using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Enums;
 using Skmr.Editor.MotionGraphics.IO;
-using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics.Sequences;
 using Skmr.Editor.MotionGraphics.Structs;
 using Skmr.Editor.MotionGraphics.Structs.Noise;

@@ -5,7 +5,7 @@ using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Structs;
 
-namespace Skmr.Editor.Images.Patterns
+namespace Skmr.Editor.MotionGraphics.Patterns
 {
     public class Grid : IElement
     {
