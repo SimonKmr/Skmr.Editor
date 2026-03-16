@@ -29,7 +29,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
         }
 
         [JsonProperty] public (int width, int height) Resolution { get; set; }
-        [JsonProperty] public List<IElement> Elements { get; } = new List<IElement>();
+        [JsonProperty] private List<IElement> _elements = new();
 
         /// <summary>
         /// Returns the next Frame as a bitmap byte array
@@ -57,7 +57,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
             canvas.Clear();
 
             //Draws the elements on the canvas
-            foreach (var element in Elements)
+            foreach (var element in _elements)
             {
                 DateTime s = DateTime.Now;
                 element.DrawOn(frame, canvas);
@@ -87,10 +87,10 @@ namespace Skmr.Editor.MotionGraphics.Sequences
             FrameRendered(frame, result);
             return result;
         }
-
+        
         public IEnumerator<IElement> GetEnumerator()
         {
-            return Elements.GetEnumerator();
+            return _elements.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -100,50 +100,50 @@ namespace Skmr.Editor.MotionGraphics.Sequences
 
         public void Add(IElement item)
         {
-            Elements.Add(item);
+            _elements.Add(item);
         }
 
         public void Clear()
         {
-            Elements.Clear();
+            _elements.Clear();
         }
 
         public bool Contains(IElement item)
         {
-            return Elements.Contains(item);
+            return _elements.Contains(item);
         }
 
         public void CopyTo(IElement[] array, int arrayIndex)
         {
-            Elements.CopyTo(array, arrayIndex);
+            _elements.CopyTo(array, arrayIndex);
         }
 
         public bool Remove(IElement item)
         {
-            return Elements.Remove(item);
+            return _elements.Remove(item);
         }
 
         public int Count { get; }
         public bool IsReadOnly { get; }
         public int IndexOf(IElement item)
         {
-            return Elements.IndexOf(item);
+            return _elements.IndexOf(item);
         }
 
         public void Insert(int index, IElement item)
         {
-            Elements.Insert(index, item);
+            _elements.Insert(index, item);
         }
 
         public void RemoveAt(int index)
         {
-            Elements.RemoveAt(index);
+            _elements.RemoveAt(index);
         }
 
         public IElement this[int index]
         {
-            get => Elements[index];
-            set => Elements[index] = value;
+            get => _elements[index];
+            set => _elements[index] = value;
         }
     }
 }
