@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections;
+using Newtonsoft.Json;
 using SkiaSharp;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Enums;
@@ -85,6 +86,64 @@ namespace Skmr.Editor.MotionGraphics.Sequences
 
             FrameRendered(frame, result);
             return result;
+        }
+
+        public IEnumerator<IElement> GetEnumerator()
+        {
+            return Elements.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Add(IElement item)
+        {
+            Elements.Add(item);
+        }
+
+        public void Clear()
+        {
+            Elements.Clear();
+        }
+
+        public bool Contains(IElement item)
+        {
+            return Elements.Contains(item);
+        }
+
+        public void CopyTo(IElement[] array, int arrayIndex)
+        {
+            Elements.CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(IElement item)
+        {
+            return Elements.Remove(item);
+        }
+
+        public int Count { get; }
+        public bool IsReadOnly { get; }
+        public int IndexOf(IElement item)
+        {
+            return Elements.IndexOf(item);
+        }
+
+        public void Insert(int index, IElement item)
+        {
+            Elements.Insert(index, item);
+        }
+
+        public void RemoveAt(int index)
+        {
+            Elements.RemoveAt(index);
+        }
+
+        public IElement this[int index]
+        {
+            get => Elements[index];
+            set => Elements[index] = value;
         }
     }
 }
