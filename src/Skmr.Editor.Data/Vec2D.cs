@@ -7,6 +7,7 @@ namespace Skmr.Editor.Data
     public struct Vec2D :
         ISubtractionOperators<Vec2D, Vec2D, Difference<Vec2D>>,
         IMultiplyOperators<Difference<Vec2D>, float, Difference<Vec2D>>,
+        IMultiplyOperators<Vec2D, float, Vec2D>,
         IAdditionOperators<Vec2D, Difference<Vec2D>, Vec2D>,
         IDefault<Vec2D>
     {
@@ -37,6 +38,18 @@ namespace Skmr.Editor.Data
                 left.x + right.Values[0],
                 left.y + right.Values[1]);
         }
+
+        public static Vec2D operator *(Vec2D left, float right)
+        {
+            var x = left.x * right;
+            var y = left.y * right;
+            return new Vec2D(x, y);
+        }
+
+        public static Vec2D FromRadian(double r)
+            => new Vec2D(
+                (float)Math.Cos(r * Math.PI / 180), 
+                (float)Math.Sin(r * Math.PI / 180));
 
         public static Vec2D GetDefault()
         {
