@@ -1,4 +1,5 @@
 ﻿using Skmr.Editor.MotionGraphics.Elements;
+using Skmr.Editor.MotionGraphics.Enums;
 
 namespace Skmr.Editor.MotionGraphics.Sequences
 {
@@ -8,6 +9,6 @@ namespace Skmr.Editor.MotionGraphics.Sequences
         public int StartFrame { get; set; }
         public int EndFrame { get; set; }
 
-        public void Render();
+        public void Render(Encoding encoding);
     }
 }

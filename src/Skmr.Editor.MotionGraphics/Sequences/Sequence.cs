@@ -14,6 +14,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
         public Action<int, byte[]> FrameRendered { get; set; } = delegate { };
         public int StartFrame { get; set; }
         public int EndFrame { get; set; }
+
         public int MaxThreads { get; set; } = 4;
         public Encoding Encoding { get; set; }
 
@@ -35,15 +36,15 @@ namespace Skmr.Editor.MotionGraphics.Sequences
         /// Returns the next Frame as a bitmap byte array
         /// </summary>
         /// <returns></returns>
-        public void Render()
+        public void Render(Encoding encoding)
         {
             Parallel.For(StartFrame, EndFrame, new ParallelOptions() { MaxDegreeOfParallelism = MaxThreads }, (i, state) =>
             {
-                RenderFrame(i);
+                RenderFrame(i,encoding);
             });
         }
 
-        public byte[] RenderFrame(int frame)
+        public byte[] RenderFrame(int frame, Encoding encoding)
         {
             if (isLoaded)
             {
@@ -70,7 +71,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
 
             //returns the canvas as a bmp byte array
             byte[] result;
-            switch (Encoding)
+            switch (encoding)
             {
                 case Encoding.Png:
                     using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
@@ -89,57 +90,38 @@ namespace Skmr.Editor.MotionGraphics.Sequences
         }
         
         public IEnumerator<IElement> GetEnumerator()
-        {
-            return _elements.GetEnumerator();
-        }
-
+                => _elements.GetEnumerator();
+        
         IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+            => GetEnumerator();
 
         public void Add(IElement item)
-        {
-            _elements.Add(item);
-        }
+            => _elements.Add(item);
+        
 
         public void Clear()
-        {
-            _elements.Clear();
-        }
-
+            => _elements.Clear();
+        
         public bool Contains(IElement item)
-        {
-            return _elements.Contains(item);
-        }
-
+            => _elements.Contains(item);
+        
         public void CopyTo(IElement[] array, int arrayIndex)
-        {
-            _elements.CopyTo(array, arrayIndex);
-        }
-
+            => _elements.CopyTo(array, arrayIndex);
+        
         public bool Remove(IElement item)
-        {
-            return _elements.Remove(item);
-        }
-
-        public int Count { get; }
-        public bool IsReadOnly { get; }
+            => _elements.Remove(item);
+        
+        public int Count { get => _elements.Count; }
+        public bool IsReadOnly { get => false; }
         public int IndexOf(IElement item)
-        {
-            return _elements.IndexOf(item);
-        }
+            => _elements.IndexOf(item);
 
         public void Insert(int index, IElement item)
-        {
-            _elements.Insert(index, item);
-        }
+            => _elements.Insert(index, item);
 
         public void RemoveAt(int index)
-        {
-            _elements.RemoveAt(index);
-        }
-
+            => _elements.RemoveAt(index);
+        
         public IElement this[int index]
         {
             get => _elements[index];
