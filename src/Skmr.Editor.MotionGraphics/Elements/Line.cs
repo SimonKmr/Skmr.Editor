@@ -3,6 +3,7 @@ using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
+using Skmr.Editor.MotionGraphics.Enums;
 using Skmr.Editor.MotionGraphics.Structs;
 
 namespace Skmr.Editor.MotionGraphics.Elements
@@ -15,6 +16,8 @@ namespace Skmr.Editor.MotionGraphics.Elements
         [JsonProperty] public IAttribute<AFloat> End { get; set; }
         [JsonProperty] public IAttribute<AFloat> Width { get; set; }
         [JsonProperty] public IAttribute<RGBA> Color { get; set; }
+        public StrokeCaps? StrokeCap { get; set; }
+        public bool? IsAntialias { get; set; }
 
         public Line()
         {
@@ -43,6 +46,21 @@ namespace Skmr.Editor.MotionGraphics.Elements
                 color.a);
 
             paint.StrokeWidth = width.value;
+
+            switch (StrokeCap)
+            {
+                case StrokeCaps.Butt:
+                    paint.StrokeCap = SKStrokeCap.Butt; break;
+                case StrokeCaps.Round:
+                    paint.StrokeCap = SKStrokeCap.Round; break;
+                case StrokeCaps.Square:
+                    paint.StrokeCap = SKStrokeCap.Square; break;
+                case null:
+                    paint.StrokeCap = SKStrokeCap.Butt; break;
+                    
+            }
+            
+            paint.IsAntialias = IsAntialias ?? true;
 
             double totalLength = 0d;
 
