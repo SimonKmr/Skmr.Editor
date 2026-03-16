@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Skmr.Editor.Engine.Containers.Mp4
+﻿namespace Skmr.Editor.Engine.Containers.Mp4
 {
     public static class AtomFactory
     {

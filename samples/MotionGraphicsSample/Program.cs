@@ -1,5 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using Newtonsoft.Json;
+
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Patterns;
@@ -11,8 +11,6 @@ using Skmr.Editor.MotionGraphics.IO;
 using Skmr.Editor.MotionGraphics.Sequences;
 using Skmr.Editor.MotionGraphics.Structs;
 using Skmr.Editor.MotionGraphics.Structs.Noise;
-
-using Presets = Skmr.Editor.MotionGraphics.Presets;
 
 (int w, int h) resolution = (1920, 1080);
 var fontFolder = @"C:\Users\Simon\AppData\Local\Microsoft\Windows\Fonts\";

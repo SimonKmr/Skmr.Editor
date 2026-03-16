@@ -2,7 +2,7 @@
 
 namespace Skmr.Editor.MotionGraphics.Sequences
 {
-    public interface ISequence
+    public interface ISequence : IList<IElement>
     {
         public List<IElement> Elements { get; }
         public Action<int, byte[]> FrameRendered { get; set; }

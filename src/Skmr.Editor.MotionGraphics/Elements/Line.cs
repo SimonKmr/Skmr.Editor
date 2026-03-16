@@ -1,16 +1,9 @@
 ﻿using Newtonsoft.Json;
-using Silk.NET.SDL;
 using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Structs;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.MotionGraphics.Elements
 {

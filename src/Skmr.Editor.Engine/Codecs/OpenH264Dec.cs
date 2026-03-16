@@ -1,4 +1,4 @@
-﻿using OpenH264Lib;
+﻿using System.Text;
 using Skmr.Editor.Data.Colors;
 
 namespace Skmr.Editor.Engine.Codecs
