@@ -19,7 +19,7 @@ namespace Skmr.Editor.MotionGraphics.IO
             var res = JsonConvert.DeserializeObject<Sequence>(json, new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.All,
+                TypeNameHandling = TypeNameHandling.Auto,
             });
             if (res != null)
                 return res;
