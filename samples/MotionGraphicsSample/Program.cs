@@ -2,7 +2,6 @@
 
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
-using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
@@ -15,7 +14,6 @@ using Skmr.Editor.MotionGraphics.Structs.Noise;
 
 (int w, int h) resolution = (1920, 1080);
 var fontFolder = @"C:\Users\Simon\AppData\Local\Microsoft\Windows\Fonts\";
-
 
 Sequence seq = new Sequence(resolution.w, resolution.h);
 
@@ -317,15 +315,6 @@ mapDots.MinMaxSize = new StaticAttribute<Vec2D>(new Vec2D(-7, 12));
 
 mapDots.Spaceing = new StaticAttribute<AInt>(new AInt(10));
 
-var mapClr = new ColorMapGPU();
-mapClr.Resolution = new Vec2D(resolution.w, resolution.h);
-var mapClrMap = new ProcedualAttribute<AMap>();
-mapClrMap.Generator = (x) => PerlinGPU.CreateNoiseMap(1920, 1080, (double)(x / 200), 256);
-
-mapClr.Map = mapClrMap;
-mapClr.Color1 = new StaticAttribute<RGBA>(new RGBA(0xFF, 0x20, 0x20, 0x40));
-mapClr.Color2 = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xC4, 0x74, 0xFF));
-
 var line = new Line();
 line.Points = [
     new StaticAttribute<Vec2D>(new Vec2D(0,0)),
@@ -384,20 +373,19 @@ solid.Position = new StaticAttribute<Vec2D>(new Vec2D(0, 0));
 solid.Resolution = new StaticAttribute<Vec2D>(new Vec2D(1920, 1080));
 solid.Color = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xFF, 0xFF, 0xFF));
 
-//seq.Elements.Add(imgMain);
-//seq.Elements.Add(ptnGrid);
-//seq.Elements.Add(mapClr);
-//seq.Elements.Add(mapDots);
+
+
 seq.Add(gradient);
 seq.Add(txtTitle);
 seq.Add(txtVs);
-//seq.Elements.Add(txtTeam01);
-//seq.Elements.Add(txtTeam02);
-//seq.Elements.Add(mdkLogo);
-//seq.Elements.Add(fncLogo);
-//seq.Elements.Add(line);
+seq.Add(txtTeam01);
+seq.Add(txtTeam02);
+seq.Add(mdkLogo);
+seq.Add(fncLogo);
+seq.Add(line);
 
 var json = seq.ToJson();
+Console.WriteLine(json);
 var obj = Manager.FromJson(json);
 
 var frames = 240;

@@ -16,12 +16,12 @@ namespace Skmr.Editor.MotionGraphics.Elements
         [JsonProperty] public IAttribute<AFloat> End { get; set; }
         [JsonProperty] public IAttribute<AFloat> Width { get; set; }
         [JsonProperty] public IAttribute<RGBA> Color { get; set; }
-        public StrokeCaps? StrokeCap { get; set; }
-        public bool? IsAntialias { get; set; }
+        [JsonProperty]public StrokeCaps? StrokeCap { get; set; }
+        [JsonProperty]public bool? IsAntialias { get; set; }
 
         public Line()
         {
-            Points = new InterpolatedAttribute<Vec2D>[0];
+            Points = new IAttribute<Vec2D>[0];
             Start = new StaticAttribute<AFloat>(new AFloat(0f));
             End = new StaticAttribute<AFloat>(new AFloat(1f));
         }
