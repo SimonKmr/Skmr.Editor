@@ -1,4 +1,4 @@
-﻿namespace Skmr.Editor.MotionGraphics.Elements;
+﻿namespace Skmr.Editor.MotionGraphics.Elements.ImageSequence;
 
 public class FolderProvider : IProvider
 {
@@ -7,7 +7,7 @@ public class FolderProvider : IProvider
         
     }
     
-    public byte[] GetPath(int frame)
+    public byte[] GetFrame(int frame)
     {
         throw new NotImplementedException();
     }

@@ -6,6 +6,7 @@ using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
+using Skmr.Editor.MotionGraphics.Elements.Patterns;
 using Skmr.Editor.MotionGraphics.Enums;
 using Skmr.Editor.MotionGraphics.IO;
 using Skmr.Editor.MotionGraphics.Sequences;

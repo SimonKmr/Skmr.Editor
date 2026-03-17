@@ -2,8 +2,7 @@
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Engine;
 
-
-namespace Skmr.Editor.Director
+namespace Skmr.Editor.Analyzer.Evaluation
 {
     public class FrameInfo
     {

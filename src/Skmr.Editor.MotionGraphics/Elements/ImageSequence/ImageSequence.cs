@@ -1,4 +1,4 @@
-﻿namespace Skmr.Editor.MotionGraphics.Elements;
+﻿namespace Skmr.Editor.MotionGraphics.Elements.ImageSequence;
 
 public class ImageSequence
 {

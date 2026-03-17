@@ -3,12 +3,13 @@ using System.IO.MemoryMappedFiles;
 using Newtonsoft.Json;
 using SkiaSharp;
 using Skmr.Editor.MotionGraphics.Elements;
+using Skmr.Editor.MotionGraphics.Elements.ImageSequence;
 using Skmr.Editor.MotionGraphics.Enums;
 
 namespace Skmr.Editor.MotionGraphics.Sequences
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class Sequence : ISequence
+    public class Sequence : ISequence, IProvider
     {
         private SKImageInfo info;
         private bool isLoaded = false;
@@ -103,6 +104,9 @@ namespace Skmr.Editor.MotionGraphics.Sequences
             return result;
         }
         
+        public byte[] GetFrame(int frame)
+            => RenderFrame(frame,Encoding.Raw);
+        
         #region List Interface
         
         public IEnumerator<IElement> GetEnumerator()
@@ -144,5 +148,7 @@ namespace Skmr.Editor.MotionGraphics.Sequences
             set => _elements[index] = value;
         }
         #endregion
+
+
     }
 }
