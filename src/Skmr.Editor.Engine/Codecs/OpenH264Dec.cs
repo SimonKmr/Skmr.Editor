@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Skmr.Editor.Data.Colors;
+﻿using Skmr.Editor.Data.Colors;
 
 namespace Skmr.Editor.Engine.Codecs
 {

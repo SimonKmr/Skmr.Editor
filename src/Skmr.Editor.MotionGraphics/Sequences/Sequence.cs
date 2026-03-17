@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.IO.MemoryMappedFiles;
 using Newtonsoft.Json;
 using SkiaSharp;
 using Skmr.Editor.MotionGraphics.Elements;
@@ -11,22 +12,30 @@ namespace Skmr.Editor.MotionGraphics.Sequences
     {
         private SKImageInfo info;
         private bool isLoaded = false;
+        private MemoryMappedViewAccessor _accessor;
         public Action<int, byte[]> FrameRendered { get; set; } = delegate { };
         public int StartFrame { get; set; }
         public int EndFrame { get; set; }
-
+        public bool HasSharedMemory { get; }
         public int MaxThreads { get; set; } = 4;
-        public Encoding Encoding { get; set; }
 
         [JsonConstructor]
         private Sequence()
         {
             isLoaded = true;
         }
-        public Sequence(int width, int height)
+        public Sequence(int width, int height, bool hasSharedMemory = false)
         {
             Resolution = (width, height);
             info = new SKImageInfo(Resolution.width, Resolution.height);
+
+            HasSharedMemory = hasSharedMemory;
+            if (HasSharedMemory)
+            {
+                int bufferSize = width * height * 4;
+                var mmf = MemoryMappedFile.CreateOrOpen("frame_buffer", bufferSize);
+                _accessor = mmf.CreateViewAccessor();
+            }
         }
 
         [JsonProperty] public (int width, int height) Resolution { get; set; }
@@ -85,9 +94,16 @@ namespace Skmr.Editor.MotionGraphics.Sequences
                     break;
             }
 
+            if (HasSharedMemory)
+            {
+                _accessor.WriteArray(0, result, 0, result.Length);
+            }
+
             FrameRendered(frame, result);
             return result;
         }
+        
+        #region List Interface
         
         public IEnumerator<IElement> GetEnumerator()
                 => _elements.GetEnumerator();
@@ -127,5 +143,6 @@ namespace Skmr.Editor.MotionGraphics.Sequences
             get => _elements[index];
             set => _elements[index] = value;
         }
+        #endregion
     }
 }
