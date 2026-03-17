@@ -1,4 +1,4 @@
-﻿namespace OpenH264Sample
+﻿namespace Y4MPrinter
 {
     class H264Writer
     {

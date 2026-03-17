@@ -1,6 +1,8 @@
-﻿using System.Runtime.InteropServices; // for StructLayout
+﻿using System.Runtime.InteropServices;
 
-namespace OpenH264Sample
+// for StructLayout
+
+namespace Y4MPrinter
 {
     /// <summary>
     /// MotionJPEG形式のAVI動画を作成するクラス
