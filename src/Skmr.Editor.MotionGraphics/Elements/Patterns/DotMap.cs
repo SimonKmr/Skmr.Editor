@@ -2,10 +2,9 @@
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
-using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Structs;
 
-namespace Skmr.Editor.MotionGraphics.Patterns
+namespace Skmr.Editor.MotionGraphics.Elements.Patterns
 {
     public class DotMap : IElement
     {

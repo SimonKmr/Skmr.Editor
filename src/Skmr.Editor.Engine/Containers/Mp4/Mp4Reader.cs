@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Skmr.Editor.Engine.Containers.Mp4
+﻿namespace Skmr.Editor.Engine.Containers.Mp4
 {
     public class Mp4Reader : IVideoContainer
     {

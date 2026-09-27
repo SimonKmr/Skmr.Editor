@@ -1,8 +1,9 @@
 ﻿using Skmr.Editor.MotionGraphics.Elements;
+using Skmr.Editor.MotionGraphics.Enums;
 
 namespace Skmr.Editor.MotionGraphics.Sequences
 {
-    public interface ISequence
+    public interface ISequence : IList<IElement>
     {
         public List<IElement> Elements { get; }
         public int StartFrame { get; set; }
