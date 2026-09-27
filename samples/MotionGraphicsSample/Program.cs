@@ -4,16 +4,15 @@ using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
+using Skmr.Editor.MotionGraphics.Elements.Patterns;
 using Skmr.Editor.MotionGraphics.Enums;
 using Skmr.Editor.MotionGraphics.IO;
-using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics.Sequences;
 using Skmr.Editor.MotionGraphics.Structs;
 using Skmr.Editor.MotionGraphics.Structs.Noise;
 
 (int w, int h) resolution = (1920, 1080);
 var fontFolder = @"C:\Users\Simon\AppData\Local\Microsoft\Windows\Fonts\";
-
 
 Sequence seq = new Sequence(resolution.w, resolution.h);
 
@@ -27,14 +26,14 @@ txtTitle.VerticalAlignment = VerticalAlignment.Top;
 //txtTitle.CustomAnimation = Presets.Text.LetterAnimation;
 
 var txtTitleColor = new InterpolatedAttribute<RGBA>();
-txtTitleColor.Keyframes.Add(
+txtTitleColor.Add(
     new Keyframe<RGBA>
     {
         Frame = 1,
         Transition = (Function.Cubic),
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0x00)
     });
-txtTitleColor.Keyframes.Add(
+txtTitleColor.Add(
     new Keyframe<RGBA>
     {
         Frame = 40,
@@ -45,7 +44,7 @@ txtTitleColor.Keyframes.Add(
 txtTitle.Color = txtTitleColor;
 
 var txtTitlePosition = new InterpolatedAttribute<Vec2D>();
-txtTitlePosition.Keyframes.Add(
+txtTitlePosition.Add(
     new Keyframe<Vec2D>
     {
         Frame = 1,
@@ -53,7 +52,7 @@ txtTitlePosition.Keyframes.Add(
         Value = new Vec2D(100, 220),
     });
 
-txtTitlePosition.Keyframes.Add(
+txtTitlePosition.Add(
     new Keyframe<Vec2D>
     {
         Frame = 40,
@@ -70,7 +69,7 @@ txtVs.FontFile = fontFolder + @"Fontfabric - Nexa Extra Light Italic.otf";
 txtVs.TextSize = 20;
 var txtVsColor = new InterpolatedAttribute<RGBA>();
 
-txtVsColor.Keyframes.Add(
+txtVsColor.Add(
     new Keyframe<RGBA>
     {
         Frame = 40,
@@ -78,7 +77,7 @@ txtVsColor.Keyframes.Add(
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0x00)
     });
 
-txtVsColor.Keyframes.Add(
+txtVsColor.Add(
     new Keyframe<RGBA>
     {
         Frame = 80,
@@ -90,7 +89,7 @@ txtVs.Color = txtVsColor;
 
 var txtVsPosition = new InterpolatedAttribute<Vec2D>();
 
-txtVsPosition.Keyframes.Add(
+txtVsPosition.Add(
     new Keyframe<Vec2D>
     {
         Frame = 40,
@@ -98,7 +97,7 @@ txtVsPosition.Keyframes.Add(
         Value = new Vec2D(500 / 2, 300 + 20),
     });
 
-txtVsPosition.Keyframes.Add(
+txtVsPosition.Add(
     new Keyframe<Vec2D>
     {
         Frame = 80,
@@ -116,7 +115,7 @@ txtTeam01.HorizontalAlignment = HorizontalAlignment.Left;
 
 var txtTeam01Color = new InterpolatedAttribute<RGBA>();
 
-txtTeam01Color.Keyframes.Add(
+txtTeam01Color.Add(
     new Keyframe<RGBA>
     {
         Frame = 50,
@@ -124,7 +123,7 @@ txtTeam01Color.Keyframes.Add(
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0x00)
     });
 
-txtTeam01Color.Keyframes.Add(
+txtTeam01Color.Add(
     new Keyframe<RGBA>
     {
         Frame = 90,
@@ -136,7 +135,7 @@ txtTeam01.Color = txtTeam01Color;
 
 var txtTeam01Position = new InterpolatedAttribute<Vec2D>();
 
-txtTeam01Position.Keyframes.Add(
+txtTeam01Position.Add(
     new Keyframe<Vec2D>
     {
         Frame = 50,
@@ -144,7 +143,7 @@ txtTeam01Position.Keyframes.Add(
         Value = new Vec2D(25, resolution.h / 3 * 2 + 175),
     });
 
-txtTeam01Position.Keyframes.Add(
+txtTeam01Position.Add(
     new Keyframe<Vec2D>
     {
         Frame = 90,
@@ -162,7 +161,7 @@ txtTeam02.HorizontalAlignment = HorizontalAlignment.Left;
 
 var txtTeam02Color = new InterpolatedAttribute<RGBA>();
 
-txtTeam02Color.Keyframes.Add(
+txtTeam02Color.Add(
     new Keyframe<RGBA>
     {
         Frame = 50,
@@ -170,7 +169,7 @@ txtTeam02Color.Keyframes.Add(
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0x00)
     });
 
-txtTeam02Color.Keyframes.Add(
+txtTeam02Color.Add(
     new Keyframe<RGBA>
     {
         Frame = 90,
@@ -182,7 +181,7 @@ txtTeam02.Color = txtTeam02Color;
 
 var txtTeam02Position = new InterpolatedAttribute<Vec2D>();
 
-txtTeam02Position.Keyframes.Add(
+txtTeam02Position.Add(
     new Keyframe<Vec2D>
     {
         Frame = 50,
@@ -190,7 +189,7 @@ txtTeam02Position.Keyframes.Add(
         Value = new Vec2D(175, resolution.h / 3 * 2 + 175),
     });
 
-txtTeam02Position.Keyframes.Add(
+txtTeam02Position.Add(
     new Keyframe<Vec2D>
     {
         Frame = 90,
@@ -207,7 +206,7 @@ mdkLogo.ImagePath = @"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Team
 
 
 var mdkLogoAlpha = new InterpolatedAttribute<AByte>();
-mdkLogoAlpha.Keyframes.Add(
+mdkLogoAlpha.Add(
     new Keyframe<AByte>
     {
         Frame = 20,
@@ -215,7 +214,7 @@ mdkLogoAlpha.Keyframes.Add(
         Value = new AByte(0),
     });
 
-mdkLogoAlpha.Keyframes.Add(
+mdkLogoAlpha.Add(
     new Keyframe<AByte>
     {
         Frame = 60,
@@ -227,7 +226,7 @@ mdkLogo.Alpha = mdkLogoAlpha;
 
 var mdkLogoPosition = new InterpolatedAttribute<Vec2D>();
 
-mdkLogoPosition.Keyframes.Add(
+mdkLogoPosition.Add(
     new Keyframe<Vec2D>
     {
         Frame = 20,
@@ -237,7 +236,7 @@ mdkLogoPosition.Keyframes.Add(
             resolution.h / 2 - 50),
     });
 
-mdkLogoPosition.Keyframes.Add(
+mdkLogoPosition.Add(
     new Keyframe<Vec2D>
     {
         Frame = 60,
@@ -255,7 +254,7 @@ fncLogo.VerticalAlignment = VerticalAlignment.Center;
 fncLogo.ImagePath = @"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Team Logos\white\fnatic.png";
 var fncLogoAlpha = new InterpolatedAttribute<AByte>();
 
-fncLogoAlpha.Keyframes.Add(
+fncLogoAlpha.Add(
     new Keyframe<AByte>
     {
         Frame = 60,
@@ -263,7 +262,7 @@ fncLogoAlpha.Keyframes.Add(
         Value = new AByte(0),
     });
 
-fncLogoAlpha.Keyframes.Add(
+fncLogoAlpha.Add(
     new Keyframe<AByte>
     {
         Frame = 100,
@@ -275,7 +274,7 @@ fncLogo.Alpha = fncLogoAlpha;
 
 var fncLogoPosition = new InterpolatedAttribute<Vec2D>();
 
-fncLogoPosition.Keyframes.Add(
+fncLogoPosition.Add(
     new Keyframe<Vec2D>
     {
         Frame = 60,
@@ -285,7 +284,7 @@ fncLogoPosition.Keyframes.Add(
             resolution.h / 2 - 50),
     });
 
-fncLogoPosition.Keyframes.Add(
+fncLogoPosition.Add(
     new Keyframe<Vec2D>
     {
         Frame = 100,
@@ -315,15 +314,6 @@ mapDots.MinMaxSize = new StaticAttribute<Vec2D>(new Vec2D(-7, 12));
 
 mapDots.Spaceing = new StaticAttribute<AInt>(new AInt(10));
 
-var mapClr = new ColorMapGPU();
-mapClr.Resolution = new Vec2D(resolution.w, resolution.h);
-var mapClrMap = new ProcedualAttribute<AMap>();
-mapClrMap.Generator = (x) => PerlinGPU.CreateNoiseMap(1920, 1080, (double)(x / 200), 256);
-
-mapClr.Map = mapClrMap;
-mapClr.Color1 = new StaticAttribute<RGBA>(new RGBA(0xFF, 0x20, 0x20, 0x40));
-mapClr.Color2 = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xC4, 0x74, 0xFF));
-
 var line = new Line();
 line.Points = [
     new StaticAttribute<Vec2D>(new Vec2D(0,0)),
@@ -336,13 +326,13 @@ line.Color = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xFF, 0xFF, 0xFF));
 line.Width = new StaticAttribute<AFloat>(new AFloat(20));
 var end = new InterpolatedAttribute<AFloat>();
 
-end.Keyframes.Add(new Keyframe<AFloat>()
+end.Add(new Keyframe<AFloat>()
 {
     Frame = 1,
     Transition = Function.Linear,
     Value = new AFloat(0)
 });
-end.Keyframes.Add(new Keyframe<AFloat>()
+end.Add(new Keyframe<AFloat>()
 {
     Frame = 100,
     Transition = Function.Linear,
@@ -352,13 +342,13 @@ line.End = end;
 
 var start = new InterpolatedAttribute<AFloat>();
 
-start.Keyframes.Add(new Keyframe<AFloat>()
+start.Add(new Keyframe<AFloat>()
 {
     Frame = 20,
     Transition = Function.Linear,
     Value = new AFloat(0)
 });
-start.Keyframes.Add(new Keyframe<AFloat>()
+start.Add(new Keyframe<AFloat>()
 {
     Frame = 120,
     Transition = Function.Linear,
@@ -382,18 +372,16 @@ solid.Position = new StaticAttribute<Vec2D>(new Vec2D(0, 0));
 solid.Resolution = new StaticAttribute<Vec2D>(new Vec2D(1920, 1080));
 solid.Color = new StaticAttribute<RGBA>(new RGBA(0xFF, 0xFF, 0xFF, 0xFF));
 
-//seq.Elements.Add(imgMain);
-//seq.Elements.Add(ptnGrid);
-//seq.Elements.Add(mapClr);
-//seq.Elements.Add(mapDots);
-seq.Elements.Add(gradient);
-seq.Elements.Add(txtTitle);
-seq.Elements.Add(txtVs);
-//seq.Elements.Add(txtTeam01);
-//seq.Elements.Add(txtTeam02);
-//seq.Elements.Add(mdkLogo);
-//seq.Elements.Add(fncLogo);
-//seq.Elements.Add(line);
+
+
+seq.Add(gradient);
+seq.Add(txtTitle);
+seq.Add(txtVs);
+seq.Add(txtTeam01);
+seq.Add(txtTeam02);
+seq.Add(mdkLogo);
+seq.Add(fncLogo);
+seq.Add(line);
 
 var json = seq.ToJson();
 

@@ -31,7 +31,7 @@ namespace Skmr.Editor.MotionGraphics.Renderer
             canvas.Clear();
 
             //Draws the elements on the canvas
-            foreach (var element in Sequence.Elements)
+            foreach (var element in Sequence)
             {
                 DateTime s = DateTime.Now;
                 element.DrawOn(frame, canvas);

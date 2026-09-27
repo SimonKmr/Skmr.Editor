@@ -1,4 +1,4 @@
-﻿namespace OpenH264Sample
+﻿namespace Y4MPrinter
 {
     // https://msdn.microsoft.com/ja-jp/library/cc352264.aspx
     // RIFFファイルは、RIFFヘッダーとその後ろに続く0個以上のリストとチャンクで構成されている。

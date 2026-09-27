@@ -3,7 +3,6 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Skmr.Editor.Data;
 using System.Drawing;
-using skmr = Skmr.Editor.Engine;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
 {

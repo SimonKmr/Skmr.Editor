@@ -1,16 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Silk.NET.SDL;
 using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Attributes;
+using Skmr.Editor.MotionGraphics.Enums;
 using Skmr.Editor.MotionGraphics.Structs;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Skmr.Editor.MotionGraphics.Elements
 {
@@ -22,10 +16,12 @@ namespace Skmr.Editor.MotionGraphics.Elements
         [JsonProperty] public IAttribute<AFloat> End { get; set; }
         [JsonProperty] public IAttribute<AFloat> Width { get; set; }
         [JsonProperty] public IAttribute<RGBA> Color { get; set; }
+        [JsonProperty]public StrokeCaps? StrokeCap { get; set; }
+        [JsonProperty]public bool? IsAntialias { get; set; }
 
         public Line()
         {
-            Points = new InterpolatedAttribute<Vec2D>[0];
+            Points = new IAttribute<Vec2D>[0];
             Start = new StaticAttribute<AFloat>(new AFloat(0f));
             End = new StaticAttribute<AFloat>(new AFloat(1f));
         }
@@ -50,6 +46,21 @@ namespace Skmr.Editor.MotionGraphics.Elements
                 color.a);
 
             paint.StrokeWidth = width.value;
+
+            switch (StrokeCap)
+            {
+                case StrokeCaps.Butt:
+                    paint.StrokeCap = SKStrokeCap.Butt; break;
+                case StrokeCaps.Round:
+                    paint.StrokeCap = SKStrokeCap.Round; break;
+                case StrokeCaps.Square:
+                    paint.StrokeCap = SKStrokeCap.Square; break;
+                case null:
+                    paint.StrokeCap = SKStrokeCap.Butt; break;
+                    
+            }
+            
+            paint.IsAntialias = IsAntialias ?? true;
 
             double totalLength = 0d;
 
