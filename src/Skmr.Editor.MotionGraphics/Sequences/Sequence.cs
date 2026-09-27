@@ -1,58 +1,30 @@
-﻿using Newtonsoft.Json;
-using SkiaSharp;
+﻿using SkiaSharp;
+using Skmr.Editor.Data;
+using Skmr.Editor.Data.Colors;
 using Skmr.Editor.MotionGraphics.Elements;
-using Skmr.Editor.MotionGraphics.Enums;
+using Skmr.Editor.MotionGraphics.Renderer;
 
 namespace Skmr.Editor.MotionGraphics.Sequences
 {
-    [JsonObject(MemberSerialization.OptIn)]
-    public class Sequence : ISequence
+    public class Sequence : ISequence, IRenderable<RGBA>
     {
-        private SKImageInfo info;
-        private bool isLoaded = false;
-        public Action<int, byte[]> FrameRendered { get; set; } = delegate { };
+        public List<IElement> Elements { get; } = new List<IElement>();
+        public readonly int Height;
+        public readonly int Width;
         public int StartFrame { get; set; }
         public int EndFrame { get; set; }
-        public int MaxThreads { get; set; } = 4;
-        public Encoding Encoding { get; set; }
 
-        [JsonConstructor]
-        private Sequence()
-        {
-            isLoaded = true;
-        }
         public Sequence(int width, int height)
         {
-            Resolution = (width, height);
-            info = new SKImageInfo(Resolution.width, Resolution.height);
+            this.Width = width;
+            this.Height = height;
         }
 
-        [JsonProperty] public (int width, int height) Resolution { get; set; }
-        [JsonProperty] public List<IElement> Elements { get; } = new List<IElement>();
-
-        /// <summary>
-        /// Returns the next Frame as a bitmap byte array
-        /// </summary>
-        /// <returns></returns>
-        public void Render()
+        public Frame<RGBA> GetFrame(int frame)
         {
-            Parallel.For(StartFrame, EndFrame, new ParallelOptions() { MaxDegreeOfParallelism = MaxThreads }, (i, state) =>
-            {
-                RenderFrame(i);
-            });
-        }
-
-        public byte[] RenderFrame(int frame)
-        {
-            if (isLoaded)
-            {
-                info = new SKImageInfo(Resolution.width, Resolution.height);
-                isLoaded = false;
-            }
+            var info = new SKImageInfo(this.Width, this.Height);
             using var surface = SKSurface.Create(info);
             using var canvas = surface.Canvas;
-
-            //Clear a Canvas
             canvas.Clear();
 
             //Draws the elements on the canvas
@@ -67,24 +39,10 @@ namespace Skmr.Editor.MotionGraphics.Sequences
 
             using var image = surface.Snapshot();
 
-            //returns the canvas as a bmp byte array
-            byte[] result;
-            switch (Encoding)
-            {
-                case Encoding.Png:
-                    using (var data = image.Encode(SKEncodedImageFormat.Png, 100))
-                    {
-                        result = data.ToArray();
-                    }
-                    break;
-                default:
-                    SKBitmap bitmap = SKBitmap.FromImage(image);
-                    result = bitmap.Bytes;
-                    break;
-            }
+            var bitmap = SKBitmap.FromImage(image).Pixels
+                .Select(x => new RGBA(x.Red, x.Green, x.Blue, x.Alpha)).ToArray();
 
-            FrameRendered(frame, result);
-            return result;
+            return new Frame<RGBA>(Width, Height, bitmap);
         }
     }
 }

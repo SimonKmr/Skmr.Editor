@@ -1,11 +1,12 @@
-﻿using Skmr.Editor.Data.Colors;
+﻿using Skmr.Editor.Data;
+using Skmr.Editor.Data.Colors;
 
 namespace Skmr.Editor.Engine.Codecs
 {
     public interface IVideoEncoder : IDisposable
     {
-        public EncoderState SendFrame(Image<RGB> image);
-        public EncoderState ReceiveFrame(out byte[]? image);
-        public void Flush();
+        EncoderState TryEncode(Frame<RGB> image, out byte[]? result);
+
+        void Flush();
     }
 }

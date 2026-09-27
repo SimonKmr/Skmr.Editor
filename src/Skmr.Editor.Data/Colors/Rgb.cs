@@ -2,18 +2,11 @@
 
 namespace Skmr.Editor.Data.Colors
 {
-    public struct RGB : IDefault<RGB>
+    public struct RGB(byte r, byte g, byte b) : IColorModel, IDefault<RGB>
     {
-        public RGB(byte r, byte g, byte b)
-        {
-            this.r = r;
-            this.g = g;
-            this.b = b;
-        }
-
-        public byte r;
-        public byte g;
-        public byte b;
+        public byte r = r;
+        public byte g = g;
+        public byte b = b;
 
         public static RGB GetDefault()
         {

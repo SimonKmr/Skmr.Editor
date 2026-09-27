@@ -1,6 +1,6 @@
 ﻿namespace Skmr.Editor.Engine.Y4M
 {
-    public enum Channel
+    public enum Y4MChannel
     {
         Y,
         Cb,

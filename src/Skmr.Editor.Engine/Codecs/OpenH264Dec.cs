@@ -1,4 +1,5 @@
 ﻿using OpenH264Lib;
+using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 
 namespace Skmr.Editor.Engine.Codecs
@@ -22,7 +23,7 @@ namespace Skmr.Editor.Engine.Codecs
             decoder = new Decoder(dllPath);
         }
 
-        public unsafe bool TryDecode(byte[] frame, out Image<RGB>? result)
+        public unsafe bool TryDecode(byte[] frame, out Frame<RGB>? result)
         {
             var size = Width * Height * 3;
             var data = decoder.Decode(frame, frame.Length);
@@ -40,19 +41,21 @@ namespace Skmr.Editor.Engine.Codecs
             return true;
         }
 
-        private Image<RGB> RGBArrayToImage(byte[] arr, int width, int height)
+        private Frame<RGB> RGBArrayToImage(byte[] arr, int width, int height)
         {
-            var result = new Image<RGB>(width, height);
+            if (width * height * 3 != arr.Length)
+            {
+                throw new ArgumentException("Buffer length does not match width/height for BGR data.");
+            }
+
+            var pixels = new RGB[width * height];
+
             for (int p = 0; p < arr.Length; p += 3)
             {
-                var rgb = new RGB(arr[p + 2], arr[p + 1], arr[p + 0]);
-
-                var x = (p / 3) % width;
-                var y = (p / 3) / width;
-
-                result.Set(x, y, rgb);
+                pixels[p / 3] = new RGB(arr[p + 2], arr[p + 1], arr[p + 0]);
             }
-            return result;
+
+            return new Frame<RGB>(width, height, pixels);
         }
 
         public void Dispose()

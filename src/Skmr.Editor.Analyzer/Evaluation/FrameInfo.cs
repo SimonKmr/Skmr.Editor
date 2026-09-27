@@ -1,4 +1,5 @@
 ﻿using Skmr.Editor.Analyzer.ComputerVision;
+using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Engine;
 
@@ -13,7 +14,7 @@ namespace Skmr.Editor.Director
             Features = features;
         }
 
-        public FrameInfo(Image<RGB> image)
+        public FrameInfo(Frame<RGB> image)
         {
 
         }

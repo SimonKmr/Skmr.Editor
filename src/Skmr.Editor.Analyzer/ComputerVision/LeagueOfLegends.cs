@@ -1,6 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Skmr.Editor.Data;
 using System.Drawing;
 using skmr = Skmr.Editor.Engine;
 
@@ -58,7 +59,7 @@ namespace Skmr.Editor.Analyzer.ComputerVision
             throw new NotImplementedException();
         }
 
-        public Feature[] Detect(Engine.Image<Data.Colors.RGB> image)
+        public Feature[] Detect(Frame<Data.Colors.RGB> image)
         {
             throw new NotImplementedException();
         }

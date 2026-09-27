@@ -1,4 +1,5 @@
 ﻿using Skmr.Editor.Analyzer.ComputerVision;
+using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Engine;
 
@@ -13,13 +14,13 @@ namespace Skmr.Editor.Analyzer.Evaluation
             this.vision = vision;
         }
 
-        public float Evaluate(Image<RGB> image)
+        public float Evaluate(Frame<RGB> image)
         {
             var features = GetFeatures(image);
             throw new NotImplementedException();
         }
 
-        public Feature[] GetFeatures(Image<RGB> image)
+        public Feature[] GetFeatures(Frame<RGB> image)
         {
             List<Feature> features = new List<Feature>();
             foreach (var f in vision.Detect(image))

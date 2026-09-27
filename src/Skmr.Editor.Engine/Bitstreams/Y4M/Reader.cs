@@ -1,4 +1,5 @@
-﻿using Skmr.Editor.Data.Colors;
+﻿using Skmr.Editor.Data;
+using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Engine.Y4M;
 
 namespace Skmr.Editor.Engine.Bitstreams.Y4M
@@ -30,12 +31,19 @@ namespace Skmr.Editor.Engine.Bitstreams.Y4M
             this.stream.Read(buffer, 0, end);
         }
 
-        public void Read(out Image<RGB> frame)
+        public void Read(out Frame<RGB> frame)
         {
             while (stream.ReadByte() != '\n') ;
             var buffer = new byte[Width * Height * 3 / 2];
             stream.Read(buffer, 0, buffer.Length);
-            frame = new Frame(Width, Height, buffer).ToImage();
+
+            if (buffer is null)
+            {
+                frame = null!;
+                return;
+            }
+
+            frame = new Y4MFrame(Width, Height, buffer).ToImage();
         }
 
         public void Dispose()

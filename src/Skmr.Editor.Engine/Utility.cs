@@ -1,106 +1,108 @@
-﻿using Skmr.Editor.Data.Colors;
+﻿using Skmr.Editor.Data;
+using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Engine.Y4M;
 
 namespace Skmr.Editor.Engine
 {
     public static partial class Utility
     {
-        static public Frame ToFrame(this Image<RGB> image)
+        /// <summary>
+        /// Converts an RGB frame to a Y4M (YUV 4:2:0 planar) frame.
+        /// Chroma is point-sampled (not averaged) at 2x2 block origins.
+        /// </summary>
+        static public Y4MFrame ToY4MFrame(this Frame<RGB> image)
         {
             int width = image.Width;
             int height = image.Height;
 
-            //Size of the Y Cb Cr section
             int ySize = width * height;
             int cbSize = ySize / 4;
             int crSize = ySize / 4;
 
-            //Creates sub arrays for the byte sections of the y-cb-cr values
-            byte[] yBytes = new byte[ySize];
-            byte[] cbBytes = new byte[cbSize];
-            byte[] crBytes = new byte[crSize];
+            byte[] data = new byte[ySize + cbSize + crSize];
+            Span<byte> dataSpan = data;
 
-            //Calculate Y Values and write them to the yBytes Array
-            for (int x = 0; x < image.Width; x++)
+            Span<byte> yBytes = dataSpan.Slice(0, ySize);
+            Span<byte> cbBytes = dataSpan.Slice(ySize, cbSize);
+            Span<byte> crBytes = dataSpan.Slice(ySize + cbSize, crSize);
+
+            ReadOnlySpan<RGB> pixels = image.GetSpan();
+
+            // Y plane - full resolution
+            for (int y = 0; y < height; y++)
             {
-                for (int y = 0; y < image.Height; y++)
+                int rowOffset = y * width;
+                for (int x = 0; x < width; x++)
                 {
-                    var c = image.Get(x, y);
-                    yBytes[x + y * width] = c.ToYCbCr().y;
+                    yBytes[rowOffset + x] = pixels[rowOffset + x].ToYCbCr().y;
                 }
             }
 
-            //Calculate cb/cr Values and write them to the cb-/crBytes Array
-            for (int x = 0; x < image.Width / 2; x++)
+            // Cb/Cr planes - subsampled 4:2:0 (point sample at each 2x2 block origin)
+            int chromaWidth = width / 2;
+            int chromaHeight = height / 2;
+
+            for (int cy = 0; cy < chromaHeight; cy++)
             {
-                for (int y = 0; y < image.Height / 2; y++)
+                int chromaRowOffset = cy * chromaWidth;
+                int sourceRowOffset = (cy * 2) * width;
+
+                for (int cx = 0; cx < chromaWidth; cx++)
                 {
-                    var c = image.Get(x * 2, y * 2);
-                    var index = x + y * width / 2;
+                    RGB c = pixels[sourceRowOffset + (cx * 2)];
                     var yCbCr = c.ToYCbCr();
 
+                    int index = chromaRowOffset + cx;
                     cbBytes[index] = yCbCr.cb;
                     crBytes[index] = yCbCr.cr;
                 }
             }
 
-            byte[] data = new byte[ySize + cbSize + crSize];
-            Array.Copy(yBytes, 0, data, 0, ySize);
-            Array.Copy(cbBytes, 0, data, ySize, cbSize);
-            Array.Copy(cbBytes, 0, data, ySize + cbSize, crSize);
-
-            return new Frame(width, height, data);
+            return new Y4MFrame(width, height, data);
         }
 
-        static public Image<RGB> ToImage(this Frame y4m)
+        /// <summary>
+        /// Converts a Y4M (YUV 4:2:0 planar) frame back to an RGB frame.
+        /// Chroma is upsampled by nearest-neighbor (matches the point-sampling used in ToY4MFrame).
+        /// </summary>
+        static public Frame<RGB> ToImage(this Y4MFrame y4m)
         {
-            var width = y4m.Width;
-            var height = y4m.Height;
-            var frame = y4m.GetData();
+            int width = y4m.Width;
+            int height = y4m.Height;
+            byte[] frameData = y4m.GetData();
 
-            //Size of the Y Cb Cr section
             int ySize = width * height;
             int cbSize = ySize / 4;
             int crSize = ySize / 4;
 
-            // Create separate byte arrays for Y, Cb, and Cr components
-            byte[] yComponent = new byte[ySize];
-            byte[] cbComponent = new byte[cbSize];
-            byte[] crComponent = new byte[crSize];
+            ReadOnlySpan<byte> data = frameData;
+            ReadOnlySpan<byte> yComponent = data.Slice(0, ySize);
+            ReadOnlySpan<byte> cbComponent = data.Slice(ySize, cbSize);
+            ReadOnlySpan<byte> crComponent = data.Slice(ySize + cbSize, crSize);
 
-            // Extract the Y, Cb, and Cr components from frameBytes[0]
-            Array.Copy(frame, 0, yComponent, 0, ySize);
-            Array.Copy(frame, ySize, cbComponent, 0, cbSize);
-            Array.Copy(frame, ySize + cbSize, crComponent, 0, crSize);
+            int chromaWidth = width / 2;
 
-            byte[,] cbMap = new byte[width / 2, height / 2];
-            byte[,] crMap = new byte[width / 2, height / 2];
+            RGB[] pixels = new RGB[width * height];
 
-            for (int x = 0; x < width / 2; x++)
+            for (int y = 0; y < height; y++)
             {
-                for (int y = 0; y < height / 2; y++)
+                int rowOffset = y * width;
+                int chromaRowOffset = (y / 2) * chromaWidth;
+
+                for (int x = 0; x < width; x++)
                 {
-                    var index = x + y * (width / 2);
-                    cbMap[x / 2, y / 2] = cbComponent[index];
-                    crMap[x / 2, y / 2] = crComponent[index];
+                    int chromaIndex = chromaRowOffset + (x / 2);
+
+                    var yCbCr = new YCbCr(
+                        yComponent[rowOffset + x],
+                        cbComponent[chromaIndex],
+                        crComponent[chromaIndex]);
+
+                    pixels[rowOffset + x] = yCbCr.ToRgb();
                 }
             }
 
-            var image = new Image<RGB>(width, height);
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    image.Set(x, y,
-                        new YCbCr(
-                            yComponent[x + y * width],
-                            cbMap[x / 4, y / 4],
-                            crMap[x / 4, y / 4]).ToRgb());
-                }
-            }
-
-            return image;
+            return new Frame<RGB>(width, height, pixels);
         }
 
         public static RGB ToRgb(this YCbCr color)
@@ -114,51 +116,47 @@ namespace Skmr.Editor.Engine
             int b = (int)(Y + 1.77200 * (Cb - 0x80));
 
             return new RGB(
-                (byte)Math.Max(0, Math.Min(255, r)),
-                (byte)Math.Max(0, Math.Min(255, g)),
-                (byte)Math.Max(0, Math.Min(255, b))
-                );
+                (byte)Math.Clamp(r, 0, 255),
+                (byte)Math.Clamp(g, 0, 255),
+                (byte)Math.Clamp(b, 0, 255)
+            );
         }
+
         public static RGB ToRgb(this YUV color)
         {
-            // Conversion formula
             double yd = color.y;
             double ud = color.u - 128;
             double vd = color.v - 128;
 
-            var red = (int)Math.Round(yd + 1.13983 * vd);
-            var green = (int)Math.Round(yd - 0.39465 * ud - 0.58060 * vd);
-            var blue = (int)Math.Round(yd + 2.03211 * ud);
-
-            // Clamp the RGB values to the valid 8-bit range (0-255)
-            red = Math.Max(0, Math.Min(255, red));
-            green = Math.Max(0, Math.Min(255, green));
-            blue = Math.Max(0, Math.Min(255, blue));
+            int red = (int)Math.Round(yd + 1.13983 * vd);
+            int green = (int)Math.Round(yd - 0.39465 * ud - 0.58060 * vd);
+            int blue = (int)Math.Round(yd + 2.03211 * ud);
 
             return new RGB
             {
-                r = (byte)red,
-                g = (byte)green,
-                b = (byte)blue,
+                r = (byte)Math.Clamp(red, 0, 255),
+                g = (byte)Math.Clamp(green, 0, 255),
+                b = (byte)Math.Clamp(blue, 0, 255),
             };
         }
 
         public static YCbCr ToYCbCr(this RGB color)
         {
-            double R = (double)color.r / 255;
-            double G = (double)color.g / 255;
-            double B = (double)color.b / 255;
+            double R = color.r / 255.0;
+            double G = color.g / 255.0;
+            double B = color.b / 255.0;
 
             double Y = 0.299 * R + 0.587 * G + 0.114 * B;
             double Cb = -0.169 * R - 0.331 * G + 0.500 * B;
             double Cr = 0.500 * R - 0.419 * G - 0.081 * B;
 
             return new YCbCr(
-                    (byte)(Y * 255),
-                    (byte)((Cb + 0.5) * 255),
-                    (byte)((Cr + 0.5) * 255)
-                );
+                (byte)(Y * 255),
+                (byte)((Cb + 0.5) * 255),
+                (byte)((Cr + 0.5) * 255)
+            );
         }
+
         public static YCbCr ToYCbCr(this YUV color)
         {
             return new YCbCr
@@ -171,47 +169,37 @@ namespace Skmr.Editor.Engine
 
         public static YUV ToYUV(this RGB color)
         {
-            // Conversion formula
             double rd = color.r / 255.0;
             double gd = color.g / 255.0;
             double bd = color.b / 255.0;
 
-            var y = (int)Math.Round(0.299 * rd + 0.587 * gd + 0.114 * bd);
-            var u = (int)Math.Round(-0.14713 * rd - 0.28886 * gd + 0.436 * bd) + 128;
-            var v = (int)Math.Round(0.615 * rd - 0.51498 * gd - 0.10001 * bd) + 128;
-
-            // Clamp the YUV values to the valid 8-bit range
-            y = Math.Max(0, Math.Min(255, y));
-            u = Math.Max(0, Math.Min(255, u));
-            v = Math.Max(0, Math.Min(255, v));
+            int y = (int)Math.Round(0.299 * rd + 0.587 * gd + 0.114 * bd);
+            int u = (int)Math.Round(-0.14713 * rd - 0.28886 * gd + 0.436 * bd) + 128;
+            int v = (int)Math.Round(0.615 * rd - 0.51498 * gd - 0.10001 * bd) + 128;
 
             return new YUV
             {
-                y = (byte)y,
-                u = (byte)u,
-                v = (byte)v,
+                y = (byte)Math.Clamp(y, 0, 255),
+                u = (byte)Math.Clamp(u, 0, 255),
+                v = (byte)Math.Clamp(v, 0, 255),
             };
         }
+
         public static YUV ToYUV(this YCbCr color)
         {
             double yd = color.y;
             double crd = color.cr - 128;
             double cbd = color.cb - 128;
 
-            var yuvY = (int)Math.Round(yd + 1.402 * crd);
-            var yuvU = (int)Math.Round(yd - 0.34414 * cbd - 0.71414 * crd);
-            var yuvV = (int)Math.Round(yd + 1.772 * cbd);
-
-            // Clamp the YUV values to the valid 8-bit range
-            yuvY = Math.Max(0, Math.Min(255, yuvY));
-            yuvU = Math.Max(0, Math.Min(255, yuvU));
-            yuvV = Math.Max(0, Math.Min(255, yuvV));
+            int yuvY = (int)Math.Round(yd + 1.402 * crd);
+            int yuvU = (int)Math.Round(yd - 0.34414 * cbd - 0.71414 * crd);
+            int yuvV = (int)Math.Round(yd + 1.772 * cbd);
 
             return new YUV
             {
-                y = (byte)yuvY,
-                u = (byte)yuvU,
-                v = (byte)yuvV,
+                y = (byte)Math.Clamp(yuvY, 0, 255),
+                u = (byte)Math.Clamp(yuvU, 0, 255),
+                v = (byte)Math.Clamp(yuvV, 0, 255),
             };
         }
 
@@ -222,51 +210,51 @@ namespace Skmr.Editor.Engine
                 array[i] = ptr[i];
             return array;
         }
-        public unsafe static byte* ToPointer(this byte[] bytes)
+
+        /// <summary>
+        /// Builds an RGBA frame from a raw interleaved byte buffer (4 bytes per pixel).
+        /// </summary>
+        public static Frame<RGBA> RawToImageRGBA(byte[] bytes, int width, int height)
         {
-            fixed (byte* ptr = bytes)
+            const int bytesPerPixel = 4;
+
+            if (bytes.Length != width * height * bytesPerPixel)
+                throw new ArgumentException("Buffer length does not match width/height for RGBA data.");
+
+            RGBA[] pixels = new RGBA[width * height];
+            ReadOnlySpan<byte> data = bytes;
+
+            for (int i = 0; i < pixels.Length; i++)
             {
-                for (int i = 0; i < bytes.Length; i++)
-                    ptr[i]++;
-
-                return ptr;
+                int offset = i * bytesPerPixel;
+                pixels[i] = new RGBA(data[offset], data[offset + 1], data[offset + 2], data[offset + 3]);
             }
-        }
-        public static Image<RGBA> RawToImageRGBA(byte[] bytes, int width, int height)
-        {
-            int i = 0;
-            var result = new Image<RGBA>(width, height);
 
-            for (int x = 0; x < 1080; x++)
-                for (int y = 0; y < 1920; y++)
-                {
-                    var c = new RGBA(bytes[i + 0], bytes[i + 1], bytes[i + 2], bytes[i + 3]);
-                    result.Set(y, x, c);
-                    i += 4;
-                }
-
-            return result;
+            return new Frame<RGBA>(width, height, pixels);
         }
 
-        public static Image<RGB> RawToImageRGB(byte[] bytes, int width, int height)
+        /// <summary>
+        /// Builds an RGB frame from a raw interleaved byte buffer.
+        /// </summary>
+        /// <param name="bytesPerPixel">
+        /// Stride of the source data - use 3 for tightly packed RGB, or 4 if the source
+        /// includes a 4th (e.g. alpha/padding) byte per pixel that should be skipped.
+        /// </param>
+        public static Frame<RGB> RawToImageRGB(byte[] bytes, int width, int height, int bytesPerPixel = 3)
         {
-            int i = 0;
-            var result = new Image<RGB>(width, height);
+            if (bytes.Length != width * height * bytesPerPixel)
+                throw new ArgumentException("Buffer length does not match width/height/stride for RGB data.");
 
-            for (int x = 0; x < 1080; x++)
-                for (int y = 0; y < 1920; y++)
-                {
-                    var r = bytes[i + 0];
-                    var g = bytes[i + 1];
-                    var b = bytes[i + 2];
+            RGB[] pixels = new RGB[width * height];
+            ReadOnlySpan<byte> data = bytes;
 
-                    var c = new RGB(r, g, b);
-                    result.Set(y, x, c);
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                int offset = i * bytesPerPixel;
+                pixels[i] = new RGB(data[offset], data[offset + 1], data[offset + 2]);
+            }
 
-                    i += 4;
-                }
-
-            return result;
+            return new Frame<RGB>(width, height, pixels);
         }
     }
 }

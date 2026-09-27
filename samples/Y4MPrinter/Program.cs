@@ -1,8 +1,8 @@
-﻿using Skmr.Editor.Engine.Containers.Mp4;
+﻿using Skmr.Editor.Data;
+using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Engine.Bitstreams.H264;
 using Skmr.Editor.Engine.Codecs;
-using Skmr.Editor.Engine;
-using Skmr.Editor.Data.Colors;
+using Skmr.Editor.Engine.Containers.Mp4;
 
 int width = 1920;
 int height = 1080;
@@ -21,17 +21,15 @@ Reader reader = new(stream, width, height);
 
 
 byte[] bytes;
-while(reader.Read(out bytes))
+while (reader.Read(out bytes!))
 {
-    Image<RGB>? frame = null;
+    Frame<RGB>? frame = null;
     if (!decoder.TryDecode(bytes, out frame))
     {
         continue;
     }
 
-    rav1e.SendFrame(frame);
-
-    var status = rav1e.ReceiveFrame(out byte[]? data);
+    var status = rav1e.TryEncode(frame!, out byte[]? data);
 
     if (status == EncoderState.Success && data != null)
     {
@@ -43,8 +41,8 @@ rav1e.Flush();
 
 while (true)
 {
-    var status = rav1e.ReceiveFrame(out byte[]? data);
-    
+    var status = rav1e.TryEncode(null!, out byte[]? data);
+
     if (status == EncoderState.Ended) break;
     if (status == EncoderState.Success && data != null)
     {

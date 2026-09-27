@@ -1,18 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using Newtonsoft.Json;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
-using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics;
 using Skmr.Editor.MotionGraphics.Attributes;
 using Skmr.Editor.MotionGraphics.Elements;
 using Skmr.Editor.MotionGraphics.Enums;
 using Skmr.Editor.MotionGraphics.IO;
+using Skmr.Editor.MotionGraphics.Patterns;
 using Skmr.Editor.MotionGraphics.Sequences;
 using Skmr.Editor.MotionGraphics.Structs;
 using Skmr.Editor.MotionGraphics.Structs.Noise;
-
-using Presets = Skmr.Editor.MotionGraphics.Presets;
 
 (int w, int h) resolution = (1920, 1080);
 var fontFolder = @"C:\Users\Simon\AppData\Local\Microsoft\Windows\Fonts\";
@@ -23,7 +20,7 @@ Sequence seq = new Sequence(resolution.w, resolution.h);
 var txtTitle = new Text();
 
 txtTitle.SourceText = "LCK 2025";
-txtTitle.FontFile = fontFolder+@"Fontfabric - Nexa Black.otf";
+txtTitle.FontFile = fontFolder + @"Fontfabric - Nexa Black.otf";
 txtTitle.TextSize = 80.0f;
 txtTitle.HorizontalAlignment = HorizontalAlignment.Left;
 txtTitle.VerticalAlignment = VerticalAlignment.Top;
@@ -106,7 +103,7 @@ txtVsPosition.Keyframes.Add(
     {
         Frame = 80,
         Transition = Function.Linear,
-        Value = new Vec2D(500 / 2,  300 ),
+        Value = new Vec2D(500 / 2, 300),
     });
 
 txtVs.Position = txtVsPosition;
@@ -177,7 +174,7 @@ txtTeam02Color.Keyframes.Add(
     new Keyframe<RGBA>
     {
         Frame = 90,
-        Transition =    Function.Linear,
+        Transition = Function.Linear,
         Value = new RGBA(0xFF, 0xFF, 0xFF, 0xFF)
     });
 
@@ -302,9 +299,9 @@ fncLogo.Position = fncLogoPosition;
 
 var mapDots = new DotMap();
 
-var map00 = AMap.FromFile(@"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Assets\00.png");
-var map01 = AMap.FromFile(@"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Assets\01.png");
-var map02 = AMap.FromFile(@"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Assets\02.png");
+//var map00 = AMap.FromFile(@"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Assets\00.png");
+//var map01 = AMap.FromFile(@"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Assets\01.png");
+//var map02 = AMap.FromFile(@"C:\Users\Simon\OneDrive\Videos\MDK Documentary\images\Assets\02.png");
 
 var mapDotsMap = new ProcedualAttribute<AMap>();
 mapDotsMap.Generator = (x) => Perlin.CreateNoiseMap(1920, 1080, 256, (double)(x / 200));
@@ -399,35 +396,26 @@ seq.Elements.Add(txtVs);
 //seq.Elements.Add(line);
 
 var json = seq.ToJson();
-var obj = Manager.FromJson(json);
 
 var frames = 240;
 
-obj.Encoding = Encoding.Png;
-
 DateTime startTotal = DateTime.Now;
 seq.EndFrame = frames;
-var test = obj.RenderFrame(10);
-
-using (var outImg = System.IO.File.Open(@$"result/test.png", FileMode.Create))
-{
-    outImg.Write(test);
-}
-
-
+var test = seq.GetFrame(10);
 
 return;
-seq.FrameRendered = (i, bytes) =>
-{
-    DateTime start = DateTime.Now;
-    using (var outImg = System.IO.File.Open(@$"result/{i:D5}.png", FileMode.Create))
-    {
-        outImg.Write(bytes);
-    }
-    DateTime stop = DateTime.Now;
-};
 
-seq.Render();
+//seq.FrameRendered = (i, bytes) =>
+//{
+//    DateTime start = DateTime.Now;
+//    using (var outImg = System.IO.File.Open(@$"result/{i:D5}.png", FileMode.Create))
+//    {
+//        outImg.Write(bytes);
+//    }
+//    DateTime stop = DateTime.Now;
+//};
+
+//seq.Render();
 
 
 var totalTime = DateTime.Now - startTotal;

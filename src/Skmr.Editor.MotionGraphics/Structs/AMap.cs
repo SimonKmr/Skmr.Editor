@@ -172,7 +172,6 @@ namespace Skmr.Editor.MotionGraphics.Structs
             var image = SKImage.FromEncodedData(path);
             var bm = SKBitmap.FromImage(image);
             var map = new float[image.Width, image.Height];
-            var max = float.MinValue;
 
             for (int x = 0; x < image.Width; x++)
             {

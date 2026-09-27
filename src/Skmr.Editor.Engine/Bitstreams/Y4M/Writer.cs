@@ -1,4 +1,5 @@
-﻿using Skmr.Editor.Data.Colors;
+﻿using Skmr.Editor.Data;
+using Skmr.Editor.Data.Colors;
 
 namespace Skmr.Editor.Engine.Bitstreams.Y4M
 {
@@ -27,11 +28,11 @@ namespace Skmr.Editor.Engine.Bitstreams.Y4M
             stream.Dispose();
         }
 
-        public void Write(Image<RGB> frame)
+        public void Write(Frame<RGB> frame)
         {
             byte[] frameHead = new byte[] { 0x46, 0x52, 0x41, 0x4D, 0x45, 0x0A };
             stream.Write(frameHead);
-            stream.Write(frame.ToFrame().GetData());
+            stream.Write(frame.ToY4MFrame().GetData());
         }
     }
 }

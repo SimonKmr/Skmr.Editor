@@ -7,6 +7,7 @@ namespace Skmr.Editor.Data.Colors
         ISubtractionOperators<RGBA, RGBA, Difference<RGBA>>,
         IMultiplyOperators<Difference<RGBA>, float, Difference<RGBA>>,
         IAdditionOperators<RGBA, Difference<RGBA>, RGBA>,
+        IColorModel,
         IDefault<RGBA>
     {
         public RGBA(byte r, byte g, byte b, byte a)

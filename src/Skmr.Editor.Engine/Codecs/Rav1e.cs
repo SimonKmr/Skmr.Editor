@@ -1,4 +1,5 @@
-﻿using Skmr.Editor.Data.Colors;
+﻿using Skmr.Editor.Data;
+using Skmr.Editor.Data.Colors;
 using Skmr.Editor.Engine.Codecs.Apis.Rav1e;
 using System.Runtime.InteropServices;
 
@@ -8,10 +9,12 @@ namespace Skmr.Editor.Engine.Codecs
     {
         private IntPtr context;
         private IntPtr config;
+        private bool isDisposed = false;
 
         public int Width { get; }
         public int Height { get; }
         public int Fps { get; }
+        public bool IsFlushed { get; private set; }
 
         public Rav1e(int width, int height, int fps = 30)
         {
@@ -21,44 +24,44 @@ namespace Skmr.Editor.Engine.Codecs
 
             //Create a config file and set width and height
             config = Functions.rav1e_config_default();
-            Functions.rav1e_config_parse(config, "width", width.ToString()); //1920
-            Functions.rav1e_config_parse(config, "height", height.ToString()); //1080
+            var statusCodeConfigParseWidth = Functions.rav1e_config_parse(config, "width", width.ToString()); //1920
+            var statusCodeConfigParseHeight = Functions.rav1e_config_parse(config, "height", height.ToString()); //1080
+
+            if (statusCodeConfigParseWidth != 0 || statusCodeConfigParseHeight != 0)
+            {
+                // to be handled
+            }
 
             //Set Framerate
             var time_base = new Rational() { num = 1, den = Convert.ToUInt64(fps) };
-            Functions.rav1e_config_parse(config, "enable_timing_info", "true"); //true
+            var statusCodeConfigParseTimingInfo = Functions.rav1e_config_parse(config, "enable_timing_info", "true"); //true
+
+            if (statusCodeConfigParseTimingInfo != 0)
+            {
+                // to be handled
+            }
+
             Functions.rav1e_config_set_time_base(config, time_base);
 
             //Creates a context out of the config
             context = Functions.rav1e_context_new(config);
         }
 
-        public EncoderState SendFrame(Image<RGB> input)
+        private EncoderState SendFrame(Frame<RGB> input)
         {
-            var ycbcr = input.ToFrame();
+            var ycbcr = input.ToY4MFrame();
             var status = SendFrame(ycbcr);
             return ToState(status);
         }
 
-        public void Flush()
-        {
-            Functions.rav1e_send_frame(context, IntPtr.Zero);
-        }
-
-        public void Dispose()
-        {
-            Functions.rav1e_config_unref(config);
-            Functions.rav1e_context_unref(context);
-        }
-
-        public EncoderStatus SendFrame(Y4M.Frame ycbcr)
+        private EncoderStatus SendFrame(Y4M.Y4MFrame ycbcr)
         {
 
             //Creates a frame
             var frame = Functions.rav1e_frame_new(context);
-            var y = ycbcr.Get(Y4M.Channel.Y);
-            var cb = ycbcr.Get(Y4M.Channel.Cb);
-            var cr = ycbcr.Get(Y4M.Channel.Cr);
+            var y = ycbcr.Get(Y4M.Y4MChannel.Y);
+            var cb = ycbcr.Get(Y4M.Y4MChannel.Cb);
+            var cr = ycbcr.Get(Y4M.Y4MChannel.Cr);
 
             //Create references of frame data
             GCHandle arr1 = GCHandle.Alloc(y, GCHandleType.Pinned);
@@ -82,7 +85,7 @@ namespace Skmr.Editor.Engine.Codecs
             return status;
         }
 
-        public EncoderState ReceiveFrame(out byte[]? data)
+        private EncoderState ReceiveFrame(out byte[]? data)
         {
             while (true)
             {
@@ -96,6 +99,7 @@ namespace Skmr.Editor.Engine.Codecs
                 do
                 {
                     status = Functions.rav1e_receive_packet(context, ref ptr);
+                    Thread.Yield();
                 } while (status == EncoderStatus.Encoded);
 
                 //Check if Packet is usable
@@ -122,6 +126,25 @@ namespace Skmr.Editor.Engine.Codecs
             }
         }
 
+        public void Flush()
+        {
+            Functions.rav1e_send_frame(context, IntPtr.Zero);
+            this.IsFlushed = true;
+        }
+
+        public void Dispose()
+        {
+            if (this.isDisposed)
+            {
+                return;
+            }
+            this.isDisposed = true;
+
+            Functions.rav1e_config_unref(config);
+            Functions.rav1e_context_unref(context);
+            GC.SuppressFinalize(this);
+        }
+
         private static EncoderState ToState(EncoderStatus status)
         {
             switch (status)
@@ -133,6 +156,29 @@ namespace Skmr.Editor.Engine.Codecs
                 default:
                     return EncoderState.Unknown;
             }
+        }
+
+        public EncoderState TryEncode(Frame<RGB>? frame, out byte[]? result)
+        {
+            if (!IsFlushed && frame is not null)
+            {
+                var sendStatus = this.SendFrame(frame);
+                if (sendStatus != EncoderState.Success)
+                {
+                    result = null;
+                    return sendStatus;
+                }
+            }
+
+            var receiveFrameStatus = this.ReceiveFrame(out byte[]? data);
+            result = null;
+
+            if (receiveFrameStatus == EncoderState.Success && data != null)
+            {
+                result = data;
+            }
+
+            return receiveFrameStatus;
         }
     }
 }

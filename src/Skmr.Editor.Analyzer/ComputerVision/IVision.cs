@@ -1,10 +1,10 @@
-﻿using Skmr.Editor.Data.Colors;
-using Skmr.Editor.Engine;
+﻿using Skmr.Editor.Data;
+using Skmr.Editor.Data.Colors;
 
 namespace Skmr.Editor.Analyzer.ComputerVision
 {
     public interface IVision
     {
-        public Feature[] Detect(Image<RGB> image);
+        public Feature[] Detect(Frame<RGB> image);
     }
 }

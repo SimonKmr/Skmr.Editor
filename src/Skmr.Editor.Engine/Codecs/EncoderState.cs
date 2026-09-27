@@ -5,5 +5,6 @@
         Unknown,
         Success,
         Ended,
+        Failure,
     }
 }
