@@ -19,17 +19,17 @@ namespace Skmr.Editor.Data
 
         public Frame(int width, int height, T[] pixels)
         {
+            if (pixels is null)
+            {
+                throw new ArgumentNullException("Pixels is null");
+            }
+
             this.Width = width;
             this.Height = height;
 
             if (pixels.Length != width * height)
             {
                 throw new Exception("Pixel Array does not match Width and Height");
-            }
-
-            if (pixels is null)
-            {
-                throw new NullReferenceException();
             }
 
             this.Pixels = pixels;

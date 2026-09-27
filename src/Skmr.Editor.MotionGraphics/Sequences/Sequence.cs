@@ -1,8 +1,8 @@
 ﻿using SkiaSharp;
 using Skmr.Editor.Data;
 using Skmr.Editor.Data.Colors;
+using Skmr.Editor.Data.Interfaces;
 using Skmr.Editor.MotionGraphics.Elements;
-using Skmr.Editor.MotionGraphics.Renderer;
 using System.Collections;
 
 namespace Skmr.Editor.MotionGraphics.Sequences
@@ -46,18 +46,13 @@ namespace Skmr.Editor.MotionGraphics.Sequences
             return new Frame<RGBA>(Width, Height, bitmap);
         }
 
-
-
         #region List Interface
 
         public IEnumerator<IElement> GetEnumerator()
                 => _elements.GetEnumerator();
 
-
-
         public void Add(IElement item)
             => _elements.Add(item);
-
 
         public void Clear()
             => _elements.Clear();

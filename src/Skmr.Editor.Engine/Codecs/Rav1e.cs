@@ -27,9 +27,14 @@ namespace Skmr.Editor.Engine.Codecs
             var statusCodeConfigParseWidth = Functions.rav1e_config_parse(config, "width", width.ToString()); //1920
             var statusCodeConfigParseHeight = Functions.rav1e_config_parse(config, "height", height.ToString()); //1080
 
-            if (statusCodeConfigParseWidth != 0 || statusCodeConfigParseHeight != 0)
+            if (statusCodeConfigParseWidth != 0)
             {
-                // to be handled
+                throw new Exception("Error while parsing width");
+            }
+
+            if (statusCodeConfigParseHeight != 0)
+            {
+                throw new Exception("Error while parsing height");
             }
 
             //Set Framerate
@@ -38,7 +43,7 @@ namespace Skmr.Editor.Engine.Codecs
 
             if (statusCodeConfigParseTimingInfo != 0)
             {
-                // to be handled
+                throw new Exception("Error while parsing enable_timing_info");
             }
 
             Functions.rav1e_config_set_time_base(config, time_base);
@@ -149,6 +154,8 @@ namespace Skmr.Editor.Engine.Codecs
         {
             switch (status)
             {
+                case EncoderStatus.Failure:
+                    return EncoderState.Failure;
                 case EncoderStatus.LimitReached:
                     return EncoderState.Ended;
                 case EncoderStatus.Success:
